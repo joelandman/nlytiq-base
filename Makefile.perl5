@@ -1,0 +1,52 @@
+include base.config
+
+#### Perl  
+PERLVER		= 5.24.0
+PERL		= perl-${PERLVER}
+PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
+OSREV		= `uname -r`
+PFLAGS          = 
+# BUILD_BZIP2=0
+# BUILD_ZLIB=False
+
+DIR		= $(shell pwd)/${PERL}
+
+ifeq ($(GCC),1)
+### use gcc
+CFLAGS          = -fPIC -O3 -malign-double -g
+CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duseshrplib -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC
+###
+endif
+
+ifeq ($(CLANG),1)
+### use clang
+CFLAGS          = -O2  
+CONFFLAGS      =  -des -Dcc=${CC} -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duseshrplib -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}"
+###
+endif
+
+#--------------------------------------------------------------------------#
+
+all:    	install-perl
+
+clean:		clean-perl  
+
+config-perl:	sources/${PERL}.tar.gz 
+	tar -zxvf sources/${PERL}.tar.gz
+	chmod 755 ${PERL}/Configure
+	cd ${PERL} ; export CC=${CC} ; export CXX=${CXX} ; ${PFLAGS} ccflags='${CFLAGS}' LD_LIBRARY_PATH=${DIR}  ./Configure ${CONFFLAGS}
+	touch config-perl
+
+make-perl: config-perl
+	cd ${PERL} ; export CC=${CC} ; export CXX=${CXX} ; \
+	   export  LD_LIBRARY_PATH=${DIR} ;                \
+	   ${PFLAGS}  make -j${NCPU} ;                     \
+	   TEST_JOBS=${NCPU} LD_LIBRARY_PATH=${DIR} make test_harness
+	touch make-perl
+
+install-perl: make-perl
+	cd ${PERL} ; ${PFLAGS} LD_LIBRARY_PATH=`pwd` make install
+	touch install-perl
+
+clean-perl:
+	rm -rf ${PERL} make-perl config-perl install-perl

@@ -1,0 +1,32 @@
+include base.config
+
+#### Octave
+OCTAVEVER		= 4.2.0
+OCTAVE			= octave-${OCTAVEVER}
+OCTAVE_INST_PATH	= ${NLYTIQ_INST_PATH}
+OCTAVEOPTS		= --enable-openmp \
+			  --enable-atomic-refcount --with-x --with-lapack=atlas  \
+			  --with-blas=openblas --with-fftw3f-includedir=/opt/nlytiq/include \
+			  --with-fftw3f-libdir=/opt/nlytiq/lib 
+LDFLAGS			= -L/opt/nlytiq/lib
+#--------------------------------------------------------------------------#
+
+all:    	install-octave
+
+clean:		clean-octave
+
+config-octave:
+	tar -zxvf sources/${OCTAVE}.tar.gz
+	cd ${OCTAVE} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} LDFLAGS=${LDFLAGS}  ./configure --prefix=${NLYTIQ_INST_PATH} ${OCTAVEOPTS}
+	touch config-octave
+
+make-octave: config-octave
+	cd ${OCTAVE} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} LDFLAGS=${LDFLAGS} make -j${NCPU}
+	touch make-octave
+
+install-octave: make-octave
+	cd ${OCTAVE} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} LDFLAGS=${LDFLAGS} make install
+	touch install-octave
+
+clean-octave:
+	rm -rf ${OCTAVE} make-octave config-octave install-octave make-octave

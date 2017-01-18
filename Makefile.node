@@ -1,0 +1,31 @@
+include base.config
+
+#### NodeJS  
+NODEVER		= v6.9.4
+NODE		= node-${NODEVER}
+NODE_INST_PATH	= ${NLYTIQ_INST_PATH}
+#--------------------------------------------------------------------------#
+
+all:    	install-node-modules
+
+clean:		clean-node  
+
+config-node:	
+	tar -zxvf sources/${NODE}.tar.gz
+	cd ${NODE} ; CFLAGS="-O2 -g  "   ./configure --prefix=${NLYTIQ_INST_PATH} 
+	touch config-node
+
+make-node: config-node
+	cd ${NODE} ;	 make -j8
+	touch make-node
+
+install-node: make-node
+	cd ${NODE} ; make install
+	touch install-node
+
+install-node-modules: install-node
+	PATH=${NLYTIQ_INST_PATH}/bin  ${NLYTIQ_INST_PATH}/bin/npm install -g nedb hapi uuid-1345 dotenv socket.io lodash 
+	touch install-node-modules
+
+clean-node:
+	rm -rf ${NODE} make-node config-node install-node install-node-modules node-modules

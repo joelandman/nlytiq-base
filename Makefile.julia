@@ -1,0 +1,43 @@
+include base.config
+
+JULIA_VER = 0.5-release
+JULIA_INST_PATH	= ${NLYTIQ_INST_PATH}
+
+ifeq ($(CLANG),1)
+__ENV__SET = USE_LLVM_SHLIB=1
+endif
+
+ifeq ($(GCC),1)
+	__ENV__SET = USE_LLVM_SHLIB=0
+endif
+
+
+
+all:    	install-julia
+
+clean:		clean-julia  
+
+config-julia:	
+	#git clone git://github.com/JuliaLang/julia.git
+	#echo "DESTDIR=${JULIA_INST_PATH}" >> julia/Make.user
+	tar -zxvf sources/julia-${JULIA_VER}.tar.gz
+	touch config-julia
+
+make-julia: config-julia
+	rm -f julia/Make.user
+	#echo "USE_SYSTEM_PCRE=1" > julia/Make.user
+	echo "LLVM_VER = 3.9.1"  >> julia/Make.user
+	echo "USE_SYSTEM_BLAS=0" >> julia/Make.user
+	echo "USE_SYSTEM_LAPACK=0" >> julia/Make.user
+	#echo "MARCH=sandybridge" >> julia/Make.user
+	echo "JULIA_CPU_TARGET=core2"  >> julia/Make.user
+	cd julia ; ${__ENV__SET} make  -j4
+	touch make-julia
+
+install-julia: make-julia
+	cd julia ; ${__ENV__SET} make install
+	cd julia/usr ; tar -cf - . | (cd ${JULIA_INST_PATH} && tar -xvf - )
+	touch install-julia
+
+clean-julia:
+	rm -rf julia install-julia make-julia config-julia OpenBLAS*

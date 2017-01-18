@@ -1,0 +1,43 @@
+include base.config
+
+#### Perl  
+PERLVER		= 2016.11
+PERL		= rakudo-star-${PERLVER}
+PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
+OSREV		= $(shell uname -r)
+PFLAGS          = --gen-moar
+CONFFLAGS      =  --prefix ${NLYTIQ_INST_PATH}
+
+DIR		= $(shell pwd)/${PERL}
+ifeq ($(GCC),1)
+	### use gcc
+	CFLAGS          = -mtune=corei7
+	###
+endif
+
+ifeq ($(CLANG),1)
+	### use clang
+	CFLAGS          = -O2
+endif
+
+#--------------------------------------------------------------------------#
+
+all:    	install-perl6
+
+clean:		clean-perl6  
+
+config-perl6:	sources/${PERL}.tar.gz
+	tar -zxvf sources/${PERL}.tar.gz
+	cd ${PERL} ; CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS}  ${NLYTIQ_INST_PATH}/bin/perl Configure.pl ${PFLAGS} ${CONFFLAGS}
+	touch config-perl6
+
+make-perl6: config-perl6
+	cd ${PERL} ; CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} make -j${NCPU}
+	touch make-perl6
+
+install-perl6: make-perl6
+	cd ${PERL} ; CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} make install
+	touch install-perl6
+
+clean-perl6:
+	rm -rf ${PERL} make-perl6 config-perl6 install-perl6

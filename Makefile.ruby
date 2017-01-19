@@ -1,7 +1,7 @@
 include base.config
 
 RUBY_INST_PATH	= ${NLYTIQ_INST_PATH}
-RUBY_VERSION	= 2.3.1
+RUBY_VERSION	= 2.4.0
 
 
 

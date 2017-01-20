@@ -93,10 +93,11 @@ it does require a modern Java which complicates things (we are trying
 to stay away from non-free/open source systems).
 
 ##Who
-Me:  (Joe Landman)[mailto:joe.landman@gmail.com]
+Me:  Joe Landman (joe _dot_ landman at our friends at google's mail service)
 
 ##License
 Each project has its own licensing, but all are open source.  Our code,
 the makefiles, are MIT/BSD licensed.
 
 ##How do I build it
+See the HOWTO

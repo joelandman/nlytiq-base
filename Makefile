@@ -8,12 +8,12 @@ include base.config
 ### select which version based upon if we are using clang
 
 ifeq ($(CLANG),1)
-packages = cmake llvm perl5 perl5mods perl6 python go julia node spark R ruby
+packages = cmake llvm atlas perl5 perl5mods perl6 python go julia node spark R ruby octave
 endif
 
 ifeq ($(GCC),1)
 # do not need llvm if we are not using it to compile everything 
-packages = cmake perl5 perl5mods perl6 python go julia node spark R ruby
+packages = cmake atlas perl5 perl5mods perl6 python go julia node spark R ruby octave
 endif
 
 #  remove rust for now.  May be added back later.

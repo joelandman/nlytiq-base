@@ -1,0 +1,33 @@
+include base.config
+
+ATLAS_VER  = 3.10.3
+ATLAS_SRC  = atlas${ATLAS_VER}
+ATLAS_TAR  = ${ATLAS_SRC}.tar.bz2
+ATLAS_DIR  = ATLAS
+LAPACK_VER = 3.7.0
+LAPACK_SRC = lapack-${LAPACK_VER}
+LAPACK_TAR = ${LAPACK_SRC}.tgz
+
+all:    	install-atlas
+
+clean:		clean-atlas  
+
+config-atlas:	
+	#echo "DESTDIR=${ATLAS_INST_PATH}" >> atlas/Make.user
+	tar -jxf sources/${ATLAS_TAR}
+	mkdir ${ATLAS_DIR}/build
+	cd ${ATLAS_DIR}/build ; ../configure --prefix=${NLYTIQ_INST_PATH} \
+		   -b 64 --cc=${CC} --cflags=${CFLAGS} --dylibs	\
+		   --with-netlib-lapack-tarfile=../../sources/${LAPACK_TAR}
+	touch config-atlas
+
+make-atlas: config-atlas
+	cd ${ATLAS_DIR}/build ; make  -j${NCPU}
+	touch make-atlas
+
+install-atlas: make-atlas
+	cd ${ATLAS_DIR}/build ;  make install
+	touch install-atlas
+
+clean-atlas:
+	rm -rf atlas install-atlas make-atlas config-atlas ${ATLAS_DIR}

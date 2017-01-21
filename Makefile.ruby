@@ -10,7 +10,7 @@ all:    	install-ruby
 
 clean:		clean-ruby  
 
-config-ruby:	
+configure-ruby:	
 	tar -zxvf sources/ruby-${RUBY_VERSION}.tar.gz
 	cd ruby-${RUBY_VERSION} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} ./configure --prefix=${RUBY_INST_PATH}  --enable-load-relative  --enable-shared
 	touch config-ruby

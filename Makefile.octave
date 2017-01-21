@@ -15,7 +15,7 @@ all:    	install-octave
 
 clean:		clean-octave
 
-config-octave:
+configure-octave:
 	tar -zxvf sources/${OCTAVE}.tar.gz
 	cd ${OCTAVE} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} LDFLAGS=${LDFLAGS}  ./configure --prefix=${NLYTIQ_INST_PATH} ${OCTAVEOPTS}
 	touch config-octave

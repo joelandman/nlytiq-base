@@ -12,7 +12,7 @@ all:    	install-atlas
 
 clean:		clean-atlas  
 
-config-atlas:	
+configure-atlas:	
 	#echo "DESTDIR=${ATLAS_INST_PATH}" >> atlas/Make.user
 	tar -jxf sources/${ATLAS_TAR}
 	mkdir ${ATLAS_DIR}/build

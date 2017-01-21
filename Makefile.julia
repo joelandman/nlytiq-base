@@ -17,7 +17,7 @@ all:    	install-julia
 
 clean:		clean-julia  
 
-config-julia:	
+configure-julia:	
 	#git clone git://github.com/JuliaLang/julia.git
 	#echo "DESTDIR=${JULIA_INST_PATH}" >> julia/Make.user
 	tar -zxvf sources/julia-${JULIA_VER}.tar.gz

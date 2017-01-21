@@ -42,7 +42,7 @@ all:    	install-R-modules
 
 clean:		clean-R  
 
-config-R:	
+configure-R:	
 	tar -zxvf sources/${R}.tar.gz
 	cd ${R} ; export CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS}  FFLAGS=${FFLAGS} FCFLAGS=${FCFLAGS} LDFLAGS=${LDFLAGS} ; ./configure --prefix=${NLYTIQ_INST_PATH} ${RFLAGS}
 	cd ${R} ; /bin/bash tools/rsync-recommended 			  

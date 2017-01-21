@@ -2,10 +2,10 @@ include base.config
 
 
 
-#### Perl  
+####   
 PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 
-#### Perl Modules  
+####  Modules  
 PERL_MODULES	= Module::Install Module::AutoInstall \
 		  Mojolicious Getopt::Lucid IPC::Run HTML::Mason \
 		  Mojolicious::Plugin::Mason1Renderer IPC::Run XML::Smart \

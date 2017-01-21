@@ -1,6 +1,6 @@
 include base.config
 
-#### Perl  
+####   
 GOVER		= 1.7.4
 GOBASE		= go${GOVER}
 GOARCH		= linux-amd64

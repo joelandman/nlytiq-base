@@ -6,7 +6,7 @@ OCTAVE			= octave-${OCTAVEVER}
 OCTAVE_INST_PATH	= ${NLYTIQ_INST_PATH}
 OCTAVEOPTS		= --enable-openmp \
 			  --enable-atomic-refcount --with-x --with-lapack=lapack \
-			  --with-blas=tatlas --with-fftw3f-includedir=/opt/nlytiq/include \
+			  --with-blas=satlas --with-fftw3f-includedir=/opt/nlytiq/include \
 			  --with-fftw3f-libdir=/opt/nlytiq/lib 
 LDFLAGS			= -L/opt/nlytiq/lib
 #--------------------------------------------------------------------------#

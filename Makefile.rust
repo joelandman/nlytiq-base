@@ -1,6 +1,6 @@
 include base.config
 
-#### Perl  
+####   
 RUSTVER		= 1.14.0
 RUSTSRC		= rustc-${RUSTVER}
 RUSTTAR		= ${RUSTSRC}-src.tar.gz

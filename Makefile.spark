@@ -1,6 +1,6 @@
 include base.config
 
-#### Perl  
+####   
 SPARKVER= 0.46
 SPARK 	= spark
 SPARK_INST_PATH	= ${NLYTIQ_INST_PATH}

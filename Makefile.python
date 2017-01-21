@@ -1,6 +1,6 @@
 include base.config
 
-#### Perl  
+####   
 PYTHONVER		= 3.6.0
 PYTHON			= Python-${PYTHONVER}
 PYTHON_INST_PATH	= ${NLYTIQ_INST_PATH}

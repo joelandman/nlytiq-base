@@ -13,9 +13,9 @@ clean:		clean-node
 configure-node:	
 	tar -zxvf sources/${NODE}.tar.gz
 	cd ${NODE} ; CFLAGS="-O2 -g  "   ./configure --prefix=${NLYTIQ_INST_PATH} 
-	touch config-node
+	touch configure-node
 
-make-node: config-node
+make-node: configure-node
 	cd ${NODE} ;	 make -j8
 	touch make-node
 
@@ -28,4 +28,4 @@ install-node-modules: install-node
 	touch install-node-modules
 
 clean-node:
-	rm -rf ${NODE} make-node config-node install-node install-node-modules node-modules
+	rm -rf ${NODE} make-node configure-node install-node install-node-modules node-modules

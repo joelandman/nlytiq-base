@@ -13,9 +13,9 @@ clean:		clean-ruby
 configure-ruby:	
 	tar -zxvf sources/ruby-${RUBY_VERSION}.tar.gz
 	cd ruby-${RUBY_VERSION} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} ./configure --prefix=${RUBY_INST_PATH}  --enable-load-relative  --enable-shared
-	touch config-ruby
+	touch configure-ruby
 
-make-ruby: config-ruby
+make-ruby: configure-ruby
 	cd ruby-${RUBY_VERSION}; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} make -j${NCPU}
 	touch make-ruby
 
@@ -24,4 +24,4 @@ install-ruby: make-ruby
 	touch install-ruby
 
 clean-ruby:
-	rm -rf ruby install-ruby make-ruby config-ruby ruby-${RUBY_VERSION}
+	rm -rf ruby install-ruby make-ruby configure-ruby ruby-${RUBY_VERSION}

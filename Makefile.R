@@ -46,9 +46,9 @@ configure-R:
 	tar -zxvf sources/${R}.tar.gz
 	cd ${R} ; export CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS}  FFLAGS=${FFLAGS} FCFLAGS=${FCFLAGS} LDFLAGS=${LDFLAGS} ; ./configure --prefix=${NLYTIQ_INST_PATH} ${RFLAGS}
 	cd ${R} ; /bin/bash tools/rsync-recommended 			  
-	touch config-R
+	touch configure-R
 
-make-R: config-R
+make-R: configure-R
 	cd ${R} ; export CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS}  FFLAGS=${FFLAGS} FCFLAGS=${FCFLAGS} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS}  ; make -j${NCPU}
 	touch make-R
 
@@ -92,4 +92,4 @@ install-R-modules: install-R
 	touch install-R-modules
 
 clean-R:
-	rm -rf ${R} make-R config-R install-R install-R-modules ${R}
+	rm -rf ${R} make-R configure-R install-R install-R-modules ${R}

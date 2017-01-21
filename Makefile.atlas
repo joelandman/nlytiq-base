@@ -19,9 +19,9 @@ configure-atlas:
 	cd ${ATLAS_DIR}/build ; ../configure --prefix=${NLYTIQ_INST_PATH} \
 		   -b 64 --cc=${CC} --cflags=${CFLAGS} --dylibs	\
 		   --with-netlib-lapack-tarfile=../../sources/${LAPACK_TAR}
-	touch config-atlas
+	touch configure-atlas
 
-make-atlas: config-atlas
+make-atlas: configure-atlas
 	cd ${ATLAS_DIR}/build ; make  -j${NCPU}
 	touch make-atlas
 
@@ -30,4 +30,4 @@ install-atlas: make-atlas
 	touch install-atlas
 
 clean-atlas:
-	rm -rf atlas install-atlas make-atlas config-atlas ${ATLAS_DIR}
+	rm -rf atlas install-atlas make-atlas configure-atlas ${ATLAS_DIR}

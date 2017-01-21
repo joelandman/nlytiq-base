@@ -18,9 +18,9 @@ clean:		clean-octave
 configure-octave:
 	tar -zxvf sources/${OCTAVE}.tar.gz
 	cd ${OCTAVE} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} LDFLAGS=${LDFLAGS}  ./configure --prefix=${NLYTIQ_INST_PATH} ${OCTAVEOPTS}
-	touch config-octave
+	touch configure-octave
 
-make-octave: config-octave
+make-octave: configure-octave
 	cd ${OCTAVE} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} LDFLAGS=${LDFLAGS} make -j${NCPU}
 	touch make-octave
 
@@ -29,4 +29,4 @@ install-octave: make-octave
 	touch install-octave
 
 clean-octave:
-	rm -rf ${OCTAVE} make-octave config-octave install-octave make-octave
+	rm -rf ${OCTAVE} make-octave configure-octave install-octave make-octave

@@ -21,9 +21,9 @@ configure-julia:
 	#git clone git://github.com/JuliaLang/julia.git
 	#echo "DESTDIR=${JULIA_INST_PATH}" >> julia/Make.user
 	tar -zxvf sources/julia-${JULIA_VER}.tar.gz
-	touch config-julia
+	touch configure-julia
 
-make-julia: config-julia
+make-julia: configure-julia
 	rm -f julia/Make.user
 	#echo "USE_SYSTEM_PCRE=1" > julia/Make.user
 	echo "LLVM_VER = 3.9.1"  >> julia/Make.user
@@ -40,4 +40,4 @@ install-julia: make-julia
 	touch install-julia
 
 clean-julia:
-	rm -rf julia install-julia make-julia config-julia OpenBLAS*
+	rm -rf julia install-julia make-julia configure-julia OpenBLAS*

@@ -26,7 +26,7 @@ all:    	install-perl6
 
 clean:		clean-perl6  
 
-config-perl6:	sources/${PERL}.tar.gz
+configure-perl6:	sources/${PERL}.tar.gz
 	tar -zxvf sources/${PERL}.tar.gz
 	cd ${PERL} ; CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS}  ${NLYTIQ_INST_PATH}/bin/perl Configure.pl ${PFLAGS} ${CONFFLAGS}
 	touch config-perl6

@@ -10,7 +10,7 @@ all:    	install-node-modules
 
 clean:		clean-node  
 
-config-node:	
+configure-node:	
 	tar -zxvf sources/${NODE}.tar.gz
 	cd ${NODE} ; CFLAGS="-O2 -g  "   ./configure --prefix=${NLYTIQ_INST_PATH} 
 	touch config-node

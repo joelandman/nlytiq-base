@@ -23,7 +23,7 @@ all:    	install-python-modules
 
 clean:		clean-python  
 
-config-python:	
+configure-python:	
 	tar -zxvf sources/${PYTHON}.tgz
 	cd ${PYTHON} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} ./configure --prefix=${NLYTIQ_INST_PATH}
 	touch config-python

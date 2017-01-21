@@ -31,7 +31,7 @@ all:    	install-perl
 
 clean:		clean-perl  
 
-config-perl:	sources/${PERL}.tar.gz 
+configure-perl:	sources/${PERL}.tar.gz 
 	tar -zxvf sources/${PERL}.tar.gz
 	chmod 755 ${PERL}/Configure
 	cd ${PERL} ; export CC=${CC} ; export CXX=${CXX} ; ${PFLAGS} ccflags='${CFLAGS}' LD_LIBRARY_PATH=${DIR}  ./Configure ${CONFFLAGS}

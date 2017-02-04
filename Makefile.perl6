@@ -29,9 +29,9 @@ clean:		clean-perl6
 configure-perl6:	sources/${PERL}.tar.gz
 	tar -zxvf sources/${PERL}.tar.gz
 	cd ${PERL} ; CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS}  ${NLYTIQ_INST_PATH}/bin/perl Configure.pl ${PFLAGS} ${CONFFLAGS}
-	touch config-perl6
+	touch configure-perl6
 
-make-perl6: config-perl6
+make-perl6: configure-perl6
 	cd ${PERL} ; CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} make -j${NCPU}
 	touch make-perl6
 
@@ -40,4 +40,4 @@ install-perl6: make-perl6
 	touch install-perl6
 
 clean-perl6:
-	rm -rf ${PERL} make-perl6 config-perl6 install-perl6
+	rm -rf ${PERL} make-perl6 configure-perl6 install-perl6

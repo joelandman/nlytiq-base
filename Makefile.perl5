@@ -14,7 +14,12 @@ DIR		= $(shell pwd)/${PERL}
 ifeq ($(GCC),1)
 ### use gcc
 CFLAGS          = -fPIC -O3 -malign-double -g
+ifeq ($(OS), Linux)
 CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duseshrplib -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC
+endif
+ifeq ($(OS), Darwin)
+CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC
+endif
 ###
 endif
 
@@ -35,9 +40,9 @@ configure-perl:	sources/${PERL}.tar.gz
 	tar -zxvf sources/${PERL}.tar.gz
 	chmod 755 ${PERL}/Configure
 	cd ${PERL} ; export CC=${CC} ; export CXX=${CXX} ; ${PFLAGS} ccflags='${CFLAGS}' LD_LIBRARY_PATH=${DIR}  ./Configure ${CONFFLAGS}
-	touch config-perl
+	touch configure-perl
 
-make-perl: config-perl
+make-perl: configure-perl
 	cd ${PERL} ; export CC=${CC} ; export CXX=${CXX} ; \
 	   export  LD_LIBRARY_PATH=${DIR} ;                \
 	   ${PFLAGS}  make -j${NCPU} ;                     \
@@ -49,4 +54,4 @@ install-perl: make-perl
 	touch install-perl
 
 clean-perl:
-	rm -rf ${PERL} make-perl config-perl install-perl
+	rm -rf ${PERL} make-perl configure-perl install-perl

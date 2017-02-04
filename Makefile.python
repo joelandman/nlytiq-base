@@ -26,9 +26,9 @@ clean:		clean-python
 configure-python:	
 	tar -zxvf sources/${PYTHON}.tgz
 	cd ${PYTHON} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} ./configure --prefix=${NLYTIQ_INST_PATH}
-	touch config-python
+	touch configure-python
 
-make-python: config-python
+make-python: configure-python
 	cd ${PYTHON} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} make -j${NCPU}
 	touch make-python
 
@@ -54,4 +54,4 @@ install-python-modules: install-python
 	touch install-python-modules
 
 clean-python:
-	rm -rf ${PYTHON} make-python config-python install-python install-python-modules python
+	rm -rf ${PYTHON} make-python configure-python install-python install-python-modules python

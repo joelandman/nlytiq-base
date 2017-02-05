@@ -8,8 +8,8 @@ all:    	install-rustbin
 
 clean:		clean-rust  
 
-install-rustbin: sources/${RUSTBINTAR}
-	export RUSTUP_HOME=${NLYTIQ_INST_PATH} ; ${RUSTUPINIT} -v
+install-rustbin: ${RUSTUPINIT}
+	CARGO_INSTALL_ROOT=${NLYTIQ_INST_PATH} RUSTUP_HOME=${NLYTIQ_INST_PATH} ${RUSTUPINIT} -v -y
 	touch install-rustbin
 
 

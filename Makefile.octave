@@ -10,16 +10,18 @@ OCTAVEOPTS		= --enable-openmp \
 			  --enable-atomic-refcount --with-x --with-lapack=lapack \
 			  --with-blas=satlas --with-fftw3f-includedir=/opt/nlytiq/include \
 			  --with-fftw3f-libdir=/opt/nlytiq/lib 
-LDFLAGS                 = -L/opt/nlytiq/lib
+LDFLAGS                 = "-L/opt/nlytiq/lib"
+
 else
+
 OCTAVEOPTS              = --enable-openmp \
 			  --enable-atomic-refcount --with-x --with-lapack=lapack \
 			  --with-blas=blas --with-fftw3f-includedir=/opt/nlytiq/include \
 			  --with-fftw3f-libdir=/opt/nlytiq/lib
-LDFLAGS                 = -L/opt/nlytiq/lib \
+LDFLAGS                 = "-L/opt/nlytiq/lib \
 			  -L/usr/lib/openblas-base \
 			  -L/usr/lib/atlas-base/ \
-			  -L/usr/lib/atlas-base/atlas/
+			  -L/usr/lib/atlas-base/atlas/"
 endif
 #LDFLAGS			= -L/opt/nlytiq/lib
 

@@ -1,7 +1,7 @@
 include base.config
 
 ####   
-PERLVER		= 2017.1
+PERLVER		= 2017.01
 PERL		= rakudo-star-${PERLVER}
 PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 OSREV		= $(shell uname -r)

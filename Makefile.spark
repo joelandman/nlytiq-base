@@ -1,0 +1,20 @@
+include base.config
+
+####   
+SPARKVER= 0.46
+SPARK 	= spark
+SPARK_INST_PATH	= ${NLYTIQ_INST_PATH}
+OSREV		= `uname -r`
+#--------------------------------------------------------------------------#
+
+all:    	install-spark
+
+clean:		clean-spark
+
+install-spark:	
+	tar -zxvf sources/${SPARK}-${SPARKVER}.tar.gz
+	cd ${SPARK}  ; cp spark ${NLYTIQ_INST_PATH}/bin
+	touch install-SPARK
+
+clean-spark:
+	rm -rf ${SPARK} install-SPARK 

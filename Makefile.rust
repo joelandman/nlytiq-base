@@ -1,46 +1,17 @@
 include base.config
 
 ####   
-RUSTVER		= 1.14.0
-RUSTSRC		= rustc-${RUSTVER}
-RUSTTAR		= ${RUSTSRC}-src.tar.gz
-RUST_INST_PATH	= ${NLYTIQ_INST_PATH}
-RUST_OPTS	= --enable-dist-host-only  --local-rust-root=${NLYTIQ_INST_PATH} \
-		  --sysconfdir=${NLYTIQ_INST_PATH}/etc --datadir=${NLYTIQ_INST_PATH}/share \
-		  --infodir=${NLYTIQ_INST_PATH}/share/info
+RUSTUPINIT	= sources/rustup-init
 #--------------------------------------------------------------------------#
 
-# note: rustc is hitting seg faults with clang 3.9.1.  Force GCC for now
-FORCEGCC 	= 1
-
-ifeq ($(FORCEGCC),1)
-CC		= gcc
-CXX		= g++
-CFLAGS          = "-fPIC -O3 -malign-double -g"
-endif
-
-all:    	install-rust 
+all:    	install-rustbin
 
 clean:		clean-rust  
 
-configure-rust: sources/${RUSTTAR}
-	tar -zxf sources/${RUSTTAR}
-	cd ${RUSTSRC} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} ./configure --prefix=${NLYTIQ_INST_PATH}  ${RUST_OPTS}
-	touch configure-rust
+install-rustbin: sources/${RUSTBINTAR}
+	export RUSTUP_HOME=${NLYTIQ_INST_PATH} ; ${RUSTUPINIT} -v
+	touch install-rustbin
 
-make-rust: configure-rust
-	cd ${RUSTSRC} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} PATH=$(PATH):${NLYTIQ_INST_PATH}/bin make -j${NCPU}
-	touch make-rust
-
-install-rust: make-rust
-	# ok ... some very strange UID setting during rustc build
-	# you need an nlytiq user 'useradd -m nlytiq' for this part, or you
-	# will get a tmp/dist creation failure ... when sudo'ed.  Yes, really.
-	# works fine under su, but not sudo.
-	chown -R $(shell whoami):$(shell whoami) ${RUSTSRC} 
-	#
-	cd ${RUSTSRC} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} PATH=$(PATH):${NLYTIQ_INST_PATH}/bin make install
-	touch install-rust
 
 clean-rust:
-	rm -rf ${RUSTSRC} make-rust install-rust configure-rust 
+	rm -rf install-rustbin

@@ -8,15 +8,22 @@ include base.config
 ### select which version based upon if we are using clang
 
 ifeq ($(CLANG),1)
-packages = cmake llvm atlas perl5 perl5mods perl6 python go julia node spark R ruby octave
+ifeq ($(BUILDATLAS),1)
+packages = cmake llvm atlas perl5 perl5mods perl6 python go julia node spark R ruby octave rust
+else
+packages = cmake llvm perl5 perl5mods perl6 python go julia node spark R ruby octave rust
+endif
 endif
 
 ifeq ($(GCC),1)
 # do not need llvm if we are not using it to compile everything 
-packages = cmake atlas perl5 perl5mods perl6 python go julia node spark R ruby octave
+ifeq ($(BUILDATLAS),1)
+packages = cmake atlas perl5 perl5mods perl6 python go julia node spark R ruby octave rust
+else
+packages = cmake perl5 perl5mods perl6 python go julia node spark R ruby octave rust
+endif
 endif
 
-#  remove rust for now.  May be added back later.
 
 ### each package has its own Makefile.  This Makefile drives complilation
 ### with a default target of all.  Each Makefile also has a clean target

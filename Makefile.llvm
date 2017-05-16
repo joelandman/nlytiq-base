@@ -19,7 +19,13 @@ CFETAR		= ${CFEDIR}.tar.xz
 RTTAR		= ${RTDIR}.tar.xz
 OPENMPTAR	= ${OPENMPDIR}.tar.xz
 LLVM_INST_PATH	= ${NLYTIQ_INST_PATH}
+
+ifneq ($(OS), SunOS)
 CMAKE_BIN	= ${NLYTIQ_INST_PATH}/bin/cmake 
+else
+CMAKE_BIN       = /opt/local/bin/cmake
+endif
+
 CMAKE_CMD	= ${CMAKE_BIN} -DCMAKE_INSTALL_PREFIX:STRING=${NLYTIQ_INST_PATH} \
                         -DLLVM_ENABLE_CXX1Y:BOOL=On -DLLVM_ENABLE_LTO:BOOL=Off \
                         -DLLVM_PARALLEL_COMPILE_JOBS:STRING=${NCPU}  \

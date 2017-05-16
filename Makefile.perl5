@@ -17,9 +17,16 @@ CFLAGS          = -fPIC -O3 -malign-double -g
 ifeq ($(OS), Linux)
 CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duseshrplib -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC
 endif
+
 ifeq ($(OS), Darwin)
 CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC
 endif
+
+ifeq ($(OS), SunOS)
+CFLAGS          =  -O  -g
+CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC
+endif
+
 ###
 endif
 

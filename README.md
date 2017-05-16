@@ -1,4 +1,4 @@
-# nyltiq-base
+# nlytiq-base
 
 ## What?
 This is a simple analytical toolchain providing a number of up to date

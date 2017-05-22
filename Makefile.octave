@@ -1,7 +1,7 @@
 include base.config
 
 #### Octave
-OCTAVEVER		= 4.2.0
+OCTAVEVER		= 4.2.1
 OCTAVE			= octave-${OCTAVEVER}
 OCTAVE_INST_PATH	= ${NLYTIQ_INST_PATH}
 
@@ -45,4 +45,4 @@ install-octave: make-octave
 	touch install-octave
 
 clean-octave:
-	rm -rf ${OCTAVE} make-octave configure-octave install-octave make-octave
+	rm -rf ${OCTAVE} make-octave configure-octave install-octave make-octave ${OCTAVE}

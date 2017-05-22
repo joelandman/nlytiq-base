@@ -1,6 +1,7 @@
 include base.config
 
-JULIA_VER = 0.5-release
+JULIA_VER = 0.5.2
+JULIA_NAME = ${JULIA_VER}-full
 JULIA_INST_PATH	= ${NLYTIQ_INST_PATH}
 
 ifeq ($(CLANG),1)
@@ -11,6 +12,7 @@ ifeq ($(GCC),1)
 	__ENV__SET = USE_LLVM_SHLIB=0
 endif
 
+JULIA_DIR = julia-${JULIA_VER}
 
 
 all:    	install-julia
@@ -19,25 +21,25 @@ clean:		clean-julia
 
 configure-julia:	
 	#git clone git://github.com/JuliaLang/julia.git
-	#echo "DESTDIR=${JULIA_INST_PATH}" >> julia/Make.user
-	tar -zxvf sources/julia-${JULIA_VER}.tar.gz
+	#echo "DESTDIR=${JULIA_INST_PATH}" >> ${JULIA_DIR}/Make.user
+	tar -zxvf sources/julia-${JULIA_NAME}.tar.gz
 	touch configure-julia
 
 make-julia: configure-julia
-	rm -f julia/Make.user
-	#echo "USE_SYSTEM_PCRE=1" > julia/Make.user
-	echo "LLVM_VER = 3.9.1"  >> julia/Make.user
-	echo "USE_SYSTEM_BLAS=0" >> julia/Make.user
-	echo "USE_SYSTEM_LAPACK=0" >> julia/Make.user
-	#echo "MARCH=sandybridge" >> julia/Make.user
-	echo "JULIA_CPU_TARGET=core2"  >> julia/Make.user
-	cd julia ; ${__ENV__SET} make  -j4
+	rm -f ${JULIA_DIR}/Make.user
+	#echo "USE_SYSTEM_PCRE=1" > ${JULIA_DIR}/Make.user
+	#echo "LLVM_VER = 4.0.0"  >> ${JULIA_DIR}/Make.user
+	echo "USE_SYSTEM_BLAS=0" >> ${JULIA_DIR}/Make.user
+	echo "USE_SYSTEM_LAPACK=0" >> ${JULIA_DIR}/Make.user
+	#echo "MARCH=sandybridge" >> ${JULIA_DIR}/Make.user
+	echo "JULIA_CPU_TARGET=core2"  >> ${JULIA_DIR}/Make.user
+	cd julia-${JULIA_VER} ; ${__ENV__SET} make  -j4
 	touch make-julia
 
 install-julia: make-julia
-	cd julia ; ${__ENV__SET} make install
-	cd julia/usr ; tar -cf - . | (cd ${JULIA_INST_PATH} && tar -xvf - )
+	cd julia-${JULIA_VER} ; ${__ENV__SET} make install
+	cd ${JULIA_DIR}/usr ; tar -cf - . | (cd ${JULIA_INST_PATH} && tar -xvf - )
 	touch install-julia
 
 clean-julia:
-	rm -rf julia install-julia make-julia configure-julia OpenBLAS*
+	rm -rf julia install-julia make-julia configure-julia OpenBLAS* julia-${JULIA_VER}

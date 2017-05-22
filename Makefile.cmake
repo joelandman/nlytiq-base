@@ -28,4 +28,4 @@ install-cmake: make-cmake
 	touch install-cmake
 
 clean-cmake:
-	rm -rf ${CMAKESRC} make-cmake install-cmake configure-cmake
+	rm -rf ${CMAKESRC} make-cmake install-cmake configure-cmake cmake

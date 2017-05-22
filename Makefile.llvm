@@ -1,7 +1,7 @@
 include base.config
 
 #### llvm
-LLVMVER		= 3.9.1
+LLVMVER		= 4.0.0
 DEVER		= 3.3
 LLVMSRC		= llvm-${LLVMVER}
 CFESRC		= cfe-${LLVMVER}

@@ -1,7 +1,7 @@
 include base.config
 
 #### R  
-RVER		= 3.3.2
+RVER		= 3.4.0
 R		= R-${RVER}
 R_INST_PATH	= ${NLYTIQ_INST_PATH}
 

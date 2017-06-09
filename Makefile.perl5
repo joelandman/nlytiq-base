@@ -1,7 +1,7 @@
 include base.config
 
 ####   
-PERLVER		= 5.24.1
+PERLVER		= 5.26.0
 PERL		= perl-${PERLVER}
 PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 OSREV		= `uname -r`

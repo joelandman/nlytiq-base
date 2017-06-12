@@ -15,7 +15,7 @@ endif
 JULIA_DIR = julia-${JULIA_VER}
 
 
-all:    	install-julia
+all:    	install-julia-modules
 
 clean:		clean-julia  
 
@@ -41,5 +41,49 @@ install-julia: make-julia
 	cd ${JULIA_DIR}/usr ; tar -cf - . | (cd ${JULIA_INST_PATH} && tar -xvf - )
 	touch install-julia
 
+install-julia-modules: install-julia
+	mkdir -p ${JULIA_INST_PATH}/julia
+	echo JULIA_PKGDIR=${JULIA_INST_PATH}/julia >> bashrc.julia
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.init()'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.update()'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("PyPlot")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Gadfly")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Plots")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("AWSCore")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("AWSS3")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("AWSLambda")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("DifferentialEquations")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("CRC")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("CSV")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("CurveFit")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("CpuId")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("ConfParser")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("ClusterManagers")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("DataFrames")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Gaston")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("GaussQuadrature")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("JSON")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("IJulia")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Mux")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("WebSockets")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("HexEdit")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("LSODA")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("LsqFit")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("MXNet")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("NumericIO")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("PlotRecipes")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("FastGaussQuadrature")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("RingBuffers")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("SQLite")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("SIMD")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Roots")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Sparklines")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("TensorFlow")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Sundials")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("TimeSeriesIO")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("UUID")'
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("YAML")'
+	touch install-julia-modules
+
 clean-julia:
-	rm -rf julia install-julia make-julia configure-julia OpenBLAS* julia-${JULIA_VER}
+	rm -rf julia install-julia make-julia configure-julia OpenBLAS* julia-${JULIA_VER} install-julia install-julia-modules bashrc.julia

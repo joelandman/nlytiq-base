@@ -7,6 +7,7 @@ PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 
 ####  Modules  
 PERL_MODULES	= Module::Install Module::AutoInstall \
+		  Net::Server::PreFork \
 		  Mojolicious Getopt::Lucid IPC::Run HTML::Mason \
 		  Mojolicious::Plugin::Mason1Renderer IPC::Run XML::Smart \
 		  DBI DBD::SQLite Config::General Config::IniFiles \

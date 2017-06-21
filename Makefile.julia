@@ -1,6 +1,6 @@
 include base.config
 
-JULIA_VER = 0.5.2
+JULIA_VER = 0.6.0
 JULIA_NAME = ${JULIA_VER}-full
 JULIA_INST_PATH	= ${NLYTIQ_INST_PATH}
 

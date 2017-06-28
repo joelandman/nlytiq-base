@@ -33,6 +33,9 @@ make-julia: configure-julia
 	echo "USE_SYSTEM_LAPACK=0" >> ${JULIA_DIR}/Make.user
 	#echo "MARCH=sandybridge" >> ${JULIA_DIR}/Make.user
 	echo "JULIA_CPU_TARGET=core2"  >> ${JULIA_DIR}/Make.user
+ifeq ($(OS),SunOS)
+	cat sources/Make.user.illumos >> ${JULIA_DIR}/Make.user
+endif
 	cd julia-${JULIA_VER} ; ${__ENV__SET} make  -j4
 	touch make-julia
 

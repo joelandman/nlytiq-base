@@ -37,9 +37,10 @@ clean:
 #--------------------------------------------------------------------------#
 
 perl-modules:
+	NONINTERACTIVE_TESTING=1 PERL_MM_USE_DEFAULT=1 ${NLYTIQ_INST_PATH}/bin/cpan YAML
 	echo "o conf build_requires_install_policy yes ; o conf commit" | ${NLYTIQ_INST_PATH}/bin/perl -MCPAN -e shell
 	for module in ${PERL_MODULES} ; do \
-	  PERL_AUTOINSTALL="--alldeps" PERL_AUTOINSTALL_PREFER_CPAN=1 \
+	  TEST_JOBS=${NCPU} NONINTERACTIVE_TESTING=1 PERL_AUTOINSTALL="--alldeps" PERL_AUTOINSTALL_PREFER_CPAN=1 \
 	  ${NLYTIQ_INST_PATH}/bin/cpan $$module  ; \
 	done
 	touch perl-modules

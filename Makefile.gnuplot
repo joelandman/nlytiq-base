@@ -6,7 +6,7 @@ GNUPLOT		= gnuplot-${GNUPLOTVER}
 GNUPLOTTAR	= ${GNUPLOT}.tar.gz
 PFLAGS          = 
 CONFFLAGS	= --prefix=${NLYTIQ_INST_PATH} --disable-silent-rules \
-		  --enable-h3d-gridbox --enable-stats \
+		  --enable-stats \
 		  --enable-backwards-compatibility \
 		  --with-x --with-readline=gnu \
 		  --with-gd=/usr/lib/x86_64-linux-gnu/	\
@@ -38,4 +38,4 @@ install-gnuplot: make-gnuplot
 	touch install-gnuplot
 
 clean-gnuplot:
-	rm -rf ${DIR} make-gnuplot configure-gnuplot install-gnuplot
+	rm -rf ${DIR} make-gnuplot configure-gnuplot install-gnuplot ${DIR}

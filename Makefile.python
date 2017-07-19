@@ -1,7 +1,7 @@
 include base.config
 
 ####   
-PYTHONVER		= 3.6.1
+PYTHONVER		= 3.6.2
 PYTHON			= Python-${PYTHONVER}
 PYTHON_INST_PATH	= ${NLYTIQ_INST_PATH}
 
@@ -48,7 +48,7 @@ install-python-modules: install-python
 	${NLYTIQ_INST_PATH}/bin/pip3 install pandas
 	${NLYTIQ_INST_PATH}/bin/pip3 install sympy
 	${NLYTIQ_INST_PATH}/bin/pip3 install scipy
-	#${NLYTIQ_INST_PATH}/bin/pip3 install tensorflow
+	${NLYTIQ_INST_PATH}/bin/pip3 install tensorflow
 	${NLYTIQ_INST_PATH}/bin/pip3 install Theano
 	
 	touch install-python-modules

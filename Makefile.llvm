@@ -83,7 +83,7 @@ install-de: make-de
 	touch install-de
 
 clean-llvm:
-	rm -rf ${LLVMDIR} make-llvm install-llvm configure-llvm
+	rm -rf ${LLVMDIR} make-llvm install-llvm configure-llvm ${BUILDDIR}
 
 clean-de:
 	rm -rf configure-de make-de install-de build

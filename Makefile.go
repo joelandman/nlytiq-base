@@ -1,7 +1,7 @@
 include base.config
 
 ####   
-GOVER		= 1.8.1
+GOVER		= 1.8.3
 GOBASE		= go${GOVER}
 GOARCH		= linux-amd64
 GOBIN		= ${GOBASE}.${GOARCH}

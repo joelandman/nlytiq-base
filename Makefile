@@ -8,10 +8,18 @@ include base.config
 ### select which version based upon if we are using clang
 
 ifeq ($(CLANG),1)
+ifneq ($(OS),FreeBSD)
 ifeq ($(BUILDATLAS),1)
 packages = cmake llvm atlas perl5 perl5mods perl6 python go julia node spark R ruby octave rust
 else
 packages = cmake llvm perl5 perl5mods perl6 python go julia node spark R ruby octave rust
+endif
+else
+ifeq ($(BUILDATLAS),1)
+packages = cmake atlas perl5 perl5mods perl6 python go julia node spark R ruby octave rust
+else
+packages = cmake perl5 perl5mods perl6 python go julia node spark R ruby octave rust
+endif
 endif
 endif
 

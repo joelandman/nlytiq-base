@@ -1,0 +1,18 @@
+diff --git a/dist/Time-HiRes/HiRes.xs b/dist/Time-HiRes/HiRes.xs
+index 1b9ee23..e7d26f1 100644
+--- a/dist/Time-HiRes/HiRes.xs
++++ b/dist/Time-HiRes/HiRes.xs
+@@ -803,7 +803,9 @@ static int darwin_time_init() {
+ }
+ 
+ #ifdef TIME_HIRES_CLOCK_GETTIME_EMULATION
+-static int clock_gettime(int clock_id, struct timespec *ts) {
++typedef int clockid_t;
++
++static int clock_gettime(clockid_t clock_id, struct timespec *ts) {
+   if (darwin_time_init() && timebase_info.denom) {
+     switch (clock_id) {
+       case CLOCK_REALTIME:
+-- 
+2.10.0
+

@@ -4,10 +4,11 @@ include base.config
 PERLVER		= 5.26.0
 PERL		= perl-${PERLVER}
 PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
-OSREV		= `uname -r`
 PFLAGS          = 
 # BUILD_BZIP2=0
 # BUILD_ZLIB=False
+
+THR		= Time-HiRes-1.9742
 
 DIR		= $(shell pwd)/${PERL}
 
@@ -19,12 +20,13 @@ CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duseshrpli
 endif
 
 ifeq ($(OS), Darwin)
-CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC
+CFLAGS+=-DPERL_DARWIN
+CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC -Dcc=${CC}
 endif
 
 ifeq ($(OS), SunOS)
-CFLAGS          =  -O  -g
-CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC
+CFLAGS          =  -O  -g  -Werror=partial-availability
+CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC -Dcc=${CC}
 endif
 
 ###
@@ -46,6 +48,10 @@ clean:		clean-perl
 configure-perl:	sources/${PERL}.tar.gz 
 	tar -zxvf sources/${PERL}.tar.gz
 	chmod 755 ${PERL}/Configure
+	# Darwin (macosx) issue, have to rev Time::HiRes
+	#cd ${PERL} ; rm -rf dist/Time-HiRes ; cd dist ; tar -xzvf ../../sources/${THR}.tar.gz ; mv ${THR} Time-HiRes
+	#cd ${PERL}/Porting/ ; sed -i 's|Time-HiRes-1\.(\d+)\.tar\.gz|Time-HiRes-1\.9742\.tar\.gz|g' Maintainers.pl	
+	#cd ${PERL} ; patch -p1 < ../sources/0001-Time-HiRes-fix-compilation-on-darwin.patch
 	cd ${PERL} ; export CC=${CC} ; export CXX=${CXX} ; ${PFLAGS} ccflags='${CFLAGS}' LD_LIBRARY_PATH=${DIR}  ./Configure ${CONFFLAGS}
 	touch configure-perl
 

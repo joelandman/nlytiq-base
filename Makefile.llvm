@@ -39,9 +39,8 @@ BUILDDIR	= ${LLVMDIR}/build
 #--------------------------------------------------------------------------#
 
 all:    	install-llvm 
-	#install-de
 
-clean:		clean-llvm clean-de
+clean:		clean-llvm
 
 
 configure-llvm: 
@@ -65,25 +64,11 @@ make-llvm: configure-llvm
  
 install-llvm: make-llvm
 	cd ${BUILDDIR}  ; make -j${NCPU} install
-	echo "${NLYTIQ_INST_PATH}/lib" > /etc/ld.so.conf.d/nlytic.conf
+ifeq ($(OS),Linux)
+	echo "${NLYTIQ_INST_PATH}/lib" > /etc/ld.so.conf.d/nlytiq.conf
 	ldconfig
+endif
 	touch install-llvm
-
-configure-de: install-llvm
-	mkdir -p build
-	tar -zxf sources/${DETAR} -C build
-	touch configure-de
-
-make-de: configure-de
-	cd build/${DEDIR} ; LLVM_CONFIG=${NLYTIQ_INST_PATH}/bin/llvm-config make
-	touch make-de
-
-install-de: make-de
-	cd build/${DEDIR} ; LLVM_CONFIG=${NLYTIQ_INST_PATH}/bin/llvm-config make install
-	touch install-de
 
 clean-llvm:
 	rm -rf ${LLVMDIR} make-llvm install-llvm configure-llvm ${BUILDDIR}
-
-clean-de:
-	rm -rf configure-de make-de install-de build

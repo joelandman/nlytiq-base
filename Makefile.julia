@@ -29,18 +29,23 @@ make-julia: configure-julia
 	rm -f ${JULIA_DIR}/Make.user
 	#echo "USE_SYSTEM_PCRE=1" > ${JULIA_DIR}/Make.user
 	#echo "LLVM_VER = 4.0.0"  >> ${JULIA_DIR}/Make.user
+ifeq (${OS},FreeBSD)
+	echo "USE_SYSTEM_BLAS=1" >> ${JULIA_DIR}/Make.user
+	echo "USE_SYSTEM_LAPACK=1" >> ${JULIA_DIR}/Make.user
+else
 	echo "USE_SYSTEM_BLAS=0" >> ${JULIA_DIR}/Make.user
 	echo "USE_SYSTEM_LAPACK=0" >> ${JULIA_DIR}/Make.user
+endif
 	#echo "MARCH=sandybridge" >> ${JULIA_DIR}/Make.user
 	echo "JULIA_CPU_TARGET=core2"  >> ${JULIA_DIR}/Make.user
 ifeq ($(OS),SunOS)
 	cat sources/Make.user.illumos >> ${JULIA_DIR}/Make.user
 endif
-	cd julia-${JULIA_VER} ; ${__ENV__SET} make  -j4
+	cd julia-${JULIA_VER} ; ${__ENV__SET} ${MAKECMD}  -j${NCPU}
 	touch make-julia
 
 install-julia: make-julia
-	cd julia-${JULIA_VER} ; ${__ENV__SET} make install
+	cd julia-${JULIA_VER} ;  ${__ENV__SET} ${MAKECMD} install
 	cd ${JULIA_DIR}/usr ; tar -cf - . | (cd ${JULIA_INST_PATH} && tar -xvf - )
 	touch install-julia
 

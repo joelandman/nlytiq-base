@@ -14,6 +14,7 @@ endif
 ifeq ($(CLANG),1)
 ### use clang
 CFLAGS          = -O2
+CXXFLAGS	+= $(shell freetype-config --cflags)
 ###
 endif 
 
@@ -25,15 +26,15 @@ clean:		clean-python
 
 configure-python:	
 	tar -zxvf sources/${PYTHON}.tgz
-	cd ${PYTHON} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} ./configure --prefix=${NLYTIQ_INST_PATH}
+	cd ${PYTHON} ; CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} CC=${CC} CXX=${CXX} ./configure --prefix=${NLYTIQ_INST_PATH}
 	touch configure-python
 
 make-python: configure-python
-	cd ${PYTHON} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} make -j${NCPU}
+	cd ${PYTHON} ; CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} CC=${CC} CXX=${CXX} make -j${NCPU}
 	touch make-python
 
 install-python: make-python
-	cd ${PYTHON} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} make install
+	cd ${PYTHON} ; CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} CC=${CC} CXX=${CXX} make install
 	touch install-python
 
 install-python-modules: install-python
@@ -44,12 +45,15 @@ install-python-modules: install-python
 	${NLYTIQ_INST_PATH}/bin/pip3 install nose
 	#${NLYTIQ_INST_PATH}/bin/pip3 install dateutil 
 	${NLYTIQ_INST_PATH}/bin/pip3 install pyzmq tornado
-	${NLYTIQ_INST_PATH}/bin/pip3 install matplotlib
+	CXXFLAGS=${CXXFLAGS} ${NLYTIQ_INST_PATH}/bin/pip3 install matplotlib
 	${NLYTIQ_INST_PATH}/bin/pip3 install pandas
 	${NLYTIQ_INST_PATH}/bin/pip3 install sympy
 	${NLYTIQ_INST_PATH}/bin/pip3 install scipy
+ifneq (${OS},FreeBSD)
 	${NLYTIQ_INST_PATH}/bin/pip3 install tensorflow
+endif
 	${NLYTIQ_INST_PATH}/bin/pip3 install Theano
+	${NLYTIQ_INST_PATH}/bin/pip3 install Keras	
 	
 	touch install-python-modules
 

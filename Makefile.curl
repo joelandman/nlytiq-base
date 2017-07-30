@@ -1,0 +1,31 @@
+include base.config
+
+#### R  
+CURLVER		= 7.54.1
+CURL		= curl-${CURLVER}
+CURL_INST_PATH	= ${NLYTIQ_INST_PATH}
+
+### force baseline gcc if GCC_VER is not blank
+include forcegcc.config
+
+#--------------------------------------------------------------------------#
+
+all:    	install-curl
+
+clean:		clean-curl
+
+configure-curl:	
+	tar -zxvf sources/${CURL}.tar.gz
+	cd ${CURL} ; export CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} LDFLAGS=${LDFLAGS} ; ./configure --prefix=${NLYTIQ_INST_PATH} --with-darwinssl 
+	touch configure-curl
+
+make-curl: configure-curl
+	cd ${CURL} ; export CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS}  LDFLAGS=${LDFLAGS}  ; make -j${NCPU}
+	touch make-curl
+
+install-curl: make-curl
+	cd ${CURL} ;  export CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} LDFLAGS=${LDFLAGS} ;  make install
+	touch install-curl
+
+clean-curl:
+	rm -rf ${CURL} make-curl configure-curl install-curl 

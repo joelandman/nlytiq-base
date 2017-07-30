@@ -10,29 +10,21 @@ R_INST_PATH	= ${NLYTIQ_INST_PATH}
 # be 64 bit.
 FORCEGCC	= 1
 
-ifeq ($(GCC),1)
-### use gcc
-CFLAGS		= "-mtune=corei7-avx "
-LDFLAGS		= ""
-###
-endif
+### force baseline gcc if GCC_VER is not blank
+include forcegcc.config
 
 ifeq ($(CLANG),1)
 ### use clang
 CFLAGS          = -O2  
-LDFLAGS		= "-L${NLYTIQ_INST_PATH}/lib"
+LDFLAGS		= -L${NLYTIQ_INST_PATH}/lib
 ###
 endif
 
-ifeq ($(FORCEGCC),1)
-CC              = gcc
-CXX             = g++
-CFLAGS          = "-fPIC -O3 -malign-double -g"
-LDFLAGS         = "-L${NLYTIQ_INST_PATH}/lib"
-endif
+CFLAGS          += -I${NLYTIQ_INST_PATH}/include
+LDFLAGS         += -L${NLYTIQ_INST_PATH}/lib
 
 FFLAGS		= ${CFLAGS}
-FCFLAGS		= ${CFLAGS}
+FCFLAGS		= ${CFLAGS} 
 CXXFLAGS	= ${CFLAGS}
 
 RFLAGS		= --with-blas --with-lapack --with-readline  --with-system-zlib --with-system-bzlib --with-system-pcre --with-system-xz --with-recommended-packages --with-x
@@ -44,18 +36,18 @@ clean:		clean-R
 
 configure-R:	
 	tar -zxvf sources/${R}.tar.gz
-	cd ${R} ; export CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS}  FFLAGS=${FFLAGS} FCFLAGS=${FCFLAGS} LDFLAGS=${LDFLAGS} ; ./configure --prefix=${NLYTIQ_INST_PATH} ${RFLAGS}
+	cd ${R} ; export CC=${CC} CXX=${CXX} CFLAGS="${CFLAGS}" CXXFLAGS="${CXXFLAGS}"  FFLAGS="${FFLAGS}" FCFLAGS="${FCFLAGS}" LDFLAGS="${LDFLAGS}" ; ./configure --prefix=${NLYTIQ_INST_PATH} ${RFLAGS}
 	cd ${R} ; /bin/bash tools/rsync-recommended 			  
 	touch configure-R
 
 make-R: configure-R
-	cd ${R} ; export CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS}  FFLAGS=${FFLAGS} FCFLAGS=${FCFLAGS} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS}  ; make -j${NCPU}
+	cd ${R} ; export CC=${CC} CXX=${CXX} CFLAGS="${CFLAGS}" CXXFLAGS="${CXXFLAGS}"  FFLAGS="${FFLAGS}" FCFLAGS="${FCFLAGS}" CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"  ; make -j${NCPU}
 	touch make-R
 
 install-R: make-R
 	# below to fix a build issue
 	mkdir -p ${NLYTIQ_INST_PATH}/lib/R/lib/
-	cd ${R} ;  export CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS}  FFLAGS=${FFLAGS} FCFLAGS=${FCFLAGS} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} ;  make install
+	cd ${R} ;  export CC=${CC} CXX=${CXX} CFLAGS="${CFLAGS}" CXXFLAGS="${CXXFLAGS}"  FFLAGS="${FFLAGS}" FCFLAGS="${FCFLAGS}" CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" ;  make install
 	touch install-R
 
 install-R-modules: install-R

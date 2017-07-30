@@ -19,12 +19,12 @@ ifeq ($(OS), Linux)
 CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duseshrplib -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC
 endif
 
-ifeq ($(OS), Darwin)
-CFLAGS+=-DPERL_DARWIN
-CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC -Dcc=${CC}
+ifeq ($(OS),Darwin)
+CFLAGS=-DPERL_DARWIN -O3 -g
+CONFFLAGS      =  -des  -Dprefix=${NLYTIQ_INST_PATH} -Dnoshrplib  -Duse64bitall -Dusethreads -Duselargefiles
 endif
 
-ifeq ($(OS), SunOS)
+ifeq ($(OS),SunOS)
 CFLAGS          =  -O  -g  -Werror=partial-availability
 CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC -Dcc=${CC}
 endif
@@ -48,22 +48,26 @@ clean:		clean-perl
 configure-perl:	sources/${PERL}.tar.gz 
 	tar -zxvf sources/${PERL}.tar.gz
 	chmod 755 ${PERL}/Configure
-	# Darwin (macosx) issue, have to rev Time::HiRes
-	#cd ${PERL} ; rm -rf dist/Time-HiRes ; cd dist ; tar -xzvf ../../sources/${THR}.tar.gz ; mv ${THR} Time-HiRes
-	#cd ${PERL}/Porting/ ; sed -i 's|Time-HiRes-1\.(\d+)\.tar\.gz|Time-HiRes-1\.9742\.tar\.gz|g' Maintainers.pl	
-	#cd ${PERL} ; patch -p1 < ../sources/0001-Time-HiRes-fix-compilation-on-darwin.patch
-	cd ${PERL} ; export CC=${CC} ; export CXX=${CXX} ; ${PFLAGS} ccflags='${CFLAGS}' LD_LIBRARY_PATH=${DIR}  ./Configure ${CONFFLAGS}
+	cd ${PERL} ; export LANGUAGE=en_US ; export CC=${CC} ; export CXX=${CXX} ; ${PFLAGS} ccflags='${CFLAGS}' LD_LIBRARY_PATH=${DIR}  ./Configure ${CONFFLAGS}
 	touch configure-perl
 
 make-perl: configure-perl
+ifneq ($(OS),Darwin)
 	cd ${PERL} ; export CC=${CC} ; export CXX=${CXX} ; \
-	   export  LD_LIBRARY_PATH=${DIR} ;                \
+	   export  LD_LIBRARY_PATH=${DIR} ; export LANGUAGE=en_US ;   \
 	   ${PFLAGS}  make -j${NCPU} ;                     \
 	   TEST_JOBS=${NCPU} LD_LIBRARY_PATH=${DIR} make test_harness
+else
+	# Yay macos bites again
+	cd ${PERL} ; export CC=${CC} ; export CXX=${CXX} ; \
+	   export  DYLD_LIBRARY_PATH=${DIR} ; export LANGUAGE=en_US ;   \
+	   ${PFLAGS}  make -j${NCPU} ;                     \
+	   TEST_JOBS=${NCPU} LD_LIBRARY_PATH=${DIR} make test_harness
+endif
 	touch make-perl
 
 install-perl: make-perl
-	cd ${PERL} ; ${PFLAGS} LD_LIBRARY_PATH=`pwd` make install
+	cd ${PERL} ; export LANGUAGE=en_US ; ${PFLAGS} LD_LIBRARY_PATH=`pwd` make install
 	touch install-perl
 
 clean-perl:

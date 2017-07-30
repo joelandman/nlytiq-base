@@ -7,16 +7,21 @@ PYTHON_INST_PATH	= ${NLYTIQ_INST_PATH}
 
 ifeq ($(GCC),1)
 ### use gcc
-CFLAGS          = -mtune=corei7 
+#CFLAGS          = -O3 -g 
+#-mtune=corei7 
 ###
 endif
 
 ifeq ($(CLANG),1)
 ### use clang
 CFLAGS          = -O2
-CXXFLAGS	+= "$(shell freetype-config --cflags)"
+CXXFLAGS	+= $(shell freetype-config --cflags)
 ###
 endif 
+
+
+### force baseline gcc if GCC_VER is not blank
+include forcegcc.config
 
 ### MacOSX specific CFLAGS/LDFLAGS (c.f. https://stackoverflow.com/questions/41489439/pip3-installs-inside-virtual-environment-with-python3-6-failing-due-to-ssl-modul)
 ifeq ($(OS), Darwin)
@@ -33,15 +38,15 @@ clean:		clean-python
 
 configure-python:	
 	tar -zxvf sources/${PYTHON}.tgz
-	cd ${PYTHON} ; CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"  CXXFLAGS="${CXXFLAGS}" CC=${CC} CXX=${CXX} ./configure --prefix=${NLYTIQ_INST_PATH}
+	cd ${PYTHON} ; CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS}  CXXFLAGS=${CXXFLAGS} CC=${CC} CXX=${CXX} ./configure --prefix=${NLYTIQ_INST_PATH}
 	touch configure-python
 
 make-python: configure-python
-	cd ${PYTHON} ; CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"  CXXFLAGS="${CXXFLAGS}" CC=${CC} CXX=${CXX} make -j${NCPU}
+	cd ${PYTHON} ; CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS}  CXXFLAGS=${CXXFLAGS} CC=${CC} CXX=${CXX} make -j${NCPU}
 	touch make-python
 
 install-python: make-python
-	cd ${PYTHON} ; CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"  CXXFLAGS="${CXXFLAGS}" CC=${CC} CXX=${CXX} make install
+	cd ${PYTHON} ; CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS}  CXXFLAGS=${CXXFLAGS} CC=${CC} CXX=${CXX} make install
 	touch install-python
 
 install-python-modules: install-python

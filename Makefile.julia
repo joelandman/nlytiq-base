@@ -12,6 +12,8 @@ ifeq ($(GCC),1)
 	__ENV__SET = USE_LLVM_SHLIB=0
 endif
 
+__ENV__SET+= CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} 
+
 JULIA_DIR = julia-${JULIA_VER}
 
 

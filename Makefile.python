@@ -5,29 +5,20 @@ PYTHONVER		= 3.6.2
 PYTHON			= Python-${PYTHONVER}
 PYTHON_INST_PATH	= ${NLYTIQ_INST_PATH}
 
-ifeq ($(GCC),1)
-### use gcc
-#CFLAGS          = -O3 -g 
-#-mtune=corei7 
-###
-endif
-
-ifeq ($(CLANG),1)
-### use clang
-CFLAGS          = -O2
-CXXFLAGS	+= $(shell freetype-config --cflags)
-###
-endif 
-
-
 ### force baseline gcc if GCC_VER is not blank
 include forcegcc.config
+
+# Python needs freetype include directory
+CXXFLAGS        += $(shell freetype-config --cflags)
 
 ### MacOSX specific CFLAGS/LDFLAGS (c.f. https://stackoverflow.com/questions/41489439/pip3-installs-inside-virtual-environment-with-python3-6-failing-due-to-ssl-modul)
 ifeq ($(OS), Darwin)
 CFLAGS  += -I$(shell brew --prefix openssl)/include
 LDFLAGS += -L$(shell brew --prefix openssl)/lib
 endif
+
+# ${_EPF_} contains the front matter for configure after the include below
+include configure.prefix.flag.config
 
 
 #--------------------------------------------------------------------------#
@@ -38,34 +29,35 @@ clean:		clean-python
 
 configure-python:	
 	tar -zxvf sources/${PYTHON}.tgz
-	cd ${PYTHON} ; CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS}  CXXFLAGS=${CXXFLAGS} CC=${CC} CXX=${CXX} ./configure --prefix=${NLYTIQ_INST_PATH}
+	cd ${PYTHON} ; ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH}
 	touch configure-python
 
 make-python: configure-python
-	cd ${PYTHON} ; CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS}  CXXFLAGS=${CXXFLAGS} CC=${CC} CXX=${CXX} make -j${NCPU}
+	cd ${PYTHON} ; make -j${NCPU}
 	touch make-python
 
 install-python: make-python
-	cd ${PYTHON} ; CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS}  CXXFLAGS=${CXXFLAGS} CC=${CC} CXX=${CXX} make install
+	cd ${PYTHON} ; make install
 	touch install-python
 
 install-python-modules: install-python
-	# now install ipython, numpy, scipy and others
-	#${NLYTIQ_INST_PATH}/bin/pip3 install ipython
-	${NLYTIQ_INST_PATH}/bin/pip3 install jupyter
+	# now install jupyter, numpy, scipy and others
+	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install jupyter
 	${NLYTIQ_INST_PATH}/bin/pip3 install numpy
 	${NLYTIQ_INST_PATH}/bin/pip3 install nose
 	#${NLYTIQ_INST_PATH}/bin/pip3 install dateutil 
 	${NLYTIQ_INST_PATH}/bin/pip3 install pyzmq tornado
-	CXXFLAGS=${CXXFLAGS} ${NLYTIQ_INST_PATH}/bin/pip3 install matplotlib
-	${NLYTIQ_INST_PATH}/bin/pip3 install pandas
-	${NLYTIQ_INST_PATH}/bin/pip3 install sympy
-	${NLYTIQ_INST_PATH}/bin/pip3 install scipy
+	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install matplotlib
+	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install pandas
+	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install sympy
+	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install scipy
+	# note: these are the non-GPU versions of the below
+	# To Do: Add in GPU versions
 ifneq (${OS},FreeBSD)
-	${NLYTIQ_INST_PATH}/bin/pip3 install tensorflow
+	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install tensorflow
 endif
-	${NLYTIQ_INST_PATH}/bin/pip3 install Theano
-	${NLYTIQ_INST_PATH}/bin/pip3 install Keras	
+	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install Theano
+	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install Keras	
 	
 	touch install-python-modules
 

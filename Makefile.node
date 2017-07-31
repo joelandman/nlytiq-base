@@ -4,6 +4,15 @@ include base.config
 NODEVER		= v6.11.1
 NODE		= node-${NODEVER}
 NODE_INST_PATH	= ${NLYTIQ_INST_PATH}
+
+ifeq ($(OS), Darwin)
+### force baseline gcc if on MacOS
+include forcegcc.config
+endif
+
+# ${_EPF_} contains the front matter for configure after the include below
+include configure.prefix.flag.config
+
 #--------------------------------------------------------------------------#
 
 all:    	install-node-modules
@@ -12,11 +21,11 @@ clean:		clean-node
 
 configure-node:	
 	tar -zxvf sources/${NODE}.tar.gz
-	cd ${NODE} ; CFLAGS="-O2 -g  "   ./configure --prefix=${NLYTIQ_INST_PATH} 
+	cd ${NODE} ; ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} 
 	touch configure-node
 
 make-node: configure-node
-	cd ${NODE} ;	 make -j8
+	cd ${NODE} ;	 make -j${NCPU}
 	touch make-node
 
 install-node: make-node

@@ -8,6 +8,9 @@ CURL_INST_PATH	= ${NLYTIQ_INST_PATH}
 ### force baseline gcc if GCC_VER is not blank
 include forcegcc.config
 
+# ${_EPF_} contains the front matter for configure after the include below
+include configure.prefix.flag.config
+
 #--------------------------------------------------------------------------#
 
 all:    	install-curl
@@ -16,15 +19,15 @@ clean:		clean-curl
 
 configure-curl:	
 	tar -zxvf sources/${CURL}.tar.gz
-	cd ${CURL} ; export CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} LDFLAGS=${LDFLAGS} ; ./configure --prefix=${NLYTIQ_INST_PATH} --with-darwinssl 
+	cd ${CURL} ; ${_EPF_} ./configure --prefix=${NLYTIQ_INST_PATH} --with-darwinssl 
 	touch configure-curl
 
 make-curl: configure-curl
-	cd ${CURL} ; export CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS}  LDFLAGS=${LDFLAGS}  ; make -j${NCPU}
+	cd ${CURL} ;  make -j${NCPU}
 	touch make-curl
 
 install-curl: make-curl
-	cd ${CURL} ;  export CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} LDFLAGS=${LDFLAGS} ;  make install
+	cd ${CURL} ;  make install
 	touch install-curl
 
 clean-curl:

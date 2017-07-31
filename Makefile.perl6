@@ -20,6 +20,10 @@ ifeq ($(CLANG),1)
 	CFLAGS          = -O2
 endif
 
+# ${_EPF_} contains the front matter for configure after the include below
+include configure.prefix.flag.config
+
+
 #--------------------------------------------------------------------------#
 
 all:    	install-perl6
@@ -28,15 +32,15 @@ clean:		clean-perl6
 
 configure-perl6:	sources/${PERL}.tar.gz
 	tar -zxvf sources/${PERL}.tar.gz
-	cd ${PERL} ; CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS}  ${NLYTIQ_INST_PATH}/bin/perl Configure.pl ${PFLAGS} ${CONFFLAGS}
+	cd ${PERL} ; ${_EPF_}  ${NLYTIQ_INST_PATH}/bin/perl Configure.pl ${PFLAGS} ${CONFFLAGS}
 	touch configure-perl6
 
 make-perl6: configure-perl6
-	cd ${PERL} ; CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} make -j${NCPU}
+	cd ${PERL} ; make -j${NCPU}
 	touch make-perl6
 
 install-perl6: make-perl6
-	cd ${PERL} ; CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} make install
+	cd ${PERL} ; make install
 	touch install-perl6
 
 clean-perl6:

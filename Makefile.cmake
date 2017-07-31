@@ -11,6 +11,10 @@ CMAKE_INST_PATH	= ${NLYTIQ_INST_PATH}
 ### force baseline gcc if GCC_VER is not blank
 include forcegcc.config
 
+# ${_EPF_} contains the front matter for configure after the include below
+include configure.prefix.flag.config
+
+
 all:    	install-cmake
 
 clean:		clean-cmake  
@@ -18,7 +22,8 @@ clean:		clean-cmake
 
 configure-cmake: 
 	tar -zxf sources/${CMAKETAR}
-	cd ${CMAKESRC} ; CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} ./configure --prefix=${NLYTIQ_INST_PATH}  
+	#cd ${CMAKESRC} ; CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} ./configure --prefix=${NLYTIQ_INST_PATH}  
+	cd ${CMAKESRC} ; ${_EPF} ./configure --prefix=${NLYTIQ_INST_PATH} 
 	touch configure-cmake
 
 make-cmake: configure-cmake

@@ -12,9 +12,13 @@ ifeq ($(GCC),1)
 	__ENV__SET = USE_LLVM_SHLIB=0
 endif
 
-__ENV__SET+= CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} 
+#__ENV__SET+= CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} 
 
 JULIA_DIR = julia-${JULIA_VER}
+
+# ${_EPF_} contains the front matter for configure after the include below
+include configure.prefix.flag.config
+
 
 
 all:    	install-julia-modules
@@ -43,11 +47,11 @@ endif
 ifeq ($(OS),SunOS)
 	cat sources/Make.user.illumos >> ${JULIA_DIR}/Make.user
 endif
-	cd julia-${JULIA_VER} ; ${__ENV__SET} ${MAKECMD}  -j${NCPU}
+	cd julia-${JULIA_VER} ; ${__ENV__SET} ${_EPF_} ${MAKECMD}  -j${NCPU}
 	touch make-julia
 
 install-julia: make-julia
-	cd julia-${JULIA_VER} ;  ${__ENV__SET} ${MAKECMD} install
+	cd julia-${JULIA_VER} ;  ${__ENV__SET} ${_EPF_} ${MAKECMD} install
 	cd ${JULIA_DIR}/usr ; tar -cf - . | (cd ${JULIA_INST_PATH} && tar -xvf - )
 	touch install-julia
 

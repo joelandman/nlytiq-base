@@ -15,6 +15,10 @@ CONFFLAGS	= --prefix=${NLYTIQ_INST_PATH} --disable-silent-rules \
 DIR		= $(shell pwd)/${GNUPLOT}
 
 
+# ${_EPF_} contains the front matter for configure after the include below
+include configure.prefix.flag.config
+
+
 #--------------------------------------------------------------------------#
 
 all:    	install-gnuplot
@@ -23,18 +27,15 @@ clean:		clean-gnuplot
 
 configure-gnuplot:	sources/${GNUPLOT}.tar.gz 
 	tar -zxvf sources/${GNUPLOTTAR}
-	cd ${DIR} ; export CC=${CC} ; export CXX=${CXX} ; ./configure ${CONFFLAGS}
+	cd ${DIR} ; ${_EPF_} ./configure ${CONFFLAGS}
 	touch configure-gnuplot
 
 make-gnuplot: configure-gnuplot
-	cd ${DIR} ; export CC=${CC} ; export CXX=${CXX} ; \
-	   export  LD_LIBRARY_PATH=${DIR} ;                \
-	   make -j${NCPU} 
+	cd ${DIR} ; export  LD_LIBRARY_PATH=${DIR} ;  make -j${NCPU} 
 	touch make-gnuplot
 
 install-gnuplot: make-gnuplot
-	cd ${DIR} ; export CC=${CC} ; export CXX=${CXX} ; \
-		export  LD_LIBRARY_PATH=${DIR} ; make install
+	cd ${DIR} ; export  LD_LIBRARY_PATH=${DIR} ; make install
 	touch install-gnuplot
 
 clean-gnuplot:

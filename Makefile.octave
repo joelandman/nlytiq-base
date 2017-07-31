@@ -7,7 +7,7 @@ OCTAVE_INST_PATH	= ${NLYTIQ_INST_PATH}
 
 ifeq ($(BUILDATLAS),1)
 OCTAVEOPTS		= --enable-openmp \
-			  --enable-atomic-refcount --with-x --with-lapack=lapack \
+			  --enable-atomic-refcount --with-lapack=lapack \
 			  --with-blas=satlas --with-fftw3f-includedir=/opt/nlytiq/include \
 			  --with-fftw3f-libdir=/opt/nlytiq/lib 
 LDFLAGS                 = "-L/opt/nlytiq/lib"
@@ -15,15 +15,28 @@ LDFLAGS                 = "-L/opt/nlytiq/lib"
 else
 
 OCTAVEOPTS              = --enable-openmp \
-			  --enable-atomic-refcount --with-x --with-lapack=lapack \
+			  --enable-atomic-refcount --with-lapack=lapack \
 			  --with-blas=blas --with-fftw3f-includedir=/opt/nlytiq/include \
 			  --with-fftw3f-libdir=/opt/nlytiq/lib
-LDFLAGS                 = "-L/opt/nlytiq/lib \
+LDFLAGS                 = -L/opt/nlytiq/lib \
 			  -L/usr/lib/openblas-base \
 			  -L/usr/lib/atlas-base/ \
-			  -L/usr/lib/atlas-base/atlas/"
+			  -L/usr/lib/atlas-base/atlas/
 endif
-#LDFLAGS			= -L/opt/nlytiq/lib
+
+ifeq ($(OS), Darwin)
+# more MacOS breakage ... libreadline
+OCTAVEOPTS += --disable-readline
+# Bad apple ... bad
+else
+# and even more MacOS breakage ... X windows ... /sigh
+OCTAVEOPTS += --with-x
+# ....
+endif
+
+# ${_EPF_} contains the front matter for configure after the include below
+include configure.prefix.flag.config
+
 
 #--------------------------------------------------------------------------#
 
@@ -33,15 +46,15 @@ clean:		clean-octave
 
 configure-octave:
 	tar -zxvf sources/${OCTAVE}.tar.gz
-	cd ${OCTAVE} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} LDFLAGS=${LDFLAGS}  ./configure --prefix=${NLYTIQ_INST_PATH} ${OCTAVEOPTS}
+	cd ${OCTAVE} ; ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} ${OCTAVEOPTS}
 	touch configure-octave
 
 make-octave: configure-octave
-	cd ${OCTAVE} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} LDFLAGS=${LDFLAGS} make -j${NCPU}
+	cd ${OCTAVE} ;  make -j${NCPU}
 	touch make-octave
 
 install-octave: make-octave
-	cd ${OCTAVE} ; CFLAGS=${CFLAGS} CC=${CC} CXX=${CXX} LDFLAGS=${LDFLAGS} make install
+	cd ${OCTAVE} ; make install
 	touch install-octave
 
 clean-octave:

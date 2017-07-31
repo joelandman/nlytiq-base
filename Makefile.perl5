@@ -39,6 +39,10 @@ CONFFLAGS      =  -des -Dcc=${CC} -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  
 ###
 endif
 
+# ${_EPF_} contains the front matter for configure after the include below
+include configure.prefix.flag.config
+
+
 #--------------------------------------------------------------------------#
 
 all:    	install-perl

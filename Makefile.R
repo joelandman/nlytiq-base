@@ -13,21 +13,23 @@ FORCEGCC	= 1
 ### force baseline gcc if GCC_VER is not blank
 include forcegcc.config
 
-ifeq ($(CLANG),1)
-### use clang
-CFLAGS          = -O2  
-LDFLAGS		= -L${NLYTIQ_INST_PATH}/lib
-###
-endif
-
 CFLAGS          += -I${NLYTIQ_INST_PATH}/include
 LDFLAGS         += -L${NLYTIQ_INST_PATH}/lib
+
 
 FFLAGS		= ${CFLAGS}
 FCFLAGS		= ${CFLAGS} 
 CXXFLAGS	= ${CFLAGS}
 
-RFLAGS		= --with-blas --with-lapack --with-readline  --with-system-zlib --with-system-bzlib --with-system-pcre --with-system-xz --with-recommended-packages --with-x
+# ${_EPF_} contains the front matter for configure after the include below
+include configure.prefix.flag.config
+
+### R specific compilation flags
+MAIN_LDFLAGS    = -L${NLYTIQ_INST_PATH}/lib
+_EPF_ += MAIN_LDFLAGS="${MAIN_LDFLAGS}"
+
+
+RFLAGS		= --with-blas --with-lapack --with-readline  --with-system-zlib --with-system-bzlib --with-system-pcre --with-system-xz --with-recommended-packages --with-x --with-sysroot=${NLYTIQ_INST_PATH}/lib
 #--------------------------------------------------------------------------#
 
 all:    	install-R-modules
@@ -36,18 +38,18 @@ clean:		clean-R
 
 configure-R:	
 	tar -zxvf sources/${R}.tar.gz
-	cd ${R} ; export CC=${CC} CXX=${CXX} CFLAGS="${CFLAGS}" CXXFLAGS="${CXXFLAGS}"  FFLAGS="${FFLAGS}" FCFLAGS="${FCFLAGS}" LDFLAGS="${LDFLAGS}" ; ./configure --prefix=${NLYTIQ_INST_PATH} ${RFLAGS}
+	cd ${R} ; export PATH=${NLYTIQ_INST_PATH}/bin:${PATH} ; ${_EPF_} ./configure --prefix=${NLYTIQ_INST_PATH} ${RFLAGS}
 	cd ${R} ; /bin/bash tools/rsync-recommended 			  
 	touch configure-R
 
 make-R: configure-R
-	cd ${R} ; export CC=${CC} CXX=${CXX} CFLAGS="${CFLAGS}" CXXFLAGS="${CXXFLAGS}"  FFLAGS="${FFLAGS}" FCFLAGS="${FCFLAGS}" CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"  ; make -j${NCPU}
+	cd ${R} ;  ${_EPF_} make -j${NCPU}
 	touch make-R
 
 install-R: make-R
 	# below to fix a build issue
 	mkdir -p ${NLYTIQ_INST_PATH}/lib/R/lib/
-	cd ${R} ;  export CC=${CC} CXX=${CXX} CFLAGS="${CFLAGS}" CXXFLAGS="${CXXFLAGS}"  FFLAGS="${FFLAGS}" FCFLAGS="${FCFLAGS}" CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" ;  make install
+	cd ${R} ;   ${_EPF_} make install
 	touch install-R
 
 install-R-modules: install-R

@@ -8,6 +8,8 @@ PCRE_INST_PATH	= ${NLYTIQ_INST_PATH}
 ### force baseline gcc if GCC_VER is not blank
 include forcegcc.config
 
+# ${_EPF_} contains the front matter for configure after the include below
+include configure.prefix.flag.config
 
 #--------------------------------------------------------------------------#
 
@@ -17,15 +19,15 @@ clean:		clean-pcre
 
 configure-pcre:	
 	tar -zxvf sources/${PCRE}.tar.gz
-	cd ${PCRE} ; export CC=${CC} CXX=${CXX} CFLAGS="${CFLAGS}" CXXFLAGS="${CXXFLAGS}" LDFLAGS="${LDFLAGS}" ; ./configure --prefix=${NLYTIQ_INST_PATH} 
+	cd ${PCRE} ; ${_EPF_} ./configure --prefix=${NLYTIQ_INST_PATH} 
 	touch configure-pcre
 
 make-pcre: configure-pcre
-	cd ${PCRE} ; export CC=${CC} CXX=${CXX} CFLAGS="${CFLAGS}" CXXFLAGS="${CXXFLAGS}"  LDFLAGS="${LDFLAGS}"  ; make -j${NCPU}
+	cd ${PCRE} ;  make -j${NCPU}
 	touch make-pcre
 
 install-pcre: make-pcre
-	cd ${PCRE} ;  export CC=${CC} CXX=${CXX} CFLAGS="${CFLAGS}" CXXFLAGS="${CXXFLAGS}" LDFLAGS="${LDFLAGS}" ;  make install
+	cd ${PCRE} ;   make install
 	touch install-pcre
 
 clean-pcre:

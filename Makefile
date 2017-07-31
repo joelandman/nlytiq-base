@@ -32,7 +32,6 @@ packages = cmake curl pcre perl5 perl5mods perl6 python go julia node spark R ru
 endif
 endif
 
-
 ### each package has its own Makefile.  This Makefile drives complilation
 ### with a default target of all.  Each Makefile also has a clean target
 ### You can make them as simple/complex as you wish, as long as the above
@@ -60,6 +59,12 @@ $(build):
 	for p in $(packages) ; do \
 	  touch $$p.build ;        \
 	done
+ifeq ($(OS), Darwin)
+# bad bad Apple.  Bad Apple.
+	touch R.build R.complete octave.build octave.complete
+# sigh ...
+endif
+
 
 %.complete: %.build	
 	$(MAKE) -f Makefile.$*

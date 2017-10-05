@@ -1,7 +1,7 @@
 include base.config
 
 ####   
-CMAKEVER		= 3.8.2
+CMAKEVER		= 3.9.4
 CMAKESRC		= cmake-${CMAKEVER}
 CMAKETAR		= ${CMAKESRC}.tar.gz
 CMAKE_INST_PATH	= ${NLYTIQ_INST_PATH}

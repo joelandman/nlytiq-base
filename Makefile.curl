@@ -1,7 +1,7 @@
 include base.config
 
 #### R  
-CURLVER		= 7.54.1
+CURLVER		= 7.56.0
 CURL		= curl-${CURLVER}
 CURL_INST_PATH	= ${NLYTIQ_INST_PATH}
 

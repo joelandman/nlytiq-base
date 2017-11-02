@@ -1,20 +1,16 @@
 include base.config
 
 #### llvm
-LLVMVER		= 4.0.0
-DEVER		= 3.3
+LLVMVER		= 5.0.0
 LLVMSRC		= llvm-${LLVMVER}
 CFESRC		= cfe-${LLVMVER}
 RTSRC		= compiler-rt-${LLVMVER}
 OPENMPSRC	= openmp-${LLVMVER}
-DESRC		= dragonegg-${DEVER}
 LLVMDIR		= ${LLVMSRC}.src
-DEDIR		= ${DESRC}.src
 CFEDIR		= ${CFESRC}.src
 RTDIR		= ${RTSRC}.src
 OPENMPDIR	= ${OPENMPSRC}.src
 LLVMTAR		= ${LLVMDIR}.tar.xz
-DETAR		= ${DEDIR}.tar.gz
 CFETAR		= ${CFEDIR}.tar.xz
 RTTAR		= ${RTDIR}.tar.xz
 OPENMPTAR	= ${OPENMPDIR}.tar.xz

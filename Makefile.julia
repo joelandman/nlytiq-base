@@ -1,6 +1,6 @@
 include base.config
 
-JULIA_VER = 0.6.0
+JULIA_VER = 0.6.1
 JULIA_NAME = ${JULIA_VER}-full
 JULIA_INST_PATH	= ${NLYTIQ_INST_PATH}
 
@@ -14,7 +14,13 @@ endif
 
 #__ENV__SET+= CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} 
 
-JULIA_DIR = julia-${JULIA_VER}
+# 0.6.0 was this ...
+#JULIA_DIR = julia-${JULIA_VER}
+#
+# 0.6.1 is this
+JULIA_DIR = julia
+
+
 
 # ${_EPF_} contains the front matter for configure after the include below
 include configure.prefix.flag.config

@@ -3,12 +3,20 @@ include base.config
 ####   
 GOVER		= 1.9.2
 GOBASE		= go${GOVER}
+ifeq ($(OS),Linux)
 GOARCH		= linux-amd64
+endif
+ifeq ($(OS),FreeBSD)
+GOARCH		= freebsd-amd64
+endif
 GOBIN		= ${GOBASE}.${GOARCH}
 GOSRC		= ${GOBASE}.src
 GOBINTAR	= ${GOBIN}.tar.gz
 GOSRCTAR	= ${GOSRC}.tar.gz
 #--------------------------------------------------------------------------#
+
+
+
 
 all:    	install-gobin
 

@@ -1,0 +1,36 @@
+include base.config
+
+#### NodeJS  
+OPENBLASVER		= v0.2.20
+OPENBLAS_TAR		= ${OPENBLASVER}
+OPENBLAS_DIR  		= OpenBLAS-${OPENBLASVER}
+OPENBLAS_INST_PATH	= ${NLYTIQ_INST_PATH}
+
+ifeq ($(OS), Darwin)
+### force baseline gcc if on MacOS
+include forcegcc.config
+endif
+
+# ${_EPF_} contains the front matter for configure after the include below
+include configure.prefix.flag.config
+
+#--------------------------------------------------------------------------#
+
+all:    	install-openblas
+
+clean:		clean-openblas  
+
+configure-openblas:	
+	tar -zxvf sources/${OPENBLAS_TAR}.tar.gz
+	touch configure-openblas
+
+make-openblas: configure-openblas
+	cd ${OPENBLAS_DIR} ; gmake -j${NCPU} ${_EPF_}
+	touch make-openblas
+
+install-openblas: make-openblas
+	cd ${OPENBLAS_DIR} ; gmake PREFIX=${NLYTIQ_INST_PATH} install
+	touch install-openblas
+
+clean-openblas:
+	rm -rf ${OPENBLAS_DIR} make-openblas configure-openblas install-openblas

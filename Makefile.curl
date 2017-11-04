@@ -5,9 +5,6 @@ CURLVER		= 7.56.0
 CURL		= curl-${CURLVER}
 CURL_INST_PATH	= ${NLYTIQ_INST_PATH}
 
-### force baseline gcc if GCC_VER is not blank
-include forcegcc.config
-
 # ${_EPF_} contains the front matter for configure after the include below
 include configure.prefix.flag.config
 

@@ -5,8 +5,6 @@ PYTHONVER		= 3.6.3
 PYTHON			= Python-${PYTHONVER}
 PYTHON_INST_PATH	= ${NLYTIQ_INST_PATH}
 
-### force baseline gcc if GCC_VER is not blank
-include forcegcc.config
 
 # Python needs freetype include directory
 CXXFLAGS        += $(shell freetype-config --cflags)
@@ -57,7 +55,12 @@ install-python-modules: install-python
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install matplotlib
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install pandas
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install sympy
+ifneq ($(OS),FreeBSD)
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install scipy
+else
+	# very strange behavior on FreeBSD ...
+	${NLYTIQ_INST_PATH}/bin/pip3 -vvv install scipy	
+endif
 	# note: these are the non-GPU versions of the below
 	# To Do: Add in GPU versions
 ifneq (${OS},FreeBSD)

@@ -37,6 +37,7 @@ endif
 # ${_EPF_} contains the front matter for configure after the include below
 include configure.prefix.flag.config
 
+_LDP_ = LD_LIBRARY_PATH=${NLYTIQ_LIB_PATH}
 
 #--------------------------------------------------------------------------#
 
@@ -46,15 +47,17 @@ clean:		clean-octave
 
 configure-octave:
 	tar -zxvf sources/${OCTAVE}.tar.gz
-	cd ${OCTAVE} ; ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} ${OCTAVEOPTS}
+	cd ${OCTAVE} ;\
+		${_LDP_} ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} ${OCTAVEOPTS}
 	touch configure-octave
 
 make-octave: configure-octave
-	cd ${OCTAVE} ;  make -j${NCPU}
+	cd ${OCTAVE} ;\
+     	    ${_LDP_} ${_EPF_} make -j${NCPU} 
 	touch make-octave
 
 install-octave: make-octave
-	cd ${OCTAVE} ; make install
+	cd ${OCTAVE} ; ${_LDP_} ${_EPF_} make install
 	touch install-octave
 
 clean-octave:

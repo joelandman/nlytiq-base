@@ -1,5 +1,6 @@
 include base.config
 include forcegcc.config
+#include forcellvm.config
 
 JULIA_VER = 0.6.1
 JULIA_NAME = ${JULIA_VER}-full
@@ -35,14 +36,17 @@ ifeq (${OS},FreeBSD)
 	echo  CXX=${CXX} >> ${JULIA_DIR}/Make.user
 	echo  CC_BASE=${CC} >> ${JULIA_DIR}/Make.user
 	echo  CXX_BASE=${CXX} >> ${JULIA_DIR}/Make.user
-	echo  USEGCC=1 >> ${JULIA_DIR}/Make.user
-	echo  USECLANG=0 >> ${JULIA_DIR}/Make.user
+	echo  USEGCC=0 >> ${JULIA_DIR}/Make.user
+	echo  USECLANG=1 >> ${JULIA_DIR}/Make.user
 	echo  LDFLAGS=${LDFLAGS} >> ${JULIA_DIR}/Make.user
 	echo  FFLAGS=${FFLAGS} ${LDFLAGS} >> ${JULIA_DIR}/Make.user
 	echo  CFLAGS=${CFLAGS} >> ${JULIA_DIR}/Make.user
 	echo  CPPFLAGS=${CXXFLAGS} >> ${JULIA_DIR}/Make.user
 	# make sure you have openblas installed
 	echo  USE_SYSTEM_BLAS=1 >> ${JULIA_DIR}/Make.user
+	echo  LIBBLAS=-lopenblas >> ${JULIA_DIR}/Make.user
+	echo  LIBBLASNAME=libopenblas  >> ${JULIA_DIR}/Make.user
+	echo  OPENBLAS_TARGET_ARCH=NEHALEM >> ${JULIA_DIR}/Make.user
 	echo  USE_SYSTEM_LAPACK=1 >> ${JULIA_DIR}/Make.user
 	echo  USE_SYSTEM_GMP=1 >> ${JULIA_DIR}/Make.user
 	echo  USE_SYSTEM_LIBUV=0 >> ${JULIA_DIR}/Make.user
@@ -51,11 +55,15 @@ ifeq (${OS},FreeBSD)
 	echo  USE_SYSTEM_MPFR=1 >> ${JULIA_DIR}/Make.user
 	echo  USE_SYSTEM_UTF8PROC=0 >> ${JULIA_DIR}/Make.user
 	echo  USE_SYSTEM_FFTW=1 >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_LLVM=0 >> ${JULIA_DIR}/Make.user
+	echo  USE_SYSTEM_LLVM=1 >> ${JULIA_DIR}/Make.user
 	echo  USE_SYSTEM_PCRE=1 >> ${JULIA_DIR}/Make.user
 	echo  USE_SYSTEM_CURL=1 >> ${JULIA_DIR}/Make.user
 	echo  USE_SYSTEM_LIBGIT2=1 >> ${JULIA_DIR}/Make.user
-	
+	echo  USE_SYSTEM_SUITESPARSE=1  >> ${JULIA_DIR}/Make.user
+	echo  USE_SYSTEM_LIBUNWIND=0 >> ${JULIA_DIR}/Make.user
+	echo  USE_SYSTEM_LIBM=0 >> ${JULIA_DIR}/Make.user
+	echo  JULIA_CPU_CORES=1 >> ${JULIA_DIR}/Make.user
+	echo  LLVM_CONFIG=${NLYTIQ_INST_PATH}/bin/llvm-config
 else
 	echo "USE_SYSTEM_BLAS=0" >> ${JULIA_DIR}/Make.user
 	echo "USE_SYSTEM_LAPACK=0" >> ${JULIA_DIR}/Make.user

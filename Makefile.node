@@ -1,7 +1,7 @@
 include base.config
 
 #### NodeJS  
-NODEVER		= v8.9.0
+NODEVER		= v8.9.1
 NODE		= node-${NODEVER}
 NODE_INST_PATH	= ${NLYTIQ_INST_PATH}
 

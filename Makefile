@@ -9,10 +9,19 @@ include base.config
 
 ifeq ($(CLANG),1)
 ifneq ($(OS),FreeBSD)
+ifneq ($(OS),Darwin)
 ifeq ($(BUILDATLAS),1)
 packages = cmake llvm curl pcre atlas perl5 perl5mods perl6 python go julia node spark R octave rust
 else
 packages = cmake llvm curl pcre perl5 perl5mods perl6 python go julia node spark R octave rust
+endif
+else
+# MacOSX ... bad ...bad mac
+ifeq ($(BUILDATLAS),1)
+packages = cmake  pcre atlas perl5 perl5mods perl6 python go julia node spark R octave rust
+else
+packages = cmake  pcre perl5 perl5mods perl6 python go julia node spark R octave rust
+endif
 endif
 else
 ifeq ($(BUILDATLAS),1)

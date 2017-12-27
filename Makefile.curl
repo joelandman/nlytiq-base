@@ -5,8 +5,10 @@ CURLVER		= 7.56.0
 CURL		= curl-${CURLVER}
 CURL_INST_PATH	= ${NLYTIQ_INST_PATH}
 
+ifneq ($(OS),Darwin)
 # ${_EPF_} contains the front matter for configure after the include below
 include configure.prefix.flag.config
+endif
 
 #--------------------------------------------------------------------------#
 
@@ -16,7 +18,7 @@ clean:		clean-curl
 
 configure-curl:	
 	tar -zxvf sources/${CURL}.tar.gz
-	cd ${CURL} ; ${_EPF_} ./configure --prefix=${NLYTIQ_INST_PATH} --with-darwinssl 
+	cd ${CURL} ; ${_EPF_} ./configure --prefix=${NLYTIQ_INST_PATH} --with-darwinssl --with-libssh2
 	touch configure-curl
 
 make-curl: configure-curl

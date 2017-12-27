@@ -9,6 +9,9 @@ endif
 ifeq ($(OS),FreeBSD)
 GOARCH		= freebsd-amd64
 endif
+ifeq ($(OS),Darwin)
+GOARCH		= darwin-amd64
+endif
 GOBIN		= ${GOBASE}.${GOARCH}
 GOSRC		= ${GOBASE}.src
 GOBINTAR	= ${GOBIN}.tar.gz

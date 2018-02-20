@@ -5,6 +5,8 @@ include forcegcc.config
 JULIA_VER = 0.6.2
 JULIA_NAME = ${JULIA_VER}-full
 JULIA_INST_PATH	= ${NLYTIQ_INST_PATH}
+JULIA_DWV = julia-${JULIA_VER}
+JULIA_DIR = julia
 
 ifeq ($(CLANG),1)
 __ENV__SET = USE_LLVM_SHLIB=1
@@ -13,8 +15,6 @@ endif
 ifeq ($(GCC),1)
 	__ENV__SET = USE_LLVM_SHLIB=0
 endif
-
-JULIA_DIR = julia
 
 
 
@@ -29,7 +29,14 @@ clean:		clean-julia
 
 configure-julia:	
 	tar -zxvf sources/julia-${JULIA_NAME}.tar.gz
+
+	# rename julia directory to exclude version name
+	if [ -d ${JULIA_DWV} ]; then 		  \
+		mv -vf ${JULIA_DWV} ${JULIA_DIR} ;\
+	fi
+
 	rm -f ${JULIA_DIR}/Make.user
+	cp -f julia.Make.user ${JULIA_DIR}/Make.user
 ifeq (${OS},FreeBSD)
 	echo  FC=${FC} >> ${JULIA_DIR}/Make.user
 	echo  CC=${CC} >> ${JULIA_DIR}/Make.user
@@ -43,30 +50,30 @@ ifeq (${OS},FreeBSD)
 	echo  CFLAGS=${CFLAGS} >> ${JULIA_DIR}/Make.user
 	echo  CPPFLAGS=${CXXFLAGS} >> ${JULIA_DIR}/Make.user
 	# make sure you have openblas installed
-	echo  USE_SYSTEM_BLAS=1 >> ${JULIA_DIR}/Make.user
-	echo  LIBBLAS=-lopenblas >> ${JULIA_DIR}/Make.user
-	echo  LIBBLASNAME=libopenblas  >> ${JULIA_DIR}/Make.user
-	echo  OPENBLAS_TARGET_ARCH=NEHALEM >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_LAPACK=1 >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_GMP=1 >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_LIBUV=0 >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_MBEDTLS=1 >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_LIBSSH2=1 >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_MPFR=1 >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_UTF8PROC=0 >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_FFTW=1 >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_LLVM=1 >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_PCRE=1 >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_CURL=1 >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_LIBGIT2=1 >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_SUITESPARSE=1  >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_LIBUNWIND=0 >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_LIBM=0 >> ${JULIA_DIR}/Make.user
-	echo  JULIA_CPU_CORES=1 >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_BLAS=1 >> ${JULIA_DIR}/Make.user
+	#echo  LIBBLAS=-lopenblas >> ${JULIA_DIR}/Make.user
+	#echo  LIBBLASNAME=libopenblas  >> ${JULIA_DIR}/Make.user
+	#echo  OPENBLAS_TARGET_ARCH=NEHALEM >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_LAPACK=1 >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_GMP=1 >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_LIBUV=0 >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_MBEDTLS=1 >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_LIBSSH2=1 >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_MPFR=1 >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_UTF8PROC=0 >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_FFTW=1 >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_LLVM=1 >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_PCRE=1 >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_CURL=1 >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_LIBGIT2=1 >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_SUITESPARSE=1  >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_LIBUNWIND=0 >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_LIBM=0 >> ${JULIA_DIR}/Make.user
+	#echo  JULIA_CPU_CORES=1 >> ${JULIA_DIR}/Make.user
 	echo  LLVM_CONFIG=${NLYTIQ_INST_PATH}/bin/llvm-config
 else
-	echo "USE_SYSTEM_BLAS=0" >> ${JULIA_DIR}/Make.user
-	echo "USE_SYSTEM_LAPACK=0" >> ${JULIA_DIR}/Make.user
+	#echo "USE_SYSTEM_BLAS=0" >> ${JULIA_DIR}/Make.user
+	#echo "USE_SYSTEM_LAPACK=0" >> ${JULIA_DIR}/Make.user
 endif
 ifeq ($(OS),SunOS)
 	cat sources/Make.user.illumos >> ${JULIA_DIR}/Make.user
@@ -74,7 +81,7 @@ endif
 	#echo "USE_SYSTEM_PCRE=1" > ${JULIA_DIR}/Make.user
 	#echo "LLVM_VER = 4.0.0"  >> ${JULIA_DIR}/Make.user
 	#echo "MARCH=sandybridge" >> ${JULIA_DIR}/Make.user
-	echo "JULIA_CPU_TARGET=core2"  >> ${JULIA_DIR}/Make.user
+	#echo "JULIA_CPU_TARGET=core2"  >> ${JULIA_DIR}/Make.user
 	
 	touch configure-julia
 

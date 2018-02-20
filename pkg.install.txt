@@ -6,8 +6,6 @@ freebsd packages needed to build nlytiq-base
     12	12:35	pkg install freetype-devel
     21	12:59	pkg install lapack
     30	13:32	pkg install cmake
-    32	13:33	history | grep pkg
-    33	13:33	history | grep pkg >> pkg.install.txt
      7	10:43	pkg in sudo
      8	10:43	pkg install sudo
      9	10:44	pkg install rsync
@@ -25,50 +23,7 @@ freebsd packages needed to build nlytiq-base
     43	13:06	pkg install gnuplot
     50	13:34	history | grep pkg
     51	13:34	history | grep pkg >> pkg.install.txt
-   33  pkg help
-   34  pkg search fortran
-   35  pkg search f95
-   36  pkg search fort
-   37  pkg search gcc
-   56  pkg update
-   57  pkg upgrade
-  124  pkg search fftw
-  126  pkg search openblas
-  129  pkg search lapack
-  132  pkg search utf8
-  133  pkg install utf8proc
-  134  pkg search libuv
-  135  pkg install libuv
-  141  history | grep pkg
-  142  history | grep pkg >> pkg.install.txt 
-   33  pkg help
-   34  pkg search fortran
-   35  pkg search f95
-   36  pkg search fort
-   37  pkg search gcc
-   56  pkg update
-   57  pkg upgrade
-  148  pkg search gmp
-  159  pkg search libssh
   160  pkg install libssh2-1.8.0,3
-  190  history | grep pkg >> pkg.install.txt
-   33  pkg help
-   34  pkg search fortran
-   35  pkg search f95
-   36  pkg search fort
-   37  pkg search gcc
-   56  pkg update
-   57  pkg upgrade
-  124  pkg search fftw
-  126  pkg search openblas
-  129  pkg search lapack
-  132  pkg search utf8
   133  pkg install utf8proc
-  134  pkg search libuv
   135  pkg install libuv
-  141  history | grep pkg
-  142  history | grep pkg >> pkg.install.txt 
-  146  pkg search libgit
   147  pkg install libgit2-0.25.1_1
-  150  pkg search llvm
-  152  history | grep pkg >> pkg.install.txt 

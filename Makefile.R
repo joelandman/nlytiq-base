@@ -1,7 +1,7 @@
 include base.config
 
 #### R  
-RVER		= 3.4.3
+RVER		= 3.5.0
 R		= R-${RVER}
 R_INST_PATH	= ${NLYTIQ_INST_PATH}
 
@@ -27,9 +27,9 @@ include configure.prefix.flag.config
 ### R specific compilation flags
 MAIN_LDFLAGS    = -L${NLYTIQ_INST_PATH}/lib
 _EPF_ += MAIN_LDFLAGS="${MAIN_LDFLAGS}"
+LIBS=curl
 
-
-RFLAGS		= --with-blas --with-lapack --with-readline  --with-system-zlib --with-system-bzlib --with-system-pcre --with-system-xz --with-recommended-packages --with-x --with-sysroot=${NLYTIQ_INST_PATH}/lib
+RFLAGS		= --with-blas --with-lapack --with-readline  --with-system-zlib --with-system-bzlib --with-system-pcre --with-system-xz --with-recommended-packages --with-x --with-sysroot=${NLYTIQ_INST_PATH}/lib --enable-R-shlib --enable-R-static-lib
 #--------------------------------------------------------------------------#
 
 all:    	install-R-modules

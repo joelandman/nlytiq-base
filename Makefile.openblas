@@ -1,8 +1,8 @@
 include base.config
 
-#### NodeJS  
-OPENBLASVER		= v0.2.20
-OPENBLAS_TAR		= ${OPENBLASVER}
+#### OpenBLAS
+OPENBLASVER		= 0.2.20
+OPENBLAS_TAR		= v${OPENBLASVER}
 OPENBLAS_DIR  		= OpenBLAS-${OPENBLASVER}
 OPENBLAS_INST_PATH	= ${NLYTIQ_INST_PATH}
 
@@ -25,11 +25,11 @@ configure-openblas:
 	touch configure-openblas
 
 make-openblas: configure-openblas
-	cd ${OPENBLAS_DIR} ; gmake -j${NCPU} ${_EPF_}
+	cd ${OPENBLAS_DIR} ; ${_EPF_} ${MAKE} TARGET=HASWELL -j${NCPU} 
 	touch make-openblas
 
 install-openblas: make-openblas
-	cd ${OPENBLAS_DIR} ; gmake PREFIX=${NLYTIQ_INST_PATH} install
+	cd ${OPENBLAS_DIR} ; ${MAKE} PREFIX=${NLYTIQ_INST_PATH} install
 	touch install-openblas
 
 clean-openblas:

@@ -1,7 +1,7 @@
 include base.config
 
 #### llvm
-LLVMVER		= 5.0.0
+LLVMVER		= 6.0.0
 LLVMSRC		= llvm-${LLVMVER}
 CFESRC		= cfe-${LLVMVER}
 RTSRC		= compiler-rt-${LLVMVER}

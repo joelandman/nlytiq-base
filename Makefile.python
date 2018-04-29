@@ -1,7 +1,7 @@
 include base.config
 
 ####   
-PYTHONVER		= 3.6.4
+PYTHONVER		= 3.6.5
 PYTHON			= Python-${PYTHONVER}
 PYTHON_INST_PATH	= ${NLYTIQ_INST_PATH}
 
@@ -34,7 +34,7 @@ clean:		clean-python
 
 configure-python:	
 	tar -zxvf sources/${PYTHON}.tgz
-	cd ${PYTHON} ; ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH}
+	cd ${PYTHON} ; ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} --enable-optimizations
 	touch configure-python
 
 make-python: configure-python

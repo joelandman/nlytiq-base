@@ -16,7 +16,7 @@ ifeq ($(GCC),1)
 	__ENV__SET = USE_LLVM_SHLIB=0
 endif
 
-
+__ENV__SET += PYTHON=${NLYTIQ_INST_PATH}/bin/python3
 
 # ${_EPF_} contains the front matter for configure after the include below
 include configure.prefix.flag.config
@@ -25,9 +25,9 @@ include configure.prefix.flag.config
 
 all:    	install-julia-modules
 
-clean:		clean-julia  
+clean:		clean-julia
 
-configure-julia:	
+configure-julia:
 	tar -zxvf sources/julia-${JULIA_NAME}.tar.gz
 
 	# rename julia directory to exclude version name
@@ -49,6 +49,7 @@ ifeq (${OS},FreeBSD)
 	echo  FFLAGS=${FFLAGS} ${LDFLAGS} >> ${JULIA_DIR}/Make.user
 	echo  CFLAGS=${CFLAGS} >> ${JULIA_DIR}/Make.user
 	echo  CPPFLAGS=${CXXFLAGS} >> ${JULIA_DIR}/Make.user
+	echo  PYTHON=${NLYTIQ_INST_PATH}/bin/python3
 	# make sure you have openblas installed
 	#echo  USE_SYSTEM_BLAS=1 >> ${JULIA_DIR}/Make.user
 	#echo  LIBBLAS=-lopenblas >> ${JULIA_DIR}/Make.user
@@ -72,8 +73,25 @@ ifeq (${OS},FreeBSD)
 	#echo  JULIA_CPU_CORES=1 >> ${JULIA_DIR}/Make.user
 	echo  LLVM_CONFIG=${NLYTIQ_INST_PATH}/bin/llvm-config
 else
-	#echo "USE_SYSTEM_BLAS=0" >> ${JULIA_DIR}/Make.user
+	#echo "USE_SYSTEM_BLAS=1" >> ${JULIA_DIR}/Make.user
+	#echo "build_shlibdir=${NLYTIQ_INST_PATH}/lib" >> ${JULIA_DIR}/Make.user
+	#echo "LIBBLAS=-L${NLYTIQ_INST_PATH}/lib -lopenblas"  >> ${JULIA_DIR}/Make.user
 	#echo "USE_SYSTEM_LAPACK=0" >> ${JULIA_DIR}/Make.user
+	#echo "USE_SYSTEM_FFTW=1" >> ${JULIA_DIR}/Make.user
+	#echo "USE_SYSTEM_LIBUV=0" >> ${JULIA_DIR}/Make.user
+	#echo "USE_SYSTEM_OPENLIBM=1" >> ${JULIA_DIR}/Make.user
+	#echo "USE_SYSTEM_GMP=1" >> ${JULIA_DIR}/Make.user
+	#echo "USE_SYSTEM_MPFR=1" >> ${JULIA_DIR}/Make.user
+	#echo "USE_SYSTEM_LIBUNWIND=1" >> ${JULIA_DIR}/Make.user
+	#echo "USE_SYSTEM_LIBGIT2=1" >> ${JULIA_DIR}/Make.user
+	#echo "USE_SYSTEM_PCRE=0" >> ${JULIA_DIR}/Make.user
+	##echo "PCRE_CONFIG=${NLYTIQ_INST_PATH}/bin/pcre2-config" >> ${JULIA_DIR}/Make.user
+	##echo "LLVM_CONFIG=${NLYTIQ_INST_PATH}/bin/llvm-config" >> ${JULIA_DIR}/Make.user
+	##echo "USE_SYSTEM_LLVM=1"  >> ${JULIA_DIR}/Make.user
+	#echo "USE_SYSTEM_SUITESPARSE=1"  >> ${JULIA_DIR}/Make.user
+	#echo "USE_SYSTEM_UTF8PROC=0" >> ${JULIA_DIR}/Make.user
+	#echo "USE_SYSTEM_MBEDTLS=1" >> ${JULIA_DIR}/Make.user
+
 endif
 ifeq ($(OS),SunOS)
 	cat sources/Make.user.illumos >> ${JULIA_DIR}/Make.user
@@ -82,13 +100,14 @@ endif
 	#echo "LLVM_VER = 4.0.0"  >> ${JULIA_DIR}/Make.user
 	#echo "MARCH=sandybridge" >> ${JULIA_DIR}/Make.user
 	#echo "JULIA_CPU_TARGET=core2"  >> ${JULIA_DIR}/Make.user
-	
+
 	touch configure-julia
 
 make-julia: configure-julia
-	cd ${JULIA_DIR} ;\
+	cd ${JULIA_DIR} ; \
 		 ${__ENV__SET} ;\
-		 ${MAKECMD}  -j${NCPU}
+		 PATH=${PATH}:${NLYTIQ_INST_PATH}/bin ;\
+		 ${MAKECMD}  -j${NCPU} OPENBLAS_TARGET_ARCH=HASWELL
 #        cd ${JULIA_DIR} ;\
 #                 ${__ENV__SET} ;\
 #                 ${_EPF_} ;\
@@ -103,46 +122,46 @@ install-julia: make-julia
 
 install-julia-modules: install-julia
 	mkdir -p ${JULIA_INST_PATH}/julia
-	echo JULIA_PKGDIR=${JULIA_INST_PATH}/julia >> bashrc.julia
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.init()'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.update()'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("PyPlot")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Gadfly")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Plots")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("AWSCore")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("AWSS3")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("AWSLambda")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("DifferentialEquations")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("CRC")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("CSV")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("CurveFit")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("CpuId")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("ConfParser")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("ClusterManagers")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("DataFrames")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Gaston")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("GaussQuadrature")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("JSON")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("IJulia")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Mux")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("WebSockets")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("HexEdit")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("LSODA")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("LsqFit")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("MXNet")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("NumericIO")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("PlotRecipes")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("FastGaussQuadrature")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("RingBuffers")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("SQLite")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("SIMD")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Roots")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Sparklines")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("TensorFlow")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Sundials")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("TimeSeriesIO")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("UUID")'
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("YAML")'
+	echo ${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia >> bashrc.julia
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.init()'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.update()'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("PyPlot")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Gadfly")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Plots")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("AWSCore")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("AWSS3")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("AWSLambda")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("DifferentialEquations")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("CRC")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("CSV")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("CurveFit")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("CpuId")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("ConfParser")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("ClusterManagers")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("DataFrames")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Gaston")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("GaussQuadrature")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("JSON")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("IJulia")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Mux")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("WebSockets")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("HexEdit")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("LSODA")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("LsqFit")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("MXNet")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("NumericIO")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("PlotRecipes")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("FastGaussQuadrature")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("RingBuffers")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("SQLite")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("SIMD")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Roots")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Sparklines")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("TensorFlow")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Sundials")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("TimeSeriesIO")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("UUID")'
+	${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("YAML")'
 	touch install-julia-modules
 
 clean-julia:

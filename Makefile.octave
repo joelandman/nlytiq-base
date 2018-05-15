@@ -1,7 +1,7 @@
 include base.config
 
 #### Octave
-OCTAVEVER		= 4.2.2
+OCTAVEVER		= 4.4.0
 OCTAVE			= octave-${OCTAVEVER}
 OCTAVE_INST_PATH	= ${NLYTIQ_INST_PATH}
 

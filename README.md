@@ -53,13 +53,13 @@ High performance general programming environments
      Jupyter, pandas, Theano, ...
 * [Perl 5.x](http://www.cpan.org)
    * Many Perl modules
-* [Ruby 2.x](https://www.ruby-lang.org/en/)
-* [NodeJS 6.x](https://nodejs.org/en/)
+* REMOVED [Ruby 2.x](https://www.ruby-lang.org/en/)
+* REMOVED [NodeJS 6.x](https://nodejs.org/en/)
    * several Node modules including NeDB
-* [Go 1.8.x](https://golang.org/)
+* REMOVED [Go 1.10.x](https://golang.org/) 
 * [Perl 6.x](https://perl6.org/)
    * Perl6 modules including panda
-* [Rust 0.19.x](https://www.rust-lang.org/en-US/)
+* [Rust 0.26.x](https://www.rust-lang.org/en-US/)
 
 ##Status
 This is still in the early stages of development.  Most of the

@@ -6,27 +6,24 @@ include base.config
 PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 
 ####  Modules  
-PERL_MODULES	= Module::Install Module::AutoInstall \
-		  Net::Server::PreFork \
-		  Mojolicious Getopt::Lucid IPC::Run HTML::Mason \
-		  Mojolicious::Plugin::Mason1Renderer IPC::Run XML::Smart \
-		  DBI DBD::SQLite Config::General Config::IniFiles \
-		  JSON::PP Config::JSON Crypt::PRNG File::ChangeNotify \
-		  File::PathConvert  File::Spec \
-		  Sys::Hostname Getopt::Lucid Data::Serializer \
-		  threads threads::shared Digest::SHA Starman \
-		  Email::Sender::Simple Switch  CPAN \
-		  InfluxDB Time::ParseDate Text::ASCIITable \
-		  IO::Pty Math::Random::Secure \
-		  Bundle::DBD::Sys  Galileo Starman \
+PERL_MODULES	= CPAN threads threads::shared Switch Digest::SHA IO::Pty \
+		  IPC::Run File::Spec File::PathConvert Sys::Hostname \ 
+		  Getopt::Lucid JSON::PP DBI DBD::SQLite Catmandu  \
+		  File::ChangeNotify Data::Serializer Time::ParseDate \
+		  Text::ASCIITable \
+		  Module::Install Module::AutoInstall Starman \
+		  Net::Server::PreFork HTML::Mason Mojolicious  \
+		  Mojolicious::Plugin::Mason1Renderer XML::Smart \
+		  Config::General Config::IniFiles \
+		  Config::JSON Math::Random::Secure Crypt::PRNG  \
+		  Bundle::DBD::Sys  Galileo \
 		  Moose HTML::TreeBuilder XML::RSS \
 		  Mojolicious::Plugin::RemoteAddr HTTP::Response \
 		  Config::Scoped  FFI::Platypus  FFI::CheckLib  FFI::Raw \
 		  FFI::Platypus::Declare FFI::Platypus::Memory \
 		  FFI::Platypus::API FFI::Platypus::Type FFI::TinyCC \
 		  URI::Escape  IO::Socket::Netlink::Taskstats \
-		  DBM::Deep  CouchDB::View Email::Sender::Simple ZMQ::FFI \
-		  SVG::Sparkline 
+		  DBM::Deep  ZMQ::FFI SVG::Sparkline 
 		  
 all:    perl-modules Data-Scale forced
 

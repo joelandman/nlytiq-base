@@ -25,7 +25,7 @@ configure-openblas:
 	touch configure-openblas
 
 make-openblas: configure-openblas
-	cd ${OPENBLAS_DIR} ; ${_EPF_} ${MAKE} TARGET=HASWELL -j${NCPU} 
+	cd ${OPENBLAS_DIR} ; ${_EPF_} ${MAKE} TARGET=NEHALEM -j${NCPU} 
 	touch make-openblas
 
 install-openblas: make-openblas

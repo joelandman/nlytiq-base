@@ -17,7 +17,7 @@ By default, we assume gcc/g++/gfortran in default paths on the system.  These
 assumptions may be invalid.  If you wish to use gcc installed in a different 
 path, edit compiler.config and find your OS (search for one of Linux, Darwin,
 FreeBSD, SunOS representing all linux distros, macos, FreeBSD and possibly 
-others, and illumos).  Edit the GCC_PATH and GCC_VER appropriately.
+others).  Edit the GCC_PATH and GCC_VER appropriately.
 
 Example: gcc-7 installed in Linux at /usr/local/compilers/gcc-7
 
@@ -37,8 +37,7 @@ It should be possible to use Intel compilers, and Portland Group compilers,
 though we've not done the work required to support this as of yet.
 
 As of this moment, gcc-4.9, gcc-5.4, gcc-6.3 work under Linux, and FreebSD.  
-clang works under MacOS (disguised as gcc).  Illumos is a work in progress, 
-and is not currently functional.
+clang works under MacOS (disguised as gcc). 
 
 4th) run 
 

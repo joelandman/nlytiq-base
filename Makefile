@@ -11,23 +11,23 @@ ifeq ($(CLANG),1)
 ifneq ($(OS),FreeBSD)
 ifneq ($(OS),Darwin)
 ifeq ($(BUILDATLAS),1)
-packages = cmake llvm curl pcre atlas perl5 perl5mods perl6 python julia  spark R octave rust
+packages = cmake llvm curl pcre atlas openblas perl5 perl5mods perl6 gnuplot python julia  spark R octave
 else
-packages = cmake llvm curl pcre perl5 perl5mods perl6 python julia  spark R octave rust
+packages = cmake llvm curl pcre openblas perl5 perl5mods perl6 gnuplot python julia  spark R octave
 endif
 else
 # MacOSX ... bad ...bad mac
 ifeq ($(BUILDATLAS),1)
-packages = cmake  pcre atlas perl5 perl5mods perl6 python julia  spark R octave rust
+packages = cmake  pcre atlas openblas perl5 perl5mods perl6 python julia  spark R octave
 else
-packages = cmake  pcre perl5 perl5mods perl6 python julia  spark R octave rust
+packages = cmake  pcre openblas perl5 perl5mods perl6 python julia  spark R octave
 endif
 endif
 else
 ifeq ($(BUILDATLAS),1)
-packages = cmake curl pcre atlas perl5 perl5mods perl6 python julia  spark R octave rust
+packages = cmake curl pcre atlas openblas perl5 perl5mods perl6 gnuplot python julia  spark R octave
 else
-packages = cmake curl pcre perl5 perl5mods perl6 python julia  spark R octave rust
+packages = cmake curl pcre perl5 openblas perl5mods perl6 gnuplot python julia  spark R octave
 endif
 endif
 endif
@@ -35,9 +35,9 @@ endif
 ifeq ($(GCC),1)
 # do not need llvm if we are not using it to compile everything 
 ifeq ($(BUILDATLAS),1)
-packages = cmake curl pcre atlas perl5 perl5mods perl6 python julia  spark R  octave rust
+packages = cmake curl pcre atlas openblas perl5 perl5mods perl6 gnuplot python julia  spark R  octave
 else
-packages = cmake curl pcre perl5 perl5mods perl6 python julia  spark R octave rust
+packages = cmake curl pcre openblas perl5 perl5mods perl6 python julia  spark R octave
 endif
 endif
 

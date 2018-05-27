@@ -93,9 +93,6 @@ else
 	#echo "USE_SYSTEM_MBEDTLS=1" >> ${JULIA_DIR}/Make.user
 
 endif
-ifeq ($(OS),SunOS)
-	cat sources/Make.user.illumos >> ${JULIA_DIR}/Make.user
-endif
 	#echo "USE_SYSTEM_PCRE=1" > ${JULIA_DIR}/Make.user
 	#echo "LLVM_VER = 4.0.0"  >> ${JULIA_DIR}/Make.user
 	#echo "MARCH=sandybridge" >> ${JULIA_DIR}/Make.user

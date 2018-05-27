@@ -31,7 +31,7 @@ PERL_MODULES	= Module::Install Module::AutoInstall \
 all:    perl-modules Data-Scale forced
 
 clean:	 
-	rm -fr perl-modules Data-Scale forced
+	rm -fr perl-modules Data-Scale forced ~/.cpan
 
 
 #--------------------------------------------------------------------------#
@@ -56,3 +56,4 @@ forced:
 	# Term::ReadLine::Gnu has major problems with readline libs. 
 	${NLYTIQ_INST_PATH}/bin/cpan -T Term::ReadLine::Gnu
 	touch forced
+

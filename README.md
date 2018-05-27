@@ -59,7 +59,7 @@ High performance general programming environments
 * REMOVED [Go 1.10.x](https://golang.org/) 
 * [Perl 6.x](https://perl6.org/)
    * Perl6 modules including panda
-* [Rust 0.26.x](https://www.rust-lang.org/en-US/)
+* REMOVED [Rust 0.26.x](https://www.rust-lang.org/en-US/)
 
 ##Status
 This is still in the early stages of development.  Most of the
@@ -81,23 +81,12 @@ and interact with any scale analytics.  The tools should work as well
 with data sets of 4 measurements, as they should with 4 x 10<sup>15</sup>
 measurements.
 
-One of the things coming is the docker build.  Another is the squashed
-file system build.  A third thing may be a windows build if there is
-interest.  I only have windows in a VM, and its windows 7, so we'd need
-a kind soul with a windows machine and some time to help build/test it on
-that platform.
-
-I will be working on a comprehensive test system.  And a small embedded
-analytics server for Jupyter and others.  Beaker has some of this, but
-it does require a modern Java which complicates things (we are trying
-to stay away from non-free/open source systems).
-
 ##Who
 Me:  Joe Landman (joe _dot_ landman at our friends at google's mail service)
 
 ##License
 Each project has its own licensing, but all are open source.  Our code,
-the makefiles, are MIT/BSD licensed.
+the makefiles, are Apache 2.0 licensed.
 
 ##How do I build it
 See the HOWTO

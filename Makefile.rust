@@ -1,7 +1,7 @@
 include base.config
 
 ####   
-RUSTUPINIT	= sources/rustup-init.$(OS)
+RUSTUPINIT	= sources/rustup-init.sh
 #--------------------------------------------------------------------------#
 
 all:    	install-rustbin

@@ -105,7 +105,7 @@ make-julia: configure-julia
 		 ${__ENV__SET} ;\
 		 PATH=${PATH}:${NLYTIQ_INST_PATH}/bin ;\
 		 export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ;\
-		 ${MAKECMD}  -j${NCPU} OPENBLAS_TARGET_ARCH=HASWELL
+		 ${MAKECMD}  -j${NCPU} OPENBLAS_TARGET_ARCH=SANDYBRIDGE
 #        cd ${JULIA_DIR} ;\
 #                 ${__ENV__SET} ;\
 #                 ${_EPF_} ;\
@@ -121,8 +121,12 @@ install-julia: make-julia
 
 install-julia-modules: install-julia
 	mkdir -p ${JULIA_INST_PATH}/julia
+	mkdir -p ~/.julia/config
+	echo "import Pkg" >> ~/.julia/config/startup.jl
 	echo ${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia >> bashrc.julia
-	export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ; ${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.init()'
+
+	# Pkg.init() isn't needed 0.7.0 and beyond.
+	#export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ; ${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'using Pkg ; Pkg.init()'
 	export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ; ${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.update()'
 	export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ; ${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("PyPlot")'
 	export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ; ${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Gadfly")'

@@ -55,7 +55,6 @@ High performance general programming environments
    * Many Perl modules
 * REMOVED [Ruby 2.x](https://www.ruby-lang.org/en/)
 * REMOVED [NodeJS 6.x](https://nodejs.org/en/)
-   * several Node modules including NeDB
 * REMOVED [Go 1.10.x](https://golang.org/) 
 * [Perl 6.x](https://perl6.org/)
    * Perl6 modules including panda

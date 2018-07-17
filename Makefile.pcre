@@ -1,7 +1,7 @@
 include base.config
 
 ####   
-PCREVER		= 10.30
+PCREVER		= 10.31
 PCRE		= pcre2-${PCREVER}
 PCRE_INST_PATH	= ${NLYTIQ_INST_PATH}
 

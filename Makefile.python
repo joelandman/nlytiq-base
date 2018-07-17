@@ -33,7 +33,7 @@ all:    	install-python-modules
 clean:		clean-python  
 
 configure-python:	
-	tar -zxvf sources/${PYTHON}.tar.gz
+	tar -Jxvf sources/${PYTHON}.tar.xz
 	cd ${PYTHON} ; ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} --enable-optimizations
 	touch configure-python
 
@@ -64,7 +64,8 @@ endif
 	# note: these are the non-GPU versions of the below
 	# To Do: Add in GPU versions
 ifneq (${OS},FreeBSD)
-	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install tensorflow
+# Tensorflow doesn't support Python 3.7 yet.  So this will fail.
+#	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install tensorflow
 endif
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install bokeh
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install Keras	

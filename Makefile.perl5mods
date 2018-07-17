@@ -7,23 +7,23 @@ PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 
 ####  Modules  
 PERL_MODULES	= CPAN threads threads::shared Switch Digest::SHA IO::Pty \
-		  IPC::Run File::Spec File::PathConvert Sys::Hostname \ 
-		  Getopt::Lucid JSON::PP DBI DBD::SQLite Catmandu  \
-		  File::ChangeNotify Data::Serializer Time::ParseDate \
-		  Text::ASCIITable \
-		  Module::Install Module::AutoInstall Starman \
-		  Net::Server::PreFork HTML::Mason Mojolicious  \
-		  Mojolicious::Plugin::Mason1Renderer XML::Smart \
-		  Config::General Config::IniFiles \
-		  Config::JSON Math::Random::Secure Crypt::PRNG  \
-		  Bundle::DBD::Sys  Galileo \
-		  Moose HTML::TreeBuilder XML::RSS \
-		  Mojolicious::Plugin::RemoteAddr HTTP::Response \
-		  Config::Scoped  FFI::Platypus  FFI::CheckLib  FFI::Raw \
-		  FFI::Platypus::Declare FFI::Platypus::Memory \
-		  FFI::Platypus::API FFI::Platypus::Type FFI::TinyCC \
-		  URI::Escape  IO::Socket::Netlink::Taskstats \
-		  DBM::Deep  ZMQ::FFI SVG::Sparkline 
+	IPC::Run File::Spec File::PathConvert Sys::Hostname \
+	Getopt::Lucid JSON::PP DBI DBD::SQLite Catmandu  \
+	File::ChangeNotify Data::Serializer Time::ParseDate \
+	Text::ASCIITable \
+	Module::Install Module::AutoInstall Starman \
+	Net::Server::PreFork HTML::Mason Mojolicious  \
+	Mojolicious::Plugin::Mason1Renderer XML::Smart \
+	Config::General Config::IniFiles \
+	Config::JSON Math::Random::Secure Crypt::PRNG  \
+	Bundle::DBD::Sys  Galileo \
+	Moose HTML::TreeBuilder XML::RSS \
+	Mojolicious::Plugin::RemoteAddr HTTP::Response \
+	Config::Scoped  FFI::Platypus  FFI::CheckLib  FFI::Raw \
+	FFI::Platypus::Declare FFI::Platypus::Memory \
+	FFI::Platypus::API FFI::Platypus::Type FFI::TinyCC \
+	URI::Escape  IO::Socket::Netlink::Taskstats \
+	DBM::Deep  ZMQ::FFI SVG::Sparkline 
 		  
 all:    perl-modules Data-Scale forced
 

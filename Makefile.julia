@@ -3,7 +3,7 @@ include forcegcc.config
 #include forcellvm.config
 
 JULIA_VER = 0.7.0
-JULIA_NAME = ${JULIA_VER}-beta2-full
+JULIA_NAME = ${JULIA_VER}-full
 JULIA_INST_PATH	= ${NLYTIQ_INST_PATH}
 JULIA_DWV = julia-${JULIA_VER}
 JULIA_DIR = julia

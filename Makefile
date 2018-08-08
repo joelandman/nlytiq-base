@@ -18,9 +18,9 @@ endif
 else
 # MacOSX ... bad ...bad mac
 ifeq ($(BUILDATLAS),1)
-packages = cmake  pcre atlas openblas perl5 perl5mods perl6 python julia  spark R octave
+packages = cmake  pcre atlas openblas perl5 perl5mods perl6 gnuplot python julia  spark R octave
 else
-packages = cmake  pcre openblas perl5 perl5mods perl6 python julia  spark R octave
+packages = cmake  pcre openblas perl5 perl5mods perl6 gnuplot python julia  spark R octave
 endif
 endif
 else
@@ -37,11 +37,11 @@ ifeq ($(GCC),1)
 ifeq ($(BUILDATLAS),1)
 packages = cmake curl pcre atlas openblas perl5 perl5mods perl6 gnuplot python julia  spark R  octave
 else
-packages = cmake curl pcre openblas perl5 perl5mods perl6 python julia  spark R octave
+packages = cmake curl pcre openblas perl5 perl5mods perl6 gnuplot python julia  spark R octave
 endif
 endif
 
-### each package has its own Makefile.  This Makefile drives complilation
+### each package has its own Makefile.  This Makefile drives compilation
 ### with a default target of all.  Each Makefile also has a clean target
 ### You can make them as simple/complex as you wish, as long as the above
 ### boundaries (all, clean) are respected, and are working ... such that

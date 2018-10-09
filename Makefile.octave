@@ -58,6 +58,7 @@ make-octave: configure-octave
 
 install-octave: make-octave
 	cd ${OCTAVE} ; ${_LDP_} ${_EPF_} make install
+	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 octave_kernel
 	touch install-octave
 
 clean-octave:

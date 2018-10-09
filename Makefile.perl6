@@ -1,7 +1,7 @@
 include base.config
 
 ####   
-PERLVER		= 2018.04
+PERLVER		= 2018.06
 PERL		= rakudo-star-${PERLVER}
 PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 OSREV		= $(shell uname -r)
@@ -48,8 +48,7 @@ install-perl6: make-perl6
 
 install-perl6-mods: install-perl6
 	tar -zxvf sources/${ZEFTAR}
-	cd zef
-	${_EPF_}  ${NLYTIQ_INST_PATH}/bin/perl6 -I. bin/zef install .
+	cd zef ; ${_EPF_}  ${NLYTIQ_INST_PATH}/bin/perl6 -I. bin/zef install .
 	touch install-perl6-mods
 
 clean-perl6:

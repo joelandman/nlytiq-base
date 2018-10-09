@@ -69,6 +69,7 @@ ifneq (${OS},FreeBSD)
 endif
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install bokeh
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install Keras	
+
 	
 	touch install-python-modules
 

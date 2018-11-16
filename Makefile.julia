@@ -2,7 +2,11 @@ include base.config
 include forcegcc.config
 #include forcellvm.config
 
+<<<<<<< HEAD
+JULIA_VER = 1.0.2
+=======
 JULIA_VER = 1.0.1
+>>>>>>> a171cee60648ca5442bf84f45bb6003f5dbfa632
 JULIA_NAME = ${JULIA_VER}-full
 JULIA_INST_PATH	= ${NLYTIQ_INST_PATH}
 JULIA_DWV = julia-${JULIA_VER}
@@ -106,17 +110,13 @@ make-julia: configure-julia
 		 PATH=${PATH}:${NLYTIQ_INST_PATH}/bin ;\
 		 export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ;\
 		 ${MAKECMD}  -j${NCPU} OPENBLAS_TARGET_ARCH=SANDYBRIDGE
-#        cd ${JULIA_DIR} ;\
-#                 ${__ENV__SET} ;\
-#                 ${_EPF_} ;\
-#                 ${MAKECMD}  -j${NCPU}
 
 	touch make-julia
 
 install-julia: make-julia
 	cd ${JULIA_DIR} ;  export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ;\
 		${__ENV__SET} ${_EPF_} ${MAKECMD} install
-	cd ${JULIA_DIR}/usr ; tar -cf - . | (cd ${JULIA_INST_PATH} && tar -xvf - )
+	#cd ${JULIA_DIR}/usr ; tar -cf - . | (cd ${JULIA_INST_PATH} && tar -xvf - )
 	touch install-julia
 
 install-julia-modules: install-julia

@@ -1,9 +1,9 @@
-include base.config
+include config/base.config
 
 ####   
 
 # ${_EPF_} contains the front matter for configure after the include below
-include configure.prefix.flag.config
+include config/configure.prefix.flag.config
 
 
 #--------------------------------------------------------------------------#

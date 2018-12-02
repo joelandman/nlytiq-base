@@ -1,7 +1,7 @@
-include base.config
+include config/base.config
 
 ####   
-CMAKEVER		= 3.12.4
+CMAKEVER		= 3.13.1
 CMAKESRC		= cmake-${CMAKEVER}
 CMAKETAR		= ${CMAKESRC}.tar.gz
 CMAKE_INST_PATH	= ${NLYTIQ_INST_PATH}
@@ -9,10 +9,10 @@ CMAKE_INST_PATH	= ${NLYTIQ_INST_PATH}
 
 
 ### force baseline gcc if GCC_VER is not blank
-include forcegcc.config
+include config/forcegcc.config
 
 # ${_EPF_} contains the front matter for configure after the include below
-include configure.prefix.flag.config
+include config/configure.prefix.flag.config
 
 
 all:    	install-cmake

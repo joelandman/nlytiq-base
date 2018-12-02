@@ -1,4 +1,5 @@
 include config/base.config
+include config/forcegcc.config
 
 #### Octave
 OCTAVEVER		= 4.4.1
@@ -25,8 +26,8 @@ LDFLAGS                 = -L/opt/nlytiq/lib \
 endif
 
 ifeq ($(OS), Darwin)
-# more MacOS breakage ... libreadline
-OCTAVEOPTS += --disable-readline
+# more MacOS breakage ... libreadline and fltk
+OCTAVEOPTS += --disable-readline --without-fltk
 # Bad apple ... bad
 else
 # and even more MacOS breakage ... X windows ... /sigh
@@ -58,7 +59,7 @@ make-octave: configure-octave
 
 install-octave: make-octave
 	cd ${OCTAVE} ; ${_LDP_} ${_EPF_} make install
-	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 octave_kernel
+	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install octave_kernel
 	touch install-octave
 
 clean-octave:

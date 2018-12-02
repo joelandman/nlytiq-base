@@ -17,7 +17,7 @@ all:    	install-curl
 clean:		clean-curl
 
 configure-curl:	
-	tar -Jxvf sources/${CURL}.tar.gz
+	tar -Jxvf sources/${CURL}.tar.xz
 	cd ${CURL} ; ${_EPF_} ./configure --prefix=${NLYTIQ_INST_PATH} --enable-cookies --enable-crypto-auth --enable-tls-srp --enable-ipv6 --enable-tftp --enable-smb --enable-rtsp --enable-file --enable-http --with-libssh2
 	touch configure-curl
 

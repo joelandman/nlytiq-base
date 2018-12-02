@@ -1,7 +1,7 @@
-include base.config
+include config/base.config
 
 #### Octave
-OCTAVEVER		= 4.4.0
+OCTAVEVER		= 4.4.1
 OCTAVE			= octave-${OCTAVEVER}
 OCTAVE_INST_PATH	= ${NLYTIQ_INST_PATH}
 
@@ -35,7 +35,7 @@ OCTAVEOPTS += --with-x
 endif
 
 # ${_EPF_} contains the front matter for configure after the include below
-include configure.prefix.flag.config
+include config/configure.prefix.flag.config
 
 _LDP_ = LD_LIBRARY_PATH=${NLYTIQ_LIB_PATH}
 
@@ -46,7 +46,7 @@ all:    	install-octave
 clean:		clean-octave
 
 configure-octave:
-	tar -zxvf sources/${OCTAVE}.tar.gz
+	tar -Jxvf sources/${OCTAVE}.tar.xz
 	cd ${OCTAVE} ;\
 		${_LDP_} ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} ${OCTAVEOPTS}
 	touch configure-octave

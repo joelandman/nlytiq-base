@@ -1,4 +1,4 @@
-include base.config
+include config/base.config
 
 ATLAS_VER  = 3.10.3
 ATLAS_SRC  = atlas${ATLAS_VER}

@@ -1,7 +1,7 @@
-include base.config
+include config/base.config
 
 ####   
-PYTHONVER		= 3.7.0
+PYTHONVER		= 3.7.1
 PYTHON			= Python-${PYTHONVER}
 PYTHON_INST_PATH	= ${NLYTIQ_INST_PATH}
 
@@ -10,20 +10,13 @@ PYTHON_INST_PATH	= ${NLYTIQ_INST_PATH}
 CXXFLAGS        += $(shell freetype-config --cflags)
 
 ### MacOSX specific CFLAGS/LDFLAGS (c.f. https://stackoverflow.com/questions/41489439/pip3-installs-inside-virtual-environment-with-python3-6-failing-due-to-ssl-modul)
-ifeq ($(OS), Darwin)
-CFLAGS  += -I$(shell brew --prefix openssl)/include
-LDFLAGS += -L$(shell brew --prefix openssl)/lib
-endif
-
-### FreeBSD numpy API fix
-ifeq ($(OS), FreeBSD)
-CFLAGS += -DNPY_NO_DEPRECATED_API   
-CXXFLAGS += -DNPY_NO_DEPRECATED_API  -fpermissive
-# CXXFLAGS += -DNPY_NO_DEPRECATED_API -DNPY_1_7_API_VERSION  -fpermissive
+ifeq ($(OS),Darwin)
+CFLAGS  += -I$(shell brew --prefix openssl)/include -I/opt/X11/include -I/usr/local/include -I/usr/local//Cellar/zlib/1.2.11/include
+LDFLAGS += -L$(shell brew --prefix openssl)/lib -L/opt/X11/lib/ -L/usr/local/lib -L/usr/local//Cellar/zlib/1.2.11/lib
 endif
 
 # ${_EPF_} contains the front matter for configure after the include below
-include configure.prefix.flag.config
+include config/configure.prefix.flag.config
 
 
 #--------------------------------------------------------------------------#
@@ -34,7 +27,10 @@ clean:		clean-python
 
 configure-python:	
 	tar -Jxvf sources/${PYTHON}.tar.xz
-	cd ${PYTHON} ; ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} --enable-optimizations
+	cd ${PYTHON} ; ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} \
+		--enable-optimizations \
+		--with-openssl=$(shell brew --prefix openssl)
+		
 	touch configure-python
 
 make-python: configure-python

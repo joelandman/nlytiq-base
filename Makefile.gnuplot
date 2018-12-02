@@ -1,7 +1,7 @@
-include base.config
+include config/base.config
 
 ####   
-GNUPLOTVER	= 5.2.3
+GNUPLOTVER	= 5.2.5
 GNUPLOT		= gnuplot-${GNUPLOTVER}
 GNUPLOTTAR	= ${GNUPLOT}.tar.gz
 PFLAGS          = 
@@ -16,7 +16,7 @@ DIR		= $(shell pwd)/${GNUPLOT}
 
 
 # ${_EPF_} contains the front matter for configure after the include below
-include configure.prefix.flag.config
+include config/configure.prefix.flag.config
 
 
 #--------------------------------------------------------------------------#

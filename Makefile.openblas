@@ -1,4 +1,4 @@
-include base.config
+include config/base.config
 
 #### OpenBLAS
 OPENBLASVER		= 0.2.20
@@ -8,11 +8,11 @@ OPENBLAS_INST_PATH	= ${NLYTIQ_INST_PATH}
 
 ifeq ($(OS), Darwin)
 ### force baseline gcc if on MacOS
-include forcegcc.config
+include config/forcegcc.config
 endif
 
 # ${_EPF_} contains the front matter for configure after the include below
-include configure.prefix.flag.config
+include config/configure.prefix.flag.config
 
 #--------------------------------------------------------------------------#
 

@@ -1,13 +1,13 @@
-include base.config
+include config/base.config
 
 #### R  
-CURLVER		= 7.56.0
+CURLVER		= 7.62.0
 CURL		= curl-${CURLVER}
 CURL_INST_PATH	= ${NLYTIQ_INST_PATH}
 
 ifneq ($(OS),Darwin)
 # ${_EPF_} contains the front matter for configure after the include below
-include configure.prefix.flag.config
+include config/configure.prefix.flag.config
 endif
 
 #--------------------------------------------------------------------------#
@@ -17,7 +17,7 @@ all:    	install-curl
 clean:		clean-curl
 
 configure-curl:	
-	tar -zxvf sources/${CURL}.tar.gz
+	tar -Jxvf sources/${CURL}.tar.gz
 	cd ${CURL} ; ${_EPF_} ./configure --prefix=${NLYTIQ_INST_PATH} --enable-cookies --enable-crypto-auth --enable-tls-srp --enable-ipv6 --enable-tftp --enable-smb --enable-rtsp --enable-file --enable-http --with-libssh2
 	touch configure-curl
 

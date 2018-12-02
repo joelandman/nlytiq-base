@@ -1,7 +1,7 @@
-include base.config
+include config/base.config
 
 ####   
-PERLVER		= 5.28.0
+PERLVER		= 5.28.1
 PERL		= perl-${PERLVER}
 PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 PFLAGS          = 
@@ -21,7 +21,7 @@ endif
 
 ifeq ($(OS),Darwin)
 CFLAGS=-DPERL_DARWIN -O3 -g
-CONFFLAGS      =  -des  -Dprefix=${NLYTIQ_INST_PATH} -Dnoshrplib  -Duse64bitall -Dusethreads -Duselargefiles
+CONFFLAGS      =  -des  -Dprefix=${NLYTIQ_INST_PATH} -Dnoshrplib  -Duse64bitint -Dusethreads -Duselargefiles
 endif
 
 ifeq ($(OS),SunOS)
@@ -40,7 +40,7 @@ CONFFLAGS      =  -des -Dcc=${CC} -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  
 endif
 
 # ${_EPF_} contains the front matter for configure after the include below
-include configure.prefix.flag.config
+include config/configure.prefix.flag.config
 
 
 #--------------------------------------------------------------------------#

@@ -1,45 +1,101 @@
 ### nlytiq base tool build
 ###
 
-include base.config
+## build environment configuration
+include config/base.config
+
+## package options
+include config/options.config
+
 
 ### list of all supported packages
 
-### select which version based upon if we are using clang
+compiler = llvm 
+prereqs  = cmake curl pcre perl5 perl5mods 
+locallibs= openblas atlas
+base     = perl6 gnuplot python 
+environs = octave julia R 
+misc	 = jupyter_kernels spark 
 
-ifeq ($(CLANG),1)
-ifneq ($(OS),FreeBSD)
-ifneq ($(OS),Darwin)
-ifeq ($(BUILDATLAS),1)
-packages = cmake llvm curl pcre atlas openblas perl5 perl5mods perl6 gnuplot python julia  spark R octave jupyter_kernels
-else
-packages = cmake llvm curl pcre openblas perl5 perl5mods perl6 gnuplot python julia  spark R octave jupyter_kernels
-endif
-else
-# MacOSX ... bad ...bad mac
-ifeq ($(BUILDATLAS),1)
-packages = cmake  pcre atlas openblas perl5 perl5mods perl6 python julia  spark R octave jupyter_kernels
-else
-packages = cmake  pcre openblas perl5 perl5mods perl6 python julia  spark R octave jupyter_kernels
-endif
-endif
-else
-ifeq ($(BUILDATLAS),1)
-packages = cmake curl pcre atlas openblas perl5 perl5mods perl6 gnuplot python julia  spark R octave jupyter_kernels
-else
-packages = cmake curl pcre perl5 openblas perl5mods perl6 gnuplot python julia  spark R octave jupyter_kernels
-endif
-endif
+# package construction
+packages = 
+
+#Linux
+ifeq (${OS},Linux)
+
+ifeq (${CLANG},1)
+packages+=${compiler}
 endif
 
-ifeq ($(GCC),1)
-# do not need llvm if we are not using it to compile everything 
-ifeq ($(BUILDATLAS),1)
-packages = cmake curl pcre atlas openblas perl5 perl5mods perl6 gnuplot python julia  spark R  octave jupyter_kernels
-else
-packages = cmake curl pcre openblas perl5 perl5mods perl6 python julia  spark R octave jupyter_kernels
+packages+=${prereqs}
+
+ifeq (${LOCALLIBS},1)
+packages+=${locallibs}
 endif
+
+packages+=${base}
+
+ifeq (${ENVIRONS},1)
+packages+=${environs}
 endif
+
+ifeq (${MISC},1)
+packages+=${misc}
+endif
+
+endif
+
+# MacOSX
+ifeq (${OS},Darwin)
+
+ifeq (${CLANG},1)
+packages+=${compiler}
+endif
+
+packages+=${prereqs}
+
+ifeq (${LOCALLIBS},1)
+packages+=${locallibs}
+endif
+
+packages+=${base}
+
+ifeq (${ENVIRONS},1)
+packages+=${environs}
+endif
+
+ifeq (${MISC},1)
+packages+=${misc}
+endif
+
+endif
+
+
+# FreeBSD
+ifeq (${OS},FreeBSD)
+
+ifeq (${CLANG},1)
+packages+=${compiler}
+endif
+
+packages+=${prereqs}
+
+ifeq (${LOCALLIBS},1)
+packages+=${locallibs}
+endif
+
+packages+=${base}
+
+ifeq (${ENVIRONS},1)
+packages+=${environs}
+endif
+
+ifeq (${MISC},1)
+packages+=${misc}
+endif
+
+endif
+
 
 ### each package has its own Makefile.  This Makefile drives complilation
 ### with a default target of all.  Each Makefile also has a clean target
@@ -76,12 +132,12 @@ endif
 
 
 %.complete: %.build	
-	$(MAKE) -f Makefile.$*
+	$(MAKECMD) -f Makefile.$*
 	touch $*.complete
 
 clean:	
 	for p in $(packages) ; do \
-		$(MAKE) -f Makefile.$$p clean ; \
+		$(MAKECMD) -f Makefile.$$p clean ; \
 		rm -f $$p.build $$p.packages $$p.complete ; \
 	done
 

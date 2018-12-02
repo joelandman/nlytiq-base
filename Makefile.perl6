@@ -1,11 +1,6 @@
-include base.config
+include config/base.config
 
-####   
-<<<<<<< HEAD
 PERLVER		= 2018.10
-=======
-PERLVER		= 2018.06
->>>>>>> a171cee60648ca5442bf84f45bb6003f5dbfa632
 PERL		= rakudo-star-${PERLVER}
 PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 OSREV		= $(shell uname -r)
@@ -18,7 +13,7 @@ ZEFTAR		= ${ZEF}.tar.gz
 
 ifeq ($(GCC),1)
 	### use gcc
-	CFLAGS          = -mtune=corei7
+	CFLAGS          = -mtune=native
 	###
 endif
 
@@ -28,7 +23,7 @@ ifeq ($(CLANG),1)
 endif
 
 # ${_EPF_} contains the front matter for configure after the include below
-include configure.prefix.flag.config
+include config/configure.prefix.flag.config
 
 
 #--------------------------------------------------------------------------#

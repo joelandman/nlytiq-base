@@ -1,4 +1,4 @@
-include base.config
+include config/base.config
 
 #### R  
 RVER		= 3.5.1
@@ -11,7 +11,7 @@ R_INST_PATH	= ${NLYTIQ_INST_PATH}
 FORCEGCC	= 1
 
 ### force baseline gcc if GCC_VER is not blank
-include forcegcc.config
+include config/forcegcc.config
 
 CFLAGS          += -I${NLYTIQ_INST_PATH}/include
 LDFLAGS         += -L${NLYTIQ_INST_PATH}/lib
@@ -22,7 +22,7 @@ FCFLAGS		= ${CFLAGS}
 CXXFLAGS	= ${CFLAGS}
 
 # ${_EPF_} contains the front matter for configure after the include below
-include configure.prefix.flag.config
+include config/configure.prefix.flag.config
 
 ### R specific compilation flags
 MAIN_LDFLAGS    = -L${NLYTIQ_INST_PATH}/lib

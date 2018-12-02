@@ -1,0 +1,54 @@
+### nlytiq compiler config for linux
+
+GCC     = 1
+CLANG   = 0
+
+# GCC by default, should be in the default path.  Change this if you need
+GCC_PATH        =
+GCC_VER         =
+# example
+#  GCC-6.3 installed in /opt/gcc/6.3/bin/gcc-6
+#  GCC_PATH        = /opt/gcc/6.3/bin/
+#  GCC_VER         = -6
+#GCC_PATH        = /opt/gcc/810/bin/
+
+#
+# note the trailing slash.  You *MUST* have it, or this will
+# break
+#
+
+
+ifeq ($(GCC),1)
+CC             = ${GCC_PATH}gcc${GCC_VER}
+CXX            = ${GCC_PATH}g++${GCC_VER}
+CFLAGS         = -fPIC -O3 -malign-double -g
+CXXFLAGS       = -fPIC -O3 -malign-double -g
+FC             = ${GCC_PATH}gfortran{$GCC_VER}
+F77            = ${FC}
+endif
+
+ifeq ($(CLANG),1)
+
+CLANG_VER       = ""
+#_CLP_           = $(shell /usr/bin/which clang${CLANG_VER})
+#_CLPPP_         = $(shell /usr/bin/which clang++${CLANG_VER})
+_CLP_		= ${NLYTIQ_INST_PATH}/bin/clang
+_CLPPP_		= ${NLYTIQ_INST_PATH}/bin/clang++
+CC              = ${_CLP_}
+CXX             = ${_CLPPP_}
+
+CFLAGS          = -O2
+CXXFLAGS        = -O2
+
+endif
+
+
+# fortran flags: needed for Julia, R, Octave.  Change if using another
+# compiler.
+FCFLAGS         = -O3 -g
+FC              = ${GCC_PATH}gfortran${GCC_VER}
+FFLAGS          = ${FCFLAGS}
+### use locally compiled atlas or not
+BUILDATLAS      = 0
+
+

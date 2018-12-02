@@ -1,4 +1,4 @@
-include base.config
+include config/base.config
 
 ####   
 SPARKVER= 0.46

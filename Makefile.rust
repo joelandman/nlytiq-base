@@ -1,4 +1,4 @@
-include base.config
+include config/base.config
 
 ####   
 RUSTUPINIT	= sources/rustup-init.sh

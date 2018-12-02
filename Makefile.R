@@ -14,7 +14,7 @@ FORCEGCC	= 1
 include config/forcegcc.config
 
 CFLAGS          += -I${NLYTIQ_INST_PATH}/include
-LDFLAGS         += -L${NLYTIQ_INST_PATH}/lib
+LDFLAGS         += -L${NLYTIQ_INST_PATH}/lib -lcurl
 
 
 FFLAGS		= ${CFLAGS}
@@ -26,8 +26,8 @@ include config/configure.prefix.flag.config
 
 ### R specific compilation flags
 MAIN_LDFLAGS    = -L${NLYTIQ_INST_PATH}/lib
+LIBS		= -lcurl
 _EPF_ += MAIN_LDFLAGS="${MAIN_LDFLAGS}"
-LIBS=curl
 
 RFLAGS		= --with-blas --with-lapack --with-readline  --with-system-zlib --with-system-bzlib --with-system-pcre --with-system-xz --with-recommended-packages --with-x --with-sysroot=${NLYTIQ_INST_PATH}/lib --enable-R-shlib --enable-R-static-lib
 #--------------------------------------------------------------------------#

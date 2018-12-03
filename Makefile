@@ -10,8 +10,8 @@ include config/options.config
 
 ### list of all supported packages
 
-compiler = llvm 
-prereqs  = cmake curl pcre perl5 perl5mods 
+compiler = cmake llvm 
+prereqs  = curl pcre perl5 perl5mods 
 locallibs= openblas atlas
 base     = perl6 gnuplot python 
 environs = octave julia R 
@@ -131,7 +131,8 @@ ifeq ($(OS), Darwin)
 endif
 
 
-%.complete: %.build	
+%.complete: %.build
+	mkdir -p ${NLYTIQ_INST_PATH}	
 	$(MAKECMD) -f Makefile.$*
 	touch $*.complete
 

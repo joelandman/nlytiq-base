@@ -27,9 +27,14 @@ clean:		clean-python
 
 configure-python:	
 	tar -Jxvf sources/${PYTHON}.tar.xz
+ifeq (${OS},Darwin)
 	cd ${PYTHON} ; ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} \
 		--enable-optimizations \
 		--with-openssl=$(shell brew --prefix openssl)
+else
+	cd ${PYTHON} ; ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} \
+		--enable-optimizations
+endif
 		
 	touch configure-python
 

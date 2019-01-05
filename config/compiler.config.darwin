@@ -3,9 +3,13 @@
 GCC     = 1
 CLANG   = 0
 
+# use for building python
+PYCOMP	= 0
+
+
 # GCC by default, should be in the default path.  Change this if you need
-GCC_PATH        = 
-GCC_VER         = 
+GCC_PATH        = /usr/local/bin/
+GCC_VER         =-8
 # example
 #  GCC-6.3 installed in /opt/gcc/6.3/bin/gcc-6
 #  GCC_PATH        = /opt/gcc/6.3/bin/
@@ -46,5 +50,22 @@ FCFLAGS         = -O3 -g
 FC              = ${GCC_PATH}gfortran${GCC_VER}
 FFLAGS          = ${FCFLAGS}
 ### use locally compiled atlas or not
+
+ifeq ($(PYCOMP),0)
+# use specified compiler (GCC|CLANG) = 1 for building python
+PYCC            = ${CC}
+PYCXX           = ${CXX}
+PYCFLAGS        = ${CFLAGS}
+PYCXXFLAGS      = ${CXXFLAGS}
+endif
+
+ifeq ($(PYCOMP),1)
+# use local/native/default cc/c++ for building python
+PYCC            = $(shell which cc)
+PYCXX           = $(shell which c++)
+PYCFLAGS        = -O2 -g
+PYCXXFLAGS      = -O2 -g
+endif
+
 
 

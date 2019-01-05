@@ -1,7 +1,7 @@
 include config/base.config
 
 #### llvm
-LLVMVER		= 7.0.0
+LLVMVER		= 7.0.1
 LLVMSRC		= llvm-${LLVMVER}
 CFESRC		= cfe-${LLVMVER}
 RTSRC		= compiler-rt-${LLVMVER}
@@ -16,7 +16,8 @@ RTTAR		= ${RTDIR}.tar.xz
 OPENMPTAR	= ${OPENMPDIR}.tar.xz
 LLVM_INST_PATH	= ${NLYTIQ_INST_PATH}
 
-CMAKE_BIN	= $(shell which cmake)
+#CMAKE_BIN	= ${NLYTIQ_INST_PATH}/bin/cmake
+CMAKE_BIN       = $(shell which cmake)
 
 CMAKE_CMD	= ${CMAKE_BIN} -DCMAKE_INSTALL_PREFIX:STRING=${NLYTIQ_INST_PATH} \
                         -DLLVM_ENABLE_CXX1Y:BOOL=On -DLLVM_ENABLE_LTO:BOOL=Off \
@@ -57,8 +58,8 @@ make-llvm: configure-llvm
 install-llvm: make-llvm
 	cd ${BUILDDIR}  ; make -j${NCPU} install
 ifeq ($(OS),Linux)
-	echo "${NLYTIQ_INST_PATH}/lib" > /etc/ld.so.conf.d/nlytiq.conf
-	ldconfig
+	#echo "${NLYTIQ_INST_PATH}/lib" > /etc/ld.so.conf.d/nlytiq.conf
+	#ldconfig
 endif
 	touch install-llvm
 

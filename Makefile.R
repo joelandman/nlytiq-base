@@ -62,7 +62,7 @@ install-R-modules: install-R
 	#
 	# create an .Renviron file to make packages installable by everyone
 	mkdir -p ${NLYTIQ_INST_PATH}/Rpackages/ 
-	chown -R 1777 ${NLYTIQ_INST_PATH}/Rpackages/
+	chmod -R 1777 ${NLYTIQ_INST_PATH}/Rpackages/
 	mkdir -p ${NLYTIQ_INST_PATH}/lib64/R/lib/
 	echo "R_LIBS=${NLYTIQ_INST_PATH}/Rpackages/" >> ${HOME}/.Renviron
 	#

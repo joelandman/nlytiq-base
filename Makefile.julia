@@ -2,7 +2,7 @@ include config/base.config
 #include config/forcegcc.config
 #include config/forcellvm.config
 
-JULIA_VER = 1.0.2
+JULIA_VER = 1.0.3
 JULIA_NAME = ${JULIA_VER}-full
 JULIA_INST_PATH	= ${NLYTIQ_INST_PATH}
 JULIA_DWV = julia-${JULIA_VER}
@@ -13,7 +13,7 @@ __ENV__SET = USE_LLVM_SHLIB=1
 endif
 
 ifeq ($(GCC),1)
-	__ENV__SET = USE_LLVM_SHLIB=0
+__ENV__SET = USE_LLVM_SHLIB=0
 endif
 
 __ENV__SET += PYTHON=${NLYTIQ_INST_PATH}/bin/python3
@@ -36,7 +36,8 @@ configure-julia:
 	fi
 
 	rm -f ${JULIA_DIR}/Make.user
-	cp -f julia.Make.user ${JULIA_DIR}/Make.user
+	#cp -f julia.Make.user ${JULIA_DIR}/Make.user
+
 ifeq (${OS},FreeBSD)
 	echo  FC=${FC} >> ${JULIA_DIR}/Make.user
 	echo  CC=${CC} >> ${JULIA_DIR}/Make.user
@@ -50,114 +51,47 @@ ifeq (${OS},FreeBSD)
 	echo  CFLAGS=${CFLAGS} >> ${JULIA_DIR}/Make.user
 	echo  CPPFLAGS=${CXXFLAGS} >> ${JULIA_DIR}/Make.user
 	echo  PYTHON=${NLYTIQ_INST_PATH}/bin/python3
-	# make sure you have openblas installed
-	#echo  USE_SYSTEM_BLAS=1 >> ${JULIA_DIR}/Make.user
-	#echo  LIBBLAS=-lopenblas >> ${JULIA_DIR}/Make.user
-	#echo  LIBBLASNAME=libopenblas  >> ${JULIA_DIR}/Make.user
-	#echo  OPENBLAS_TARGET_ARCH=NEHALEM >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_LAPACK=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_GMP=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_LIBUV=0 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_MBEDTLS=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_LIBSSH2=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_MPFR=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_UTF8PROC=0 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_FFTW=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_LLVM=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_PCRE=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_CURL=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_LIBGIT2=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_SUITESPARSE=1  >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_LIBUNWIND=0 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_LIBM=0 >> ${JULIA_DIR}/Make.user
-	#echo  JULIA_CPU_CORES=1 >> ${JULIA_DIR}/Make.user
-	echo  LLVM_CONFIG=${NLYTIQ_INST_PATH}/bin/llvm-config
 endif
+
 ifeq (${OS},Darwin)
-	echo  FC=${FC} >> ${JULIA_DIR}/Make.user
-	echo  CC=${CC} >> ${JULIA_DIR}/Make.user
-	echo  CXX=${CXX} >> ${JULIA_DIR}/Make.user
-	echo  CC_BASE=${CC} >> ${JULIA_DIR}/Make.user
-	echo  CXX_BASE=${CXX} >> ${JULIA_DIR}/Make.user
-	#echo  USEGCC=1 >> ${JULIA_DIR}/Make.user
-	#echo  USECLANG=0 >> ${JULIA_DIR}/Make.user
-	echo  LDFLAGS=${LDFLAGS} >> ${JULIA_DIR}/Make.user
-	echo  FFLAGS=${FFLAGS} ${LDFLAGS} >> ${JULIA_DIR}/Make.user
-	echo  CFLAGS=${CFLAGS} >> ${JULIA_DIR}/Make.user
-	echo  CPPFLAGS=${CXXFLAGS} >> ${JULIA_DIR}/Make.user
-	echo  PYTHON=${NLYTIQ_INST_PATH}/bin/python3
-	# make sure you have openblas installed
-	#echo  USE_SYSTEM_BLAS=1 >> ${JULIA_DIR}/Make.user
-	#echo  LIBBLAS=-lopenblas >> ${JULIA_DIR}/Make.user
-	#echo  LIBBLASNAME=libopenblas  >> ${JULIA_DIR}/Make.user
-	#echo  OPENBLAS_TARGET_ARCH=NEHALEM >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_LAPACK=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_GMP=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_LIBUV=0 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_MBEDTLS=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_LIBSSH2=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_MPFR=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_UTF8PROC=0 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_FFTW=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_LLVM=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_PCRE=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_CURL=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_LIBGIT2=1 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_SUITESPARSE=1  >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_LIBUNWIND=0 >> ${JULIA_DIR}/Make.user
-	#echo  USE_SYSTEM_LIBM=0 >> ${JULIA_DIR}/Make.user
-	#echo  JULIA_CPU_CORES=1 >> ${JULIA_DIR}/Make.user
-	#echo  LLVM_CONFIG=${NLYTIQ_INST_PATH}/bin/llvm-config
+	# use 'brew install libunwind mpfr mbedtls libssh2 curl wget suitesparse'
+	echo  USE_SYSTEM_LIBUNWIND=1    >> ${JULIA_DIR}/Make.user
+	echo  USE_SYSTEM_MPFR=1         >> ${JULIA_DIR}/Make.user
+	echo  USE_SYSTEM_MBEDTLS=1      >> ${JULIA_DIR}/Make.user
+	echo  USE_SYSTEM_LIBSSH2=1      >> ${JULIA_DIR}/Make.user
+	echo  USE_SYSTEM_PCRE=0         >> ${JULIA_DIR}/Make.user
+	echo  USE_SYSTEM_CURL=1         >> ${JULIA_DIR}/Make.user
+	echo  USE_SYSTEM_SUITESPARSE=1  >> ${JULIA_DIR}/Make.user
 endif
+
 ifeq ($(OS),Linux)
-	#echo "USE_SYSTEM_BLAS=1" >> ${JULIA_DIR}/Make.user
-	#echo "build_shlibdir=${NLYTIQ_INST_PATH}/lib" >> ${JULIA_DIR}/Make.user
-	#echo "LIBBLAS=-L${NLYTIQ_INST_PATH}/lib -lopenblas"  >> ${JULIA_DIR}/Make.user
-	#echo "USE_SYSTEM_LAPACK=0" >> ${JULIA_DIR}/Make.user
-	#echo "USE_SYSTEM_FFTW=1" >> ${JULIA_DIR}/Make.user
-	#echo "USE_SYSTEM_LIBUV=0" >> ${JULIA_DIR}/Make.user
-	#echo "USE_SYSTEM_OPENLIBM=1" >> ${JULIA_DIR}/Make.user
-	#echo "USE_SYSTEM_GMP=1" >> ${JULIA_DIR}/Make.user
-	#echo "USE_SYSTEM_MPFR=1" >> ${JULIA_DIR}/Make.user
-	#echo "USE_SYSTEM_LIBUNWIND=1" >> ${JULIA_DIR}/Make.user
-	#echo "USE_SYSTEM_LIBGIT2=1" >> ${JULIA_DIR}/Make.user
-	#echo "USE_SYSTEM_PCRE=0" >> ${JULIA_DIR}/Make.user
-	##echo "PCRE_CONFIG=${NLYTIQ_INST_PATH}/bin/pcre2-config" >> ${JULIA_DIR}/Make.user
-	##echo "LLVM_CONFIG=${NLYTIQ_INST_PATH}/bin/llvm-config" >> ${JULIA_DIR}/Make.user
-	##echo "USE_SYSTEM_LLVM=1"  >> ${JULIA_DIR}/Make.user
-	#echo "USE_SYSTEM_SUITESPARSE=1"  >> ${JULIA_DIR}/Make.user
-	#echo "USE_SYSTEM_UTF8PROC=0" >> ${JULIA_DIR}/Make.user
-	#echo "USE_SYSTEM_MBEDTLS=1" >> ${JULIA_DIR}/Make.user
+	# this just works for now
 endif
-	#echo "USE_SYSTEM_PCRE=1" > ${JULIA_DIR}/Make.user
-	#echo "LLVM_VER = 4.0.0"  >> ${JULIA_DIR}/Make.user
-	#echo "MARCH=sandybridge" >> ${JULIA_DIR}/Make.user
-	#echo "JULIA_CPU_TARGET=core2"  >> ${JULIA_DIR}/Make.user
 
 	touch configure-julia
 
-make-julia: configure-julia
-	cd ${JULIA_DIR} ; \
-		 ${__ENV__SET} ;\
-		 PATH=${PATH}:${NLYTIQ_INST_PATH}/bin ;\
-		 export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ;\
-		 ${MAKECMD}  -j${NCPU} OPENBLAS_TARGET_ARCH=SANDYBRIDGE
+make-julia-deps: configure-julia
+	cd ${JULIA_DIR} ; ${__ENV__SET} ${MAKECMD} -j${NCPU} -C DEPS  
+	touch make-julia-deps
 
+make-julia: make-julia-deps
+	cd ${JULIA_DIR} ; ${__ENV__SET}  ${MAKECMD} -j${NCPU}
 	touch make-julia
 
 install-julia: make-julia
-	cd ${JULIA_DIR} ;  export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ;\
-		${__ENV__SET} ${_EPF_} ${MAKECMD} install
-	cd ${JULIA_DIR}/usr ; tar -cf - . | (cd ${JULIA_INST_PATH} && tar -xvf - )
+	cd ${JULIA_DIR} ; ${__ENV__SET} ${MAKECMD} install
+	cd ${JULIA_DIR}/${JULIA_DWV} ; tar -cf - . | (cd ${JULIA_INST_PATH} && tar -xvf - )
 	touch install-julia
 
 install-julia-modules: install-julia
 	mkdir -p ${JULIA_INST_PATH}/julia
 	mkdir -p ~/.julia/config
-	echo "import Pkg" > ~/.julia/config/startup.jl
+	#echo "import Pkg" > ~/.julia/config/startup.jl
 	echo JULIA_PKGDIR=${JULIA_INST_PATH}/julia >  ${JULIA_INST_PATH}/etc/bashrc.julia
 	echo JULIA_BINDIR=${JULIA_INST_PATH}/bin   >> ${JULIA_INST_PATH}/etc/bashrc.julia
 
+<<<<<<< HEAD
+=======
 	export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ; ${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.update()'
 	#export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ; ${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("PyCall")'
 	#export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ; ${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("PyPlot")'
@@ -186,7 +120,8 @@ install-julia-modules: install-julia
 	export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ; ${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("TensorFlow")'
 	export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ; ${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("Sundials")'
 	export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ; ${__ENV__SET} JULIA_PKGDIR=${JULIA_INST_PATH}/julia ${JULIA_INST_PATH}/bin/julia -e 'Pkg.add("YAML")'
+>>>>>>> 458641f2c8014278d5a594be6d265a24f1bd095a
 	touch install-julia-modules
 
 clean-julia:
-	rm -rf install-julia make-julia configure-julia OpenBLAS* ${JULIA_DIR} install-julia install-julia-modules bashrc.julia
+	rm -rf install-julia make-julia configure-julia OpenBLAS* ${JULIA_DIR} install-julia install-julia-modules bashrc.julia make-julia-deps

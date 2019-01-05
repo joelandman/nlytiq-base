@@ -121,7 +121,7 @@ all:    	$(build) $(complete)
 
 ### generate the .build files
 $(build):
-	for p in $(packages) ; do \
+	for p in $(packages) ; do  \
 	  touch $$p.build ;        \
 	done
 ifeq ($(OS), Darwin)

@@ -1,7 +1,7 @@
 include config/base.config
 
 ####   
-CMAKEVER		= 3.13.1
+CMAKEVER		= 3.13.2
 CMAKESRC		= cmake-${CMAKEVER}
 CMAKETAR		= ${CMAKESRC}.tar.gz
 CMAKE_INST_PATH	= ${NLYTIQ_INST_PATH}
@@ -23,7 +23,7 @@ clean:		clean-cmake
 configure-cmake: 
 	tar -zxf sources/${CMAKETAR}
 	#cd ${CMAKESRC} ; CC=${CC} CXX=${CXX} CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} ./configure --prefix=${NLYTIQ_INST_PATH}  
-	cd ${CMAKESRC} ; ${_EPF} ./configure --prefix=${NLYTIQ_INST_PATH} 
+	cd ${CMAKESRC} ; ${_EPF} ./configure --prefix=${NLYTIQ_INST_PATH} --no-qt-gui --parallel=${NCPU}
 	touch configure-cmake
 
 make-cmake: configure-cmake
@@ -32,11 +32,6 @@ make-cmake: configure-cmake
  
 install-cmake: make-cmake
 	cd ${CMAKESRC} ; make -j${NCPU} install
-ifeq ($(OS),Linux)
-	test -f /usr/bin/cmake  && \
-       		mv -f /usr/bin/cmake /usr/bin/cmake.original && \
-		ln -s ${NLYTIQ_INST_PATH}/bin/cmake /usr/bin/cmake
-endif
 	touch install-cmake
 
 clean-cmake:

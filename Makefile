@@ -18,6 +18,7 @@ environs = octave julia R
 misc	 = jupyter_kernels spark 
 
 # package construction
+all_packages = ${compiler} ${prereqs} ${locallibs} ${base} ${environs} ${misc}
 packages = 
 
 #Linux
@@ -137,7 +138,7 @@ endif
 	touch $*.complete
 
 clean:	
-	for p in $(packages) ; do \
+	for p in $(all_packages) ; do \
 		$(MAKECMD) -f Makefile.$$p clean ; \
 		rm -f $$p.build $$p.packages $$p.complete ; \
 	done

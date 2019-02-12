@@ -9,17 +9,19 @@ OCTAVE_INST_PATH	= ${NLYTIQ_INST_PATH}
 ifeq ($(BUILDATLAS),1)
 OCTAVEOPTS		= --enable-openmp \
 			  --enable-atomic-refcount --with-lapack=lapack \
-			  --with-blas=satlas --with-fftw3f-includedir=/opt/nlytiq/include \
-			  --with-fftw3f-libdir=/opt/nlytiq/lib 
-LDFLAGS                 = "-L/opt/nlytiq/lib"
+			  --with-blas=satlas --with-fftw3f-includedir=${OCTAVE_INST_PATH}/include \
+			  --with-fftw3f-libdir=${OCTAVE_INST_PATH}/lib 
+LDFLAGS                 = "-L${OCTAVE_INST_PATH}/lib"
 
 else
 
 OCTAVEOPTS              = --enable-openmp \
 			  --enable-atomic-refcount --with-lapack=lapack \
-			  --with-blas=blas --with-fftw3f-includedir=/opt/nlytiq/include \
-			  --with-fftw3f-libdir=/opt/nlytiq/lib
-LDFLAGS                 = -L/opt/nlytiq/lib \
+			  --with-blas=blas --with-fftw3f-includedir=${OCTAVE_INST_PATH}/include \
+			  --with-fftw3f-libdir=${OCTAVE_INST_PATH}/lib \
+			  --with-curl-libdir=${OCTAVE_INST_PATH}/lib  \
+			  --with-curl-includedir=${OCTAVE_INST_PATH}/lib
+LDFLAGS                 = -L${OCTAVE_INST_PATH}/lib \
 			  -L/usr/lib/openblas-base \
 			  -L/usr/lib/atlas-base/ \
 			  -L/usr/lib/atlas-base/atlas/

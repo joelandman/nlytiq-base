@@ -67,6 +67,8 @@ endif
 
 ifeq ($(OS),Linux)
 	#echo  USE_SYSTEM_PCRE=0         >> ${JULIA_DIR}/Make.user
+	echo  OPENBLAS_TARGET_ARCH=NEHALEM >> ${JULIA_DIR}/Make.user
+	echo  USE_SYSTEM_CURL=1         >> ${JULIA_DIR}/Make.user
 endif
 
 	touch configure-julia

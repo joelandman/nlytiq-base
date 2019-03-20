@@ -2,11 +2,11 @@ include config/base.config
 include config/forcegcc.config
 
 #### Octave
-OCTAVEVER		= 4.4.1
+OCTAVEVER		= 5.1.0
 OCTAVE			= octave-${OCTAVEVER}
 OCTAVE_INST_PATH	= ${NLYTIQ_INST_PATH}
 
-ifeq ($(BUILDATLAS),1)
+ifeq ($(BUILDATLAS),0)
 OCTAVEOPTS		= --enable-openmp \
 			  --enable-atomic-refcount --with-lapack=lapack \
 			  --with-blas=satlas --with-fftw3f-includedir=${OCTAVE_INST_PATH}/include \

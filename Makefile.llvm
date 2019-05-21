@@ -16,8 +16,11 @@ RTTAR		= ${RTDIR}.tar.xz
 OPENMPTAR	= ${OPENMPDIR}.tar.xz
 LLVM_INST_PATH	= ${NLYTIQ_INST_PATH}
 
-#CMAKE_BIN	= ${NLYTIQ_INST_PATH}/bin/cmake
+ifeq (${OS},Darwin)
+CMAKE_BIN	= ${NLYTIQ_INST_PATH}/bin/cmake
+else
 CMAKE_BIN       = $(shell which cmake)
+endif
 
 CMAKE_CMD	= ${CMAKE_BIN} -DCMAKE_INSTALL_PREFIX:STRING=${NLYTIQ_INST_PATH} \
                         -DLLVM_ENABLE_CXX1Y:BOOL=On -DLLVM_ENABLE_LTO:BOOL=Off \

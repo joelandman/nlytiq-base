@@ -1,8 +1,8 @@
 include config/base.config
-#include config/forcegcc.config
+include config/forcegcc.config
 #include config/forcellvm.config
 
-JULIA_VER = 1.1.0
+JULIA_VER = 1.1.1
 JULIA_NAME = ${JULIA_VER}-full
 JULIA_INST_PATH	= ${NLYTIQ_INST_PATH}
 JULIA_DWV = julia-${JULIA_VER}
@@ -38,31 +38,17 @@ configure-julia:
 	rm -f ${JULIA_DIR}/Make.user
 	cp -f julia.Make.user ${JULIA_DIR}/Make.user
 
-ifeq (${OS},FreeBSD)
-	echo  FC=${FC} >> ${JULIA_DIR}/Make.user
-	echo  CC=${CC} >> ${JULIA_DIR}/Make.user
-	echo  CXX=${CXX} >> ${JULIA_DIR}/Make.user
-	echo  CC_BASE=${CC} >> ${JULIA_DIR}/Make.user
-	echo  CXX_BASE=${CXX} >> ${JULIA_DIR}/Make.user
-	echo  USEGCC=0 >> ${JULIA_DIR}/Make.user
-	echo  USECLANG=1 >> ${JULIA_DIR}/Make.user
-	echo  LDFLAGS=${LDFLAGS} >> ${JULIA_DIR}/Make.user
-	echo  FFLAGS=${FFLAGS} ${LDFLAGS} >> ${JULIA_DIR}/Make.user
-	echo  CFLAGS=${CFLAGS} >> ${JULIA_DIR}/Make.user
-	echo  CPPFLAGS=${CXXFLAGS} >> ${JULIA_DIR}/Make.user
-	echo  PYTHON=${NLYTIQ_INST_PATH}/bin/python3
-endif
-
 ifeq (${OS},Darwin)
 	# use 'brew install libunwind mpfr mbedtls libssh2 curl wget suitesparse'
-	echo  USE_SYSTEM_LIBUNWIND=1    >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_MPFR=1         >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_MBEDTLS=1      >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_LIBSSH2=1      >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_PCRE=0         >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_CURL=1         >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_SUITESPARSE=1  >> ${JULIA_DIR}/Make.user
-	echo  OPENBLAS_TARGET_ARCH=NEHALEM >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_LIBUNWIND=1    >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_MPFR=1         >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_MBEDTLS=1      >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_LIBSSH2=1      >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_PCRE=0         >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_CURL=1         >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_SUITESPARSE=1  >> ${JULIA_DIR}/Make.user
+	#echo  OPENBLAS_TARGET_ARCH=NEHALEM >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_OPENBLAS=1     >> ${JULIA_DIR}/Make.user
 endif
 
 ifeq ($(OS),Linux)

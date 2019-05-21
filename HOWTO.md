@@ -27,21 +27,41 @@ done in parallel whenever possible.  On my 6 core system with ample
 memory and fast disk, builds (when rust is enabled) have taken
 more than 2 hours.
 
-To build everything
+Note: if you are building on Mac, I'd recommend homebrew.  Then you'll
+want to install gcc@8, and the following dependent packages:
+	
+	libssh2
+	zlib
+	tcl-tk
+	ossp-uuid
+	suite-sparse
+	mbedtls
+	curl
+	libunwind-headers
+	mpfr
+	xz
+	libedit
+	with-readline
+	cmake
+	gnu-sed
 
-  sudo make
+The prep_mac.bash script will do this for you.
+
+To build everything after installing any dependencies
+
+  make
 
 To build a specific project
 
-  sudo make -f Makefile.$project
+  make -f Makefile.$project
 
 To clean up everything
 
-  sudo make clean
+  make clean
 
 To clean up a specific project
 
-  sudo make -f Makefile.$project clean
+  make -f Makefile.$project clean
 
 Rust is currently disabled due to some oddities I am working on tracking
 down.  

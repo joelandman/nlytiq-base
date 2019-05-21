@@ -11,7 +11,8 @@ CXXFLAGS        += $(shell freetype-config --cflags)
 
 ### MacOSX specific CFLAGS/LDFLAGS (c.f. https://stackoverflow.com/questions/41489439/pip3-installs-inside-virtual-environment-with-python3-6-failing-due-to-ssl-modul)
 ifeq ($(OS),Darwin)
-CFLAGS  += -I$(shell brew --prefix openssl)/include -I/opt/X11/include -I/usr/local/include -I/usr/local//Cellar/zlib/1.2.11/include
+include config/forcepyllvm.config
+CFLAGS  += -I$(shell brew --prefix openssl)/include -I/opt/X11/include -I/usr/local/include -I/usr/local//Cellar/zlib/1.2.11/include 
 LDFLAGS += -L$(shell brew --prefix openssl)/lib -L/opt/X11/lib/ -L/usr/local/lib -L/usr/local//Cellar/zlib/1.2.11/lib
 endif
 
@@ -29,8 +30,9 @@ configure-python:
 	tar -Jxvf sources/${PYTHON}.tar.xz
 ifeq (${OS},Darwin)
 	cd ${PYTHON} ; ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} \
-		--enable-optimizations \
-		--with-openssl=$(shell brew --prefix openssl)
+		--disable-optimizations \
+		--with-openssl=$(shell brew --prefix openssl) 
+		--disable-profiling
 else
 	cd ${PYTHON} ; ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} \
 		--enable-optimizations

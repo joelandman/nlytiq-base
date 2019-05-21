@@ -22,7 +22,7 @@ install-jupyter-mods: install-jupyter
 	#${_EPF_} ${NLYTIQ_INST_PATH}/share/perl6/site/bin/zef install Jupyter::Kernel
 	export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ;\
 	export JUPYTER=${NLYTIQ_INST_PATH}/bin/jupyter ;\
-	JULIA_PKGDIR=${NLYTIQ_INST_PATH}/julia ${NLYTIQ_INST_PATH}/bin/julia -e 'Pkg.add("IJulia")'	
+	JULIA_PKGDIR=${NLYTIQ_INST_PATH}/julia ${NLYTIQ_INST_PATH}/bin/julia -e 'using Pkg ; Pkg.add("IJulia")'	
 
 	echo "alias iperl6='jupyter-console --kernel=perl6'" > ${NLYTIQ_INST_PATH}/etc/bashrc.jupyter	
 	touch install-jupyter-mods

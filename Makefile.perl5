@@ -5,39 +5,27 @@ PERLVER		= 5.30.0
 PERL		= perl-${PERLVER}
 PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 PFLAGS          = 
+DARWIN_PATCH_1  = 0001-PATCH-perl-128972-Build-failure-on-OS-X.patch
+DARWIN_PATCH_2  = 0001-Time-HiRes-fix-compilation-on-darwin.patch
+DARWIN_PATCH_3  = 0001-macos-gettime-emulation.patch
 # BUILD_BZIP2=0
 # BUILD_ZLIB=False
 
 THR		= Time-HiRes-1.9742
 
 DIR		= $(shell pwd)/${PERL}
-
-ifeq ($(GCC),1)
-### use gcc
 CFLAGS          = -fPIC -O3 -malign-double -g
+
 ifeq ($(OS), Linux)
 CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duseshrplib -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC
 endif
 
 ifeq ($(OS),Darwin)
 CFLAGS=-DPERL_DARWIN -O3 -g
-CONFFLAGS      =  -des  -Dprefix=${NLYTIQ_INST_PATH} -Dnoshrplib  -Duse64bitint -Dusethreads -Duselargefiles
+CONFFLAGS      =  -des  -Dprefix=${NLYTIQ_INST_PATH} -Dcc=${CC}   -Duseshrplib -Duse64bitall -Dnoshrplib  -Duse64bitint -Dusethreads -Duselargefiles -Accflags='-Werror=partial-availability' -Accflags='-D_DARWIN_FEATURE_CLOCK_GETTIME=1 -DHAS_GETTIMEOFDAY' -Dccflags="${CFLAGS}"
 endif
 
-ifeq ($(OS),SunOS)
-CFLAGS          =  -O  -g  -Werror=partial-availability
-CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC -Dcc=${CC}
-endif
 
-###
-endif
-
-ifeq ($(CLANG),1)
-### use clang
-CFLAGS          = -O2  
-CONFFLAGS      =  -des -Dcc=${CC} -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duseshrplib -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}"
-###
-endif
 
 # ${_EPF_} contains the front matter for configure after the include below
 include config/configure.prefix.flag.config
@@ -52,22 +40,24 @@ clean:		clean-perl
 configure-perl:	sources/${PERL}.tar.gz 
 	tar -zxvf sources/${PERL}.tar.gz
 	chmod 755 ${PERL}/Configure
-	cd ${PERL} ; export LANGUAGE=en_US ; export CC=${CC} ; export CXX=${CXX} ; ${PFLAGS} ccflags='${CFLAGS}' LD_LIBRARY_PATH=${DIR}  ./Configure ${CONFFLAGS}
+ifeq ($(OS),Darwin)
+#	cd ${PERL};  patch -p1 < ../sources/${DARWIN_PATCH_1}
+#	cd ${PERL};  patch -p1 < ../sources/${DARWIN_PATCH_2}
+#	cd ${PERL};  patch -p1 < ../sources/${DARWIN_PATCH_3}
+endif
+	cd ${PERL} ; export LANGUAGE=en_US ; export CC=${CC} ;\
+		export CXX=${CXX} ;\
+		${PFLAGS} ccflags='${CFLAGS}' LD_LIBRARY_PATH=${DIR}  ./Configure ${CONFFLAGS}
 	touch configure-perl
 
 make-perl: configure-perl
-ifneq ($(OS),Darwin)
-	cd ${PERL} ; export CC=${CC} ; export CXX=${CXX} ; \
-	   export  LD_LIBRARY_PATH=${DIR} ; export LANGUAGE=en_US ;   \
-	   ${PFLAGS}  make -j${NCPU} ;                     \
+	cd ${PERL} ;\
+	   export CC=${CC} ;\
+	   export CXX=${CXX} ;\
+	   export  LD_LIBRARY_PATH=${DIR} ;\
+	   export LANGUAGE=en_US ;\
+	   ${PFLAGS}  make -j${NCPU} ;\
 	   TEST_JOBS=${NCPU} LD_LIBRARY_PATH=${DIR} make test_harness
-else
-	# Yay macos bites again
-	cd ${PERL} ; export CC=${CC} ; export CXX=${CXX} ; \
-	   export  DYLD_LIBRARY_PATH=${DIR} ; export LANGUAGE=en_US ;   \
-	   ${PFLAGS}  make -j${NCPU} ;                     \
-	   TEST_JOBS=${NCPU} LD_LIBRARY_PATH=${DIR} make test_harness
-endif
 	touch make-perl
 
 install-perl: make-perl

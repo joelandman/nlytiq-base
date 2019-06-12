@@ -10,18 +10,18 @@ PERL_MODULES	= CPAN threads threads::shared Switch Digest::SHA IO::Pty \
 	IPC::Run File::Spec File::PathConvert Sys::Hostname \
 	Getopt::Lucid JSON::PP DBI DBD::SQLite Catmandu  \
 	File::ChangeNotify Data::Serializer Time::ParseDate \
-	Text::ASCIITable \
+	Text::ASCIITable Text::UnicodeTable::Simple Text::Table \
 	Module::Install Module::AutoInstall Starman \
 	Net::Server::PreFork HTML::Mason Mojolicious  \
 	Mojolicious::Plugin::Mason1Renderer XML::Smart \
 	Config::General Config::IniFiles \
 	Config::JSON Math::Random::Secure Crypt::PRNG  \
-	Bundle::DBD::Sys  Galileo \
+	Bundle::DBD::Sys  Galileo MCE MCE::Loop MCE::Flow MCE::Map MCE::Grep MCE::Queue MCE::Hobo MCE::Shared \
 	Moose HTML::TreeBuilder XML::RSS \
 	Mojolicious::Plugin::RemoteAddr HTTP::Response \
 	Config::Scoped  FFI::Platypus  FFI::CheckLib  FFI::Raw \
 	FFI::Platypus::Declare FFI::Platypus::Memory \
-	FFI::Platypus::API FFI::Platypus::Type FFI::TinyCC \
+	FFI::Platypus::API FFI::Platypus::Type  \
 	URI::Escape  IO::Socket::Netlink::Taskstats \
 	DBM::Deep  ZMQ::FFI SVG::Sparkline 
 		  

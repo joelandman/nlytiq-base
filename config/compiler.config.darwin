@@ -1,15 +1,15 @@
 ### nlytiq compiler config for darwin/macosx
 
-GCC     = 1
-CLANG   = 0
+GCC     = 0
+CLANG   = 1
 
 # use for building python
 PYCOMP	= 0
 
 
 # GCC by default, should be in the default path.  Change this if you need
-GCC_PATH        = /usr/local/bin/
-GCC_VER         =-8
+#GCC_PATH        = /usr/local/bin/
+#GCC_VER         =-8
 # example
 #  GCC-6.3 installed in /opt/gcc/6.3/bin/gcc-6
 #  GCC_PATH        = /opt/gcc/6.3/bin/

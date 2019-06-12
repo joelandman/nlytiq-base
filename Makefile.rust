@@ -9,9 +9,7 @@ all:    	install-rustbin
 clean:		clean-rust  
 
 install-rustbin: ${RUSTUPINIT}
-ifneq ($(OS), SunOS)
 	CARGO_INSTALL_ROOT=${NLYTIQ_INST_PATH} RUSTUP_HOME=${NLYTIQ_INST_PATH} ${RUSTUPINIT} -v -y
-endif
 	touch install-rustbin
 
 

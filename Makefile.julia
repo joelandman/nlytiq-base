@@ -53,14 +53,14 @@ endif
 
 ifeq ($(OS),Linux)
 	#echo  USE_SYSTEM_PCRE=0         >> ${JULIA_DIR}/Make.user
-	echo  OPENBLAS_TARGET_ARCH=NEHALEM >> ${JULIA_DIR}/Make.user
+	#echo  OPENBLAS_TARGET_ARCH=NEHALEM >> ${JULIA_DIR}/Make.user
 	echo  USE_SYSTEM_CURL=1         >> ${JULIA_DIR}/Make.user
 endif
 
 	touch configure-julia
 
 make-julia-deps: configure-julia
-	cd ${JULIA_DIR} ; ${__ENV__SET} ${MAKECMD} -j${NCPU} -C deps  
+	cd ${JULIA_DIR} ; ${__ENV__SET} ${MAKECMD} -j${NCPU} -C deps
 	touch make-julia-deps
 
 make-julia: make-julia-deps
@@ -78,7 +78,7 @@ install-julia-modules: install-julia
 	#echo "import Pkg" > ~/.julia/config/startup.jl
 	echo JULIA_PKGDIR=${JULIA_INST_PATH}/julia >  ${JULIA_INST_PATH}/etc/bashrc.julia
 	echo JULIA_BINDIR=${JULIA_INST_PATH}/bin   >> ${JULIA_INST_PATH}/etc/bashrc.julia
-
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia JULIA_BINDIR=${JULIA_INST_PATH}/bin sources/julia-pkgs.jl
 	touch install-julia-modules
 
 clean-julia:

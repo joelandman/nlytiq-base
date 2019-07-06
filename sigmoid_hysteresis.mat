@@ -1,0 +1,23 @@
+#!/usr/bin/env octave
+
+# sigmoid function
+function r = s(a,x)
+    r = 1./(1.+exp(-a.*x));
+endfunction
+
+# offset sigmoid
+function r = os(o,a,x)
+    r = s(a,-o .+ x);
+endfunction
+
+x  =  -5.0:0.1:5.0;
+s1 =  os(0,5,x);
+s2 =  os(-1,5,x);
+s3 =  os(1,5,x);
+#df = DataFrame(a=x, b=s1, c=s2, d=s3)
+hf = figure ();
+
+plot(x,s1,x,s2,x,s3)
+print (hf, "sfh.png", "-dpng");
+
+exit

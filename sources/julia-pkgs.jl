@@ -3,7 +3,7 @@
 using Pkg
 using Printf
 
-pkgs = [  
+pkgs = [
 	"DataFrames", 
 	"StatsPlots",
 	"DifferentialEquations",
@@ -16,7 +16,24 @@ pkgs = [
 	"DiffEqDevTools",
 	"DiffEqPDEBase",
 	"BoundaryValueDiffEq",
-	"OrdinaryDiffEq"
+	"OrdinaryDiffEq",
+	"Flux",
+	"BenchmarkTools",
+	"SpecialFunctions",
+	"JuliaDB",
+	"ScikitLearn",
+	"UnicodePlots",
+	"FileIO",
+	"Images",
+	"ImageView",
+	"Makie",
+	"GeometryTypes",
+	"Colors",
+	"JSON",
+	"FastGaussQuadrature",
+	"FastTransforms",
+	"IJulia",
+	"JuliaInterpreter"
        ]
 
 for p ∈  pkgs

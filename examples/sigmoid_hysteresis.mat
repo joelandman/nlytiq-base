@@ -18,6 +18,6 @@ s3 =  os(1,5,x);
 hf = figure ();
 
 plot(x,s1,x,s2,x,s3)
-print (hf, "sfh.png", "-dpng");
+print (hf, "sfh_oct.png", "-dpng");
 
 exit

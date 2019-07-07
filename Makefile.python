@@ -35,7 +35,7 @@ ifeq (${OS},Darwin)
 		--disable-profiling
 else
 	cd ${PYTHON} ; ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} \
-		--enable-optimizations
+		--enable-optimizations --enable-shared
 endif
 		
 	touch configure-python
@@ -58,6 +58,7 @@ install-python-modules: install-python
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install matplotlib
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install pandas
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install sympy
+	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install fortran-language-server
 ifneq ($(OS),FreeBSD)
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install scipy
 else

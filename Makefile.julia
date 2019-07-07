@@ -75,7 +75,8 @@ install-julia: make-julia
 install-julia-modules: install-julia
 	mkdir -p ${JULIA_INST_PATH}/julia
 	mkdir -p ~/.julia/config
-	#echo "import Pkg" > ~/.julia/config/startup.jl
+	echo "using BenchmarkTools" > ~/.julia/config/startup.jl
+	echo "using Test" >> ~/.julia/config/startup.jl
 	echo JULIA_PKGDIR=${JULIA_INST_PATH}/julia >  ${JULIA_INST_PATH}/etc/bashrc.julia
 	echo JULIA_BINDIR=${JULIA_INST_PATH}/bin   >> ${JULIA_INST_PATH}/etc/bashrc.julia
 	JULIA_PKGDIR=${JULIA_INST_PATH}/julia JULIA_BINDIR=${JULIA_INST_PATH}/bin sources/julia-pkgs.jl

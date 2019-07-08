@@ -79,7 +79,7 @@ install-R-modules: install-R
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("bspec")' 
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("bit64")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("rjson")'
-
+	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("IRkernel")'
 	touch install-R-modules
 
 clean-R:

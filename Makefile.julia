@@ -52,9 +52,9 @@ ifeq (${OS},Darwin)
 endif
 
 ifeq ($(OS),Linux)
-	#echo  USE_SYSTEM_PCRE=0         >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_PCRE=1         >> ${JULIA_DIR}/Make.user
 	#echo  OPENBLAS_TARGET_ARCH=NEHALEM >> ${JULIA_DIR}/Make.user
-	echo  USE_SYSTEM_CURL=1         >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_CURL=1         >> ${JULIA_DIR}/Make.user
 endif
 
 	touch configure-julia
@@ -75,8 +75,8 @@ install-julia: make-julia
 install-julia-modules: install-julia
 	mkdir -p ${JULIA_INST_PATH}/julia
 	mkdir -p ~/.julia/config
-	echo "using BenchmarkTools" > ~/.julia/config/startup.jl
-	echo "using Test" >> ~/.julia/config/startup.jl
+	#echo "using BenchmarkTools" > ~/.julia/config/startup.jl
+	#echo "using Test" >> ~/.julia/config/startup.jl
 	echo JULIA_PKGDIR=${JULIA_INST_PATH}/julia >  ${JULIA_INST_PATH}/etc/bashrc.julia
 	echo JULIA_BINDIR=${JULIA_INST_PATH}/bin   >> ${JULIA_INST_PATH}/etc/bashrc.julia
 	JULIA_PKGDIR=${JULIA_INST_PATH}/julia JULIA_BINDIR=${JULIA_INST_PATH}/bin sources/julia-pkgs.jl

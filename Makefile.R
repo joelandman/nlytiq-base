@@ -69,7 +69,6 @@ install-R-modules: install-R
 	# now install the modules we want
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("ggplot")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("tseries")'
-	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("car")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("gplots")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("gtools")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("parallelize.dynamic")'
@@ -80,8 +79,6 @@ install-R-modules: install-R
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("bspec")' 
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("bit64")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("rjson")'
-	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("DBI")'
-	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("httr")'
 
 	touch install-R-modules
 

@@ -6,30 +6,13 @@ OCTAVEVER		= 5.1.0
 OCTAVE			= octave-${OCTAVEVER}
 OCTAVE_INST_PATH	= ${NLYTIQ_INST_PATH}
 
-ifeq ($(BUILDATLAS),0)
 OCTAVEOPTS		= --enable-openmp \
-			  --enable-atomic-refcount --with-lapack=lapack \
-			  --with-blas=satlas --with-fftw3f-includedir=${OCTAVE_INST_PATH}/include \
-			  --with-fftw3f-libdir=${OCTAVE_INST_PATH}/lib 
-#			  --with-pcre-libdir=$(shell pcre-config --libs | cut -c3- | cut -d" " -f1)   \
-#			  --with-pcre-includedir=$(shell pcre-config --cflags) \
-#			  --with-pcre=pcre
+			  --enable-atomic-refcount \
+			  --with-curl-libdir=${OCTAVE_INST_PATH}/lib \
+			  --with-curl-includedir=${OCTAVE_INST_PATH}/include 
+
 LDFLAGS		 = "-L${OCTAVE_INST_PATH}/lib"
-
-else
-
-OCTAVEOPTS	      = --enable-openmp \
-			  --enable-atomic-refcount --with-lapack=lapack \
-			  --with-blas=blas --with-fftw3f-includedir=${OCTAVE_INST_PATH}/include \
-			  --with-fftw3f-libdir=${OCTAVE_INST_PATH}/lib \
-			  --with-curl-libdir=${OCTAVE_INST_PATH}/lib  \
-			  --with-curl-includedir=${OCTAVE_INST_PATH}/lib 
-
-LDFLAGS		 = -L${OCTAVE_INST_PATH}/lib \
-			  -L/usr/lib/openblas-base \
-			  -L/usr/lib/atlas-base/ \
-			  -L/usr/lib/atlas-base/atlas/
-endif
+CFLAGS	 	+= "-I${OCTAVE_INST_PATH}/include"
 
 ifeq ($(OS), Darwin)
 # more MacOS breakage ... libreadline and fltk

@@ -4,6 +4,8 @@ using Pkg
 using Printf
 
 pkgs = [
+	"Test",
+	"BenchmarkTools"
 	"DataFrames", 
 	"StatsPlots",
 	"DifferentialEquations",
@@ -18,7 +20,6 @@ pkgs = [
 	"BoundaryValueDiffEq",
 	"OrdinaryDiffEq",
 	"Flux",
-	"BenchmarkTools",
 	"SpecialFunctions",
 	"JuliaDB",
 	"ScikitLearn",

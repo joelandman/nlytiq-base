@@ -5,7 +5,7 @@ using Printf
 
 pkgs = [
 	"Test",
-	"BenchmarkTools"
+	"BenchmarkTools",
 	"DataFrames", 
 	"StatsPlots",
 	"DifferentialEquations",

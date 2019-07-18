@@ -16,8 +16,8 @@ your platform tools (usually /usr).
 By default, we assume gcc/g++/gfortran in default paths on the system.  These 
 assumptions may be invalid.  If you wish to use gcc installed in a different 
 path, edit compiler.config and find your OS (search for one of Linux, Darwin,
-FreeBSD, SunOS representing all linux distros, macos, FreeBSD and possibly 
-others).  Edit the GCC_PATH and GCC_VER appropriately.
+representing all linux distros and macos.  Edit the GCC_PATH and GCC_VER 
+appropriately.
 
 Example: gcc-7 installed in Linux at /usr/local/compilers/gcc-7
 

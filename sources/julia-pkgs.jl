@@ -34,7 +34,12 @@ pkgs = [
 	"FastGaussQuadrature",
 	"FastTransforms",
 	"IJulia",
-	"JuliaInterpreter"
+	"JuliaInterpreter",
+	"Zygote",
+	"ForwardDiff",
+	"DiffEqGPU",
+	"DiffEqFlux",
+	"PhysicalConstants"
        ]
 
 for p ∈  pkgs

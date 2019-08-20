@@ -10,6 +10,7 @@ pkgs = [
 	"StatsPlots",
 	"DifferentialEquations",
 	"Plots",
+	"Gadfly",
 	"CUDAdrv",
 	"CuArrays",
 	"CUDAnative",
@@ -39,10 +40,17 @@ pkgs = [
 	"ForwardDiff",
 	"DiffEqGPU",
 	"DiffEqFlux",
-	"PhysicalConstants"
+	"PhysicalConstants",
+	"VegaLite",
+	"VegaDatasets",
+	"TensorFlow",
+	"PackageCompiler",
+	
        ]
 
 for p ∈  pkgs
 	@printf("Adding package %s\n",p)
 	Pkg.add(p)
 end
+
+Pkg.add(PackageSpec(url="https://github.com/genieframework/Genie.jl"))

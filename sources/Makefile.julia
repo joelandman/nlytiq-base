@@ -1,0 +1,86 @@
+include config/base.config
+include config/forcegcc.config
+#include config/forcellvm.config
+
+JULIA_VER = 1.2.0
+JULIA_NAME = ${JULIA_VER}-full
+JULIA_INST_PATH	= ${NLYTIQ_INST_PATH}
+JULIA_DWV = julia-${JULIA_VER}
+JULIA_DIR = julia
+
+ifeq ($(CLANG),1)
+__ENV__SET = USE_LLVM_SHLIB=1
+endif
+
+ifeq ($(GCC),1)
+__ENV__SET = USE_LLVM_SHLIB=0
+endif
+
+__ENV__SET += PYTHON=${NLYTIQ_INST_PATH}/bin/python3
+
+# ${_EPF_} contains the front matter for configure after the include below
+include config/configure.prefix.flag.config
+
+
+
+all:    	install-julia-modules
+
+clean:		clean-julia
+
+configure-julia:
+	tar -zxvf sources/julia-${JULIA_NAME}.tar.gz
+
+	# rename julia directory to exclude version name
+	if [ -d ${JULIA_DWV} ]; then 		  \
+		mv -vf ${JULIA_DWV} ${JULIA_DIR} ;\
+	fi
+
+	rm -f ${JULIA_DIR}/Make.user
+	cp -f julia.Make.user ${JULIA_DIR}/Make.user
+
+ifeq (${OS},Darwin)
+	# use 'brew install libunwind mpfr mbedtls libssh2 curl wget suitesparse'
+	#echo  USE_SYSTEM_LIBUNWIND=1    >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_MPFR=1         >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_MBEDTLS=1      >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_LIBSSH2=1      >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_PCRE=0         >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_CURL=1         >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_SUITESPARSE=1  >> ${JULIA_DIR}/Make.user
+	#echo  OPENBLAS_TARGET_ARCH=NEHALEM >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_OPENBLAS=1     >> ${JULIA_DIR}/Make.user
+endif
+
+ifeq ($(OS),Linux)
+	#echo  USE_SYSTEM_PCRE=1         >> ${JULIA_DIR}/Make.user
+	#echo  OPENBLAS_TARGET_ARCH=NEHALEM >> ${JULIA_DIR}/Make.user
+	#echo  USE_SYSTEM_CURL=1         >> ${JULIA_DIR}/Make.user
+endif
+
+	touch configure-julia
+
+make-julia-deps: configure-julia
+	cd ${JULIA_DIR} ; ${__ENV__SET} ${MAKECMD} -j${NCPU} -C deps
+	touch make-julia-deps
+
+make-julia: make-julia-deps
+	cd ${JULIA_DIR} ; ${__ENV__SET}  ${MAKECMD} -j${NCPU}
+	touch make-julia
+
+install-julia: make-julia
+	cd ${JULIA_DIR} ; ${__ENV__SET} ${MAKECMD} install
+	cd ${JULIA_DIR}/${JULIA_DWV} ; tar -cf - . | (cd ${JULIA_INST_PATH} && tar -xvf - )
+	touch install-julia
+
+install-julia-modules: install-julia
+	mkdir -p ${JULIA_INST_PATH}/julia
+	mkdir -p ~/.julia/config
+	echo JULIA_PKGDIR=${JULIA_INST_PATH}/julia >  ${JULIA_INST_PATH}/etc/bashrc.julia
+	echo JULIA_BINDIR=${JULIA_INST_PATH}/bin   >> ${JULIA_INST_PATH}/etc/bashrc.julia
+	JULIA_PKGDIR=${JULIA_INST_PATH}/julia JULIA_BINDIR=${JULIA_INST_PATH}/bin sources/julia-pkgs.jl
+	echo "using BenchmarkTools" > ~/.julia/config/startup.jl
+	echo "using Test" >> ~/.julia/config/startup.jl
+	touch install-julia-modules
+
+clean-julia:
+	rm -rf install-julia make-julia configure-julia OpenBLAS* ${JULIA_DIR} install-julia install-julia-modules bashrc.julia make-julia-deps

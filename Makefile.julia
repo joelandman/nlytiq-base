@@ -17,6 +17,7 @@ __ENV__SET = USE_LLVM_SHLIB=0
 endif
 
 __ENV__SET += PYTHON=${NLYTIQ_INST_PATH}/bin/python3
+#__ENV__SET += PYTHON=${NLYTIQ_INST_PATH}/bin/python3 CXXFLAGS=-D_GLIBCXX_USE_CXX11_ABI=0
 
 # ${_EPF_} contains the front matter for configure after the include below
 include config/configure.prefix.flag.config
@@ -55,6 +56,7 @@ ifeq ($(OS),Linux)
 	#echo  USE_SYSTEM_PCRE=1         >> ${JULIA_DIR}/Make.user
 	#echo  OPENBLAS_TARGET_ARCH=NEHALEM >> ${JULIA_DIR}/Make.user
 	#echo  USE_SYSTEM_CURL=1         >> ${JULIA_DIR}/Make.user
+	#echo "CXXFLAGS=-D_GLIBCXX_USE_CXX11_ABI=0" >> ${JULIA_DIR}/Make.user
 endif
 
 	touch configure-julia

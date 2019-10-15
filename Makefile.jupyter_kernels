@@ -18,9 +18,9 @@ install-jupyter:
 
 install-jupyter-mods: install-jupyter
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install octave_kernel
-	#${_EPF_} ${NLYTIQ_INST_PATH}/bin/cpan -T Devel::IPerl
-	git clone https://github.com/joelandman/p5-Devel-IPerl
-	cd p5-Devel-IPerl ; ${_EPF_} ${NLYTIQ_INST_PATH}/bin/perl Makefile.PL ;\
+	tar -zxvf sources/Devel-IPerl-0.009.tar.gz
+	cp sources/sources/jupyter-iperl-test Devel-IPerl-0.009/t/ipython_version.t
+	cd Devel-IPerl-0.009 ; ${_EPF_} ${NLYTIQ_INST_PATH}/bin/perl Makefile.PL ;\
 		make ;\
 		make install
 	${_EPF_} ${NLYTIQ_INST_PATH}/share/perl6/site/bin/zef install Jupyter::Kernel
@@ -32,4 +32,4 @@ install-jupyter-mods: install-jupyter
 	touch install-jupyter-mods
 
 clean-jupyter:
-	rm -rf ${PYTHON} install-jupyter install-jupyter-mods p5-Devel-IPerl
+	rm -rf ${PYTHON} install-jupyter install-jupyter-mods Devel-IPerl-0.009

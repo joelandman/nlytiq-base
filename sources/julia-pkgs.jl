@@ -17,7 +17,6 @@ pkgs = [
 	"DiffEqBase",
 	"DiffEqPhysics",
 	"DiffEqDevTools",
-	"DiffEqPDEBase",
 	"BoundaryValueDiffEq",
 	"OrdinaryDiffEq",
 	"Flux",

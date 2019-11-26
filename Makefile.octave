@@ -7,9 +7,7 @@ OCTAVE			= octave-${OCTAVEVER}
 OCTAVE_INST_PATH	= ${NLYTIQ_INST_PATH}
 
 OCTAVEOPTS		= --enable-openmp \
-			  --enable-atomic-refcount \
-			  --with-curl-libdir=${OCTAVE_INST_PATH}/lib \
-			  --with-curl-includedir=${OCTAVE_INST_PATH}/include 
+			  --enable-atomic-refcount 
 
 LDFLAGS		 = "-L${OCTAVE_INST_PATH}/lib"
 CFLAGS	 	+= "-I${OCTAVE_INST_PATH}/include"

@@ -11,7 +11,7 @@ include config/options.config
 ### list of all supported packages
 
 compiler = cmake llvm 
-prereqs  = curl perl5 perl5mods rust
+prereqs  = perl5 perl5mods rust
 locallibs= 
 base     = perl6 gnuplot python 
 environs = octave julia R 

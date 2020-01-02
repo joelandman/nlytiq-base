@@ -38,11 +38,10 @@ pkgs = [
 	"Zygote",
 	"ForwardDiff",
 	"DiffEqGPU",
-	"DiffEqFlux",
 	"PhysicalConstants",
 	"VegaLite",
 	"VegaDatasets",
-	"TensorFlow",
+#	"TensorFlow",
 	"PackageCompiler",
 	
        ]

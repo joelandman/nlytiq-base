@@ -2,7 +2,7 @@ include config/base.config
 include config/forcegcc.config
 #include config/forcellvm.config
 
-JULIA_VER = 1.3.0
+JULIA_VER = 1.3.1
 JULIA_NAME = ${JULIA_VER}-full
 JULIA_INST_PATH	= ${NLYTIQ_INST_PATH}
 JULIA_DWV = julia-${JULIA_VER}
@@ -79,7 +79,7 @@ install-julia-modules: install-julia
 	mkdir -p ~/.julia/config
 	echo JULIA_PKGDIR=${JULIA_INST_PATH}/julia >  ${JULIA_INST_PATH}/etc/bashrc.julia
 	echo JULIA_BINDIR=${JULIA_INST_PATH}/bin   >> ${JULIA_INST_PATH}/etc/bashrc.julia
-	JULIA_PKGDIR=${JULIA_INST_PATH}/julia JULIA_BINDIR=${JULIA_INST_PATH}/bin sources/julia-pkgs.jl
+	TF_USE_GPU=1 JULIA_PKGDIR=${JULIA_INST_PATH}/julia JULIA_BINDIR=${JULIA_INST_PATH}/bin sources/julia-pkgs.jl
 	echo "using BenchmarkTools" > ~/.julia/config/startup.jl
 	echo "using Test" >> ~/.julia/config/startup.jl
 	touch install-julia-modules

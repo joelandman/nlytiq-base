@@ -25,10 +25,10 @@ PERL_MODULES	= CPAN threads threads::shared Switch Digest::SHA IO::Pty \
 	URI::Escape  IO::Socket::Netlink::Taskstats \
 	DBM::Deep  ZMQ::FFI SVG::Sparkline 
 		  
-all:    perl-modules Data-Scale forced
+all:    perl-modules Data-Utils forced
 
 clean:	 
-	rm -fr perl-modules Data-Scale forced ~/.cpan
+	rm -fr perl-modules Data-Utils forced ~/.cpan
 
 
 #--------------------------------------------------------------------------#
@@ -45,9 +45,9 @@ perl-modules:
 
 #--------------------------------------------------------------------------#
 
-Data-Scale: sources/Data-Scale.tar.gz
-	tar -zxvf sources/Data-Scale.tar.gz
-	cd Data-Scale ;  ${NLYTIQ_INST_PATH}/bin/perl Makefile.PL ; make ; make test ; make install
+Data-Utils: sources/Data-Utils.tar.gz
+	tar -zxvf sources/Data-Utils.tar.gz
+	cd Data-Utils ;  ${NLYTIQ_INST_PATH}/bin/perl Makefile.PL ; make ; make test ; make install
 
 forced:
 	# Term::ReadLine::Gnu has major problems with readline libs. 

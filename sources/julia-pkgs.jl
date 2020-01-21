@@ -41,8 +41,11 @@ pkgs = [
 	"PhysicalConstants",
 	"VegaLite",
 	"VegaDatasets",
+	"CUTEst",
+	"TimerOutputs",
+	"Optim"
 #	"TensorFlow",
-	"PackageCompiler",
+#	"PackageCompiler",
 	
        ]
 

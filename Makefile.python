@@ -1,7 +1,7 @@
 include config/base.config
 
 ####   
-PYTHONVER		= 3.8.0
+PYTHONVER		= 3.8.2
 PYTHON			= Python-${PYTHONVER}
 PYTHON_INST_PATH	= ${NLYTIQ_INST_PATH}
 
@@ -70,20 +70,15 @@ install-python-modules: install-python
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install pandas
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install sympy
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install fortran-language-server
-ifneq ($(OS),FreeBSD)
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install scipy
-else
-	# very strange behavior on FreeBSD ...
-	${NLYTIQ_INST_PATH}/bin/pip3 -vvv install scipy	
-endif
+
 	# note: these are the non-GPU versions of the below
 	# To Do: Add in GPU versions
-ifneq (${OS},FreeBSD)
 # Tensorflow doesn't support Python 3.7 yet.  So this will fail.
 #	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install tensorflow
-endif
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install bokeh
-	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install Keras	
+	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install Keras
+	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install torch	
 	touch install-python-modules
 
 clean-python:

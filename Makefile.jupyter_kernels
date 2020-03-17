@@ -19,7 +19,7 @@ install-jupyter:
 install-jupyter-mods: install-jupyter
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install octave_kernel
 	tar -zxvf sources/Devel-IPerl-0.009.tar.gz
-	cp sources/sources/jupyter-iperl-test Devel-IPerl-0.009/t/ipython_version.t
+	cp sources/jupyter-iperl-test Devel-IPerl-0.009/t/ipython_version.t
 	cd Devel-IPerl-0.009 ; ${_EPF_} ${NLYTIQ_INST_PATH}/bin/perl Makefile.PL ;\
 		make ;\
 		make install

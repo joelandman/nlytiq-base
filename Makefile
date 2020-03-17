@@ -13,7 +13,7 @@ include config/options.config
 compiler = cmake llvm 
 prereqs  = perl5 perl5mods rust
 locallibs= 
-base     = perl6 gnuplot python 
+base     = raku gnuplot python 
 environs = octave julia R 
 misc	 = jupyter_kernels spark 
 
@@ -71,31 +71,6 @@ endif
 
 endif
 
-
-# FreeBSD
-ifeq (${OS},FreeBSD)
-
-ifeq (${CLANG},1)
-packages+=${compiler}
-endif
-
-packages+=${prereqs}
-
-ifeq (${LOCALLIBS},1)
-packages+=${locallibs}
-endif
-
-packages+=${base}
-
-ifeq (${ENVIRONS},1)
-packages+=${environs}
-endif
-
-ifeq (${MISC},1)
-packages+=${misc}
-endif
-
-endif
 
 
 ### each package has its own Makefile.  This Makefile drives complilation

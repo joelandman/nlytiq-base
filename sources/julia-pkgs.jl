@@ -55,3 +55,4 @@ for p ∈  pkgs
 end
 
 Pkg.add(PackageSpec(url="https://github.com/genieframework/Genie.jl"))
+Pkg.add(PackageSpec(url="https://github.com/queryverse/Queryverse.jl"))

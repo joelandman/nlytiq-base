@@ -26,7 +26,7 @@ pkgs = [
 	"UnicodePlots",
 	"FileIO",
 	"Images",
-	"ImageView",
+	#"ImageView",
 	"Makie",
 	"GeometryTypes",
 	"Colors",

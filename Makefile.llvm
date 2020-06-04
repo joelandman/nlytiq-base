@@ -1,19 +1,22 @@
 include config/base.config
 
 #### llvm
-LLVMVER		= 9.0.0
+LLVMVER		= 10.0.0
 LLVMSRC		= llvm-${LLVMVER}
-CFESRC		= cfe-${LLVMVER}
+CFESRC		= clang-${LLVMVER}
 RTSRC		= compiler-rt-${LLVMVER}
 OPENMPSRC	= openmp-${LLVMVER}
+POLLYSRC	= polly-${LLVMVER}
 LLVMDIR		= ${LLVMSRC}.src
 CFEDIR		= ${CFESRC}.src
 RTDIR		= ${RTSRC}.src
 OPENMPDIR	= ${OPENMPSRC}.src
+POLLYDIR	= ${POLLYSRC}.src
 LLVMTAR		= ${LLVMDIR}.tar.xz
 CFETAR		= ${CFEDIR}.tar.xz
 RTTAR		= ${RTDIR}.tar.xz
 OPENMPTAR	= ${OPENMPDIR}.tar.xz
+POLLYTAR	= ${POLLYDIR}.tar.xz
 LLVM_INST_PATH	= ${NLYTIQ_INST_PATH}
 
 ifeq (${OS},Darwin)
@@ -46,9 +49,11 @@ configure-llvm:
 	tar -Jxf sources/${CFETAR} -C ${LLVMDIR}/tools
 	tar -Jxf sources/${RTTAR} -C ${LLVMDIR}/projects
 	tar -Jxf sources/${OPENMPTAR} -C ${LLVMDIR}/projects
+	tar -Jxf sources/${POLLYTAR} -C ${LLVMDIR}/projects
 	mv -f ${LLVMDIR}/tools/${CFEDIR} ${LLVMDIR}/tools/clang
 	mv -f ${LLVMDIR}/projects/${RTDIR} ${LLVMDIR}/projects/compiler-rt
 	mv -f ${LLVMDIR}/projects/${OPENMPDIR} ${LLVMDIR}/projects/openmp
+	mv -f ${LLVMDIR}/projects/${POLLYDIR} ${LLVMDIR}/projects/polly
 	touch configure-llvm
 
 make-llvm: configure-llvm

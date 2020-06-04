@@ -3,7 +3,7 @@ include config/base.config
 #### llvm
 LLVMVER		= 10.0.0
 LLVMSRC		= llvm-project-${LLVMVER}
-LLVMDIR		= ${LLVMSRC}.src
+LLVMDIR		= ${LLVMSRC}
 LLVMTAR		= ${LLVMDIR}.tar.xz
 LLVM_INST_PATH	= ${NLYTIQ_INST_PATH}
 
@@ -13,15 +13,24 @@ else
 CMAKE_BIN       = $(shell which cmake)
 endif
 
-CMAKE_CMD	= ${CMAKE_BIN}  -G "Unix Makefiles" 	\
-			-DCMAKE_INSTALL_PREFIX:STRING=${NLYTIQ_INST_PATH} \
-                        -DLLVM_ENABLE_CXX1Y:BOOL=On -DLLVM_ENABLE_LTO:BOOL=Off \
-                        -DLLVM_PARALLEL_COMPILE_JOBS:STRING=${NCPU}  \
-                        -DLLVM_PARALLEL_LINK_JOBS:STRING=${NCPU} \
-			-DLLVM_BUILD_LLVM_DYLIB:BOOL=ON \
-			-DLLVM_TARGETS_TO_BUILD:STRING="host" \
-			-DLLVM_LINK_LLVM_DYLIB:BOOL=ON 	\
-			-DLLVM_ENABLE_PROJECTS='clang,clang-tools-extra,lldb,compiler-rt,polly'
+# gcc-9 and later currently fail on build (in Ubuntu 20.04), so use gcc-8 for the moment
+GCC		= gcc-8
+GXX		= g++-8
+
+CMAKE_CMD	= CC=${GCC} CXX=${GXX} ${CMAKE_BIN}  -G "Unix Makefiles" 				\
+			-DCMAKE_INSTALL_PREFIX:STRING=${NLYTIQ_INST_PATH} 	\
+			-DLLVM_PARALLEL_COMPILE_JOBS:STRING=${NCPU}  		\
+			-DLLVM_PARALLEL_LINK_JOBS:STRING=${NCPU}		\
+			-DCMAKE_BUILD_TYPE=Release				\
+			-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lldb;compiler-rt;polly;openmp"
+
+#                        -DLLVM_ENABLE_CXX1Y:BOOL=On -DLLVM_ENABLE_LTO:BOOL=Off \
+#                        -DLLVM_PARALLEL_COMPILE_JOBS:STRING=${NCPU}  \
+#                        -DLLVM_PARALLEL_LINK_JOBS:STRING=${NCPU} \
+#			-DLLVM_BUILD_LLVM_DYLIB:BOOL=ON \
+#			-DLLVM_TARGETS_TO_BUILD:STRING="host" \
+#			-DLLVM_LINK_LLVM_DYLIB:BOOL=ON 	\
+#			-DLLVM_ENABLE_PROJECTS='clang,clang-tools-extra,lldb,compiler-rt,polly'
 
 BUILDDIR	= ${LLVMDIR}/build
 
@@ -38,15 +47,11 @@ configure-llvm:
 	touch configure-llvm
 
 make-llvm: configure-llvm
-	cd ${BUILDDIR} ; ${CMAKE_CMD} ..
+	cd ${BUILDDIR} ; ${CMAKE_CMD} ../llvm
 	cd ${BUILDDIR}  ; make -j${NCPU}
 	touch make-llvm
 
-make-llvm-openmp: make-llvm
-	#cd ${BUILDDIR}  ; make -j${NCPU} omp
-	touch make-llvm
- 
-install-llvm: make-llvm-openmp
+install-llvm: make-llvm
 	cd ${BUILDDIR}  ; make -j${NCPU} install
 ifeq ($(OS),Linux)
 	#echo "${NLYTIQ_INST_PATH}/lib" > /etc/ld.so.conf.d/nlytiq.conf
@@ -55,4 +60,4 @@ endif
 	touch install-llvm
 
 clean-llvm:
-	rm -rf ${LLVMDIR} make-llvm make-llvm-openmp install-llvm configure-llvm ${BUILDDIR} 
+	rm -rf ${LLVMDIR} make-llvm  install-llvm configure-llvm ${BUILDDIR} 

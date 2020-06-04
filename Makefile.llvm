@@ -2,21 +2,9 @@ include config/base.config
 
 #### llvm
 LLVMVER		= 10.0.0
-LLVMSRC		= llvm-${LLVMVER}
-CFESRC		= clang-${LLVMVER}
-RTSRC		= compiler-rt-${LLVMVER}
-OPENMPSRC	= openmp-${LLVMVER}
-POLLYSRC	= polly-${LLVMVER}
+LLVMSRC		= llvm-project-${LLVMVER}
 LLVMDIR		= ${LLVMSRC}.src
-CFEDIR		= ${CFESRC}.src
-RTDIR		= ${RTSRC}.src
-OPENMPDIR	= ${OPENMPSRC}.src
-POLLYDIR	= ${POLLYSRC}.src
 LLVMTAR		= ${LLVMDIR}.tar.xz
-CFETAR		= ${CFEDIR}.tar.xz
-RTTAR		= ${RTDIR}.tar.xz
-OPENMPTAR	= ${OPENMPDIR}.tar.xz
-POLLYTAR	= ${POLLYDIR}.tar.xz
 LLVM_INST_PATH	= ${NLYTIQ_INST_PATH}
 
 ifeq (${OS},Darwin)
@@ -25,13 +13,15 @@ else
 CMAKE_BIN       = $(shell which cmake)
 endif
 
-CMAKE_CMD	= ${CMAKE_BIN} -DCMAKE_INSTALL_PREFIX:STRING=${NLYTIQ_INST_PATH} \
+CMAKE_CMD	= ${CMAKE_BIN}  -G "Unix Makefiles" 	\
+			-DCMAKE_INSTALL_PREFIX:STRING=${NLYTIQ_INST_PATH} \
                         -DLLVM_ENABLE_CXX1Y:BOOL=On -DLLVM_ENABLE_LTO:BOOL=Off \
                         -DLLVM_PARALLEL_COMPILE_JOBS:STRING=${NCPU}  \
                         -DLLVM_PARALLEL_LINK_JOBS:STRING=${NCPU} \
 			-DLLVM_BUILD_LLVM_DYLIB:BOOL=ON \
 			-DLLVM_TARGETS_TO_BUILD:STRING="host" \
-			-DLLVM_LINK_LLVM_DYLIB:BOOL=ON 
+			-DLLVM_LINK_LLVM_DYLIB:BOOL=ON 	\
+			-DLLVM_ENABLE_PROJECTS='clang,clang-tools-extra,lldb,compiler-rt,polly'
 
 BUILDDIR	= ${LLVMDIR}/build
 
@@ -45,25 +35,18 @@ clean:		clean-llvm
 configure-llvm: 
 	tar -Jxf sources/${LLVMTAR}
 	mkdir -p ${BUILDDIR}
-	mkdir -p ${LLVMDIR}/tools ${LLVMDIR}/projects
-	tar -Jxf sources/${CFETAR} -C ${LLVMDIR}/tools
-	tar -Jxf sources/${RTTAR} -C ${LLVMDIR}/projects
-	tar -Jxf sources/${OPENMPTAR} -C ${LLVMDIR}/projects
-	tar -Jxf sources/${POLLYTAR} -C ${LLVMDIR}/projects
-	mv -f ${LLVMDIR}/tools/${CFEDIR} ${LLVMDIR}/tools/clang
-	mv -f ${LLVMDIR}/projects/${RTDIR} ${LLVMDIR}/projects/compiler-rt
-	mv -f ${LLVMDIR}/projects/${OPENMPDIR} ${LLVMDIR}/projects/openmp
-	mv -f ${LLVMDIR}/projects/${POLLYDIR} ${LLVMDIR}/projects/polly
 	touch configure-llvm
 
 make-llvm: configure-llvm
 	cd ${BUILDDIR} ; ${CMAKE_CMD} ..
-	#cd ${BUILDDIR} ; ${CMAKE_CMD} --build .
 	cd ${BUILDDIR}  ; make -j${NCPU}
-	cd ${BUILDDIR}  ; make -j${NCPU} omp
+	touch make-llvm
+
+make-llvm-openmp: make-llvm
+	#cd ${BUILDDIR}  ; make -j${NCPU} omp
 	touch make-llvm
  
-install-llvm: make-llvm
+install-llvm: make-llvm-openmp
 	cd ${BUILDDIR}  ; make -j${NCPU} install
 ifeq ($(OS),Linux)
 	#echo "${NLYTIQ_INST_PATH}/lib" > /etc/ld.so.conf.d/nlytiq.conf
@@ -72,4 +55,4 @@ endif
 	touch install-llvm
 
 clean-llvm:
-	rm -rf ${LLVMDIR} make-llvm install-llvm configure-llvm ${BUILDDIR}
+	rm -rf ${LLVMDIR} make-llvm make-llvm-openmp install-llvm configure-llvm ${BUILDDIR} 

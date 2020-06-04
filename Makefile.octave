@@ -6,8 +6,12 @@ OCTAVEVER		= 5.2.0
 OCTAVE			= octave-${OCTAVEVER}
 OCTAVE_INST_PATH	= ${NLYTIQ_INST_PATH}
 
-OCTAVEOPTS		= --enable-openmp \
-			  --enable-atomic-refcount 
+OCTAVEOPTS		= --enable-openmp 		\
+			  --enable-threads=posix	\
+			  --disable-atomic-refcount	\
+			  --enable-jit			\
+			  --with-blas="-lopenblas"	\
+			  --disable-float-truncate 
 
 LDFLAGS		 = "-L${OCTAVE_INST_PATH}/lib"
 CFLAGS	 	+= "-I${OCTAVE_INST_PATH}/include"
@@ -29,14 +33,26 @@ _LDP_ = LD_LIBRARY_PATH=${NLYTIQ_LIB_PATH}
 
 #--------------------------------------------------------------------------#
 
-all:    	install-octave
+all:    	install-openblas install-octave
 
-clean:		clean-octave
+clean:		clean-octave clean-openblas
 
-configure-octave:
+configure-openblas:
+	tar -zxvf sources/OpenBLAS.tar.gz
+	touch configure-openblas
+
+build-openblas: configure-openblas
+	cd OpenBLAS/ ; make TARGET=SANDYBRIDGE BINARY=64 USE_OPENMP=1 USE_THREAD=1 NUM_THREADS=${NCPU} USE_TLS=1 MAKE_NB_JOBS=${NCPU} GEMM_MULTITHREAD_THRESHOLD=50
+	touch build-openblas
+
+install-openblas: build-openblas
+	cd OpenBLAS/ ; make PREFIX=${NLYTIQ_INST_PATH} install
+	touch install-openblas
+
+configure-octave: install-openblas
 	tar -Jxvf sources/${OCTAVE}.tar.xz
 	cd ${OCTAVE} ;\
-		${_LDP_} ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} ${OCTAVEOPTS}
+		${_LDP_} ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} ${OCTAVEOPTS} CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"
 	touch configure-octave
 
 make-octave: configure-octave
@@ -51,3 +67,6 @@ install-octave: make-octave
 
 clean-octave:
 	rm -rf ${OCTAVE} make-octave configure-octave install-octave make-octave ${OCTAVE}
+
+clean-openblas:
+	rm -rf OpenBLAS build-openblas configure-openblas install-openblas

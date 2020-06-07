@@ -74,8 +74,7 @@ install-python-modules: install-python
 
 	# note: these are the non-GPU versions of the below
 	# To Do: Add in GPU versions
-# Tensorflow doesn't support Python 3.7 yet.  So this will fail.
-#	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install tensorflow
+	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install tensorflow-gpu
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install bokeh
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install Keras
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install torch	

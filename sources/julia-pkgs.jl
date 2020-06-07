@@ -26,7 +26,7 @@ pkgs = [
 	"UnicodePlots",
 	"FileIO",
 	"Images",
-	#"ImageView",
+	"ImageView",
 	"Makie",
 	"GeometryTypes",
 	"Colors",
@@ -43,9 +43,10 @@ pkgs = [
 	"VegaDatasets",
 	"CUTEst",
 	"TimerOutputs",
-	"Optim"
+	"Optim",
+	"UnicodePlots",
 #	"TensorFlow",
-#	"PackageCompiler",
+	"PackageCompiler",
 	
        ]
 

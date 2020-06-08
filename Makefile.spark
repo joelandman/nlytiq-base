@@ -13,6 +13,7 @@ clean:		clean-spark
 
 install-spark:	
 	tar -zxvf sources/${SPARK}-${SPARKVER}.tar.gz
+	mkdir -p ${NLYTIQ_INST_PATH}/bin
 	cd ${SPARK}  ; cp spark ${NLYTIQ_INST_PATH}/bin
 	touch install-SPARK
 

@@ -45,9 +45,8 @@ pkgs = [
 	"TimerOutputs",
 	"Optim",
 	"UnicodePlots",
-#	"TensorFlow",
-	"PackageCompiler",
-	
+	"TensorFlow",
+	"PackageCompiler"
        ]
 
 for p ∈  pkgs

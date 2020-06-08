@@ -78,6 +78,7 @@ install-python-modules: install-python
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install bokeh
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install Keras
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install torch	
+	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install xlrd
 	touch install-python-modules
 
 clean-python:

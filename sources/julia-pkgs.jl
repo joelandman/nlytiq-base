@@ -20,6 +20,7 @@ pkgs = [
 	"BoundaryValueDiffEq",
 	"OrdinaryDiffEq",
 	"Flux",
+	"LinuxPerf",
 	"SpecialFunctions",
 	"JuliaDB",
 	"ScikitLearn",

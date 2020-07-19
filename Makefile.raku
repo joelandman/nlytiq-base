@@ -1,7 +1,7 @@
 include config/base.config
 
-PERLVER		= 2020.01
-PERL		= rakudo-star-${PERLVER}
+PERLVER		= 2020.06
+PERL		= rakudo-${PERLVER}
 PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 OSREV		= $(shell uname -r)
 PFLAGS          = --gen-moar

@@ -41,20 +41,18 @@ The packages are broadly programming environments that are very strong
 analytical systems on the own, and more general programming environments
 that can be used to build and bridge other analytical systems.
 
-High performance analytical programming environments
+High performance high level programming environments
 
 * [Julia](http://julialang.org)
 * [R](https://cran.r-project.org/)
 * [Octave](https://www.gnu.org/software/octave/)
 
-High performance general programming environments
+High level general programming environments
 * [Python 3.x](http://www.python.org)
    * Python packages including numpy, scipy, matlibplot,
-     Jupyter, pandas, Theano, ...
+     Jupyter, pandas, tensorflow-gpu, ...
 * [Perl 5.x](http://www.cpan.org)
    * Many Perl modules
-* [Raku](https://raku.org/)
-   * Perl6 modules including panda
 * [Rust](https://www.rust-lang.org/en-US/)
 
 ##Status

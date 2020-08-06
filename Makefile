@@ -13,7 +13,7 @@ include config/options.config
 compiler = cmake llvm 
 prereqs  = perl5 perl5mods rust
 locallibs= 
-base     = raku gnuplot python 
+base     = gnuplot python 
 environs = octave julia R 
 misc	 = jupyter_kernels spark 
 

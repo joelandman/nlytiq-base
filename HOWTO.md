@@ -4,7 +4,7 @@
 
 * compilers
    * C/C++
-   * Fortran (gfortran)
+   * Fortran 
 
 * libraries and development headers
    * bzip2   (Perl, R, Python)
@@ -16,7 +16,17 @@
    * Xwindows (R)
    * PCRE (Python, R)
 
-A dependency checker is planned.
+Note: gcc 8 and 9 work well for this.  LLVM tends to be able to compile most of these packages
+though there are occassional compatibility issues.  If you would like to adjust which compiler
+is used, options for the compilation, paths to the compiler, make a (backup) copy of 
+
+	config/compiler.config.$OS
+
+where $OS is the lower case version of the output of `uname` for the system you are 
+building this on.  Right now linux and darwin (mac OSX) are supported.  We have supported SmartOS
+and FreeBSD in the past, but this support has been removed.
+
+
 
 ##Building
 
@@ -45,8 +55,9 @@ want to install gcc@8, and the following dependent packages:
 	cmake
 	gnu-sed
 
-The prep_mac.bash script will do this for you.
-
+The prep_mac.bash script will do this for you.  If you are running on linux, use the appropriate prep_distro.bash script by
+	sudo ./prep_$DISTRO.bash
+	
 To build everything after installing any dependencies
 
   make
@@ -63,5 +74,3 @@ To clean up a specific project
 
   make -f Makefile.$project clean
 
-Rust is currently disabled due to some oddities I am working on tracking
-down.  

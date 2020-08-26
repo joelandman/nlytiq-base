@@ -20,7 +20,6 @@ pkgs = [
 	"Flux",
 	"LinuxPerf",
 	"SpecialFunctions",
-	"JuliaDB",
 	"ScikitLearn",
 	"UnicodePlots",
 	"FileIO",
@@ -47,7 +46,7 @@ pkgs = [
 	"TensorFlow",
 	"Primes",
 	"XLSX",
-	"Query"
+	"Query",
 	"PackageCompiler"
        ]
 

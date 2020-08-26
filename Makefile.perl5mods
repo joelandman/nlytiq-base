@@ -9,15 +9,15 @@ PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 PERL_MODULES	= CPAN threads threads::shared Digest::SHA IO::Pty IPC::Cmd \
 	IPC::Run File::Spec File::PathConvert Sys::Hostname ZMQ::LibZMQ3 \
 	Getopt::Lucid JSON::PP DBI DBD::SQLite Catmandu Digest::SHA1  \
-	File::ChangeNotify Data::Serializer Time::ParseDate Moose \
+	File::ChangeNotify Data::Serializer Time::ParseDate Moo \
 	Text::ASCIITable Text::UnicodeTable::Simple Text::Table \
-	Module::Install Module::AutoInstall Starman \
+	Module::Install Module::AutoInstall Module::Build Starman \
 	Net::Server::PreFork HTML::Mason Mojolicious  \
 	Mojolicious::Plugin::Mason1Renderer XML::Smart \
 	Config::General Config::IniFiles Config::JSON Math::Random::Secure \
-	Crypt::PRNG Bundle::DBD::Sys  Galileo MCE MCE::Loop MCE::Flow \
+	Crypt::PRNG MCE MCE::Loop MCE::Flow \
        	MCE::Map MCE::Grep MCE::Queue MCE::Hobo MCE::Shared \
-	Moose HTML::TreeBuilder XML::RSS Devel::Caller Params::Validate \
+	HTML::TreeBuilder Params::Validate \
 	Mojolicious::Plugin::RemoteAddr HTTP::Response HTML::Entities  \
 	Config::Scoped  FFI::Platypus  FFI::CheckLib  FFI::Raw \
 	FFI::Platypus::Declare FFI::Platypus::Memory \

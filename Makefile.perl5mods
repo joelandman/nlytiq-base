@@ -1,29 +1,11 @@
 include config/base.config
 
 
-
 ####   
 PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 
 ####  Modules  
-PERL_MODULES	= CPAN threads threads::shared Digest::SHA IO::Pty IPC::Cmd \
-	IPC::Run File::Spec File::PathConvert Sys::Hostname ZMQ::LibZMQ3 \
-	Getopt::Lucid JSON::PP DBI DBD::SQLite Catmandu Digest::SHA1  \
-	File::ChangeNotify Data::Serializer Time::ParseDate Moo \
-	Text::ASCIITable Text::UnicodeTable::Simple Text::Table \
-	Module::Install Module::AutoInstall Module::Build Starman \
-	Net::Server::PreFork HTML::Mason Mojolicious  \
-	Mojolicious::Plugin::Mason1Renderer XML::Smart \
-	Config::General Config::IniFiles Config::JSON Math::Random::Secure \
-	Crypt::PRNG MCE MCE::Loop MCE::Flow \
-       	MCE::Map MCE::Grep MCE::Queue MCE::Hobo MCE::Shared \
-	HTML::TreeBuilder Params::Validate \
-	Mojolicious::Plugin::RemoteAddr HTTP::Response HTML::Entities  \
-	Config::Scoped  FFI::Platypus  FFI::CheckLib  FFI::Raw \
-	FFI::Platypus::Declare FFI::Platypus::Memory \
-	FFI::Platypus::API FFI::Platypus::Type  \
-	URI::Escape  IO::Socket::Netlink::Taskstats \
-	ZMQ::FFI SVG::Sparkline 
+PERL_MODULES	= CPAN threads threads::shared 
 		  
 all:    perl-modules Data-Utils forced
 
@@ -40,6 +22,13 @@ perl-modules:
 	  TEST_JOBS=${NCPU} NONINTERACTIVE_TESTING=1 PERL_AUTOINSTALL="--alldeps" PERL_AUTOINSTALL_PREFER_CPAN=1 \
 	  ${NLYTIQ_INST_PATH}/bin/cpan $$module  ; \
 	done
+    
+	# now have perl do the installations in parallel
+	${NLYTIQ_INST_PATH}/bin/perl sources/perl5mods.pl
+
+	# repeat as it appears that there is a dependency error, and second pass
+	# fixes it.  For all properly installed modules, this is a no-op.
+	${NLYTIQ_INST_PATH}/bin/perl sources/perl5mods.pl
 	touch perl-modules
 
 
@@ -48,10 +37,10 @@ perl-modules:
 Data-Utils: sources/Data-Utils.tar.gz
 	tar -zxvf sources/Data-Utils.tar.gz
 	cd Data-Utils ;  ${NLYTIQ_INST_PATH}/bin/perl Makefile.PL ; make ; make test ; make install
+	touch Data-Utils
 
 forced:
 	# Term::ReadLine::Gnu has major problems with readline libs. 
 	${NLYTIQ_INST_PATH}/bin/cpan -T Term::ReadLine::Gnu
-	
 	touch forced
 

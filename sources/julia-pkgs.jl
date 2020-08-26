@@ -45,6 +45,9 @@ pkgs = [
 	"Optim",
 	"UnicodePlots",
 	"TensorFlow",
+	"Primes",
+	"XLSX",
+	"Query"
 	"PackageCompiler"
        ]
 

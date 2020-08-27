@@ -5,7 +5,7 @@ include config/base.config
 PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 
 ####  Modules  
-PERL_MODULES	= CPAN threads threads::shared 
+PERL_MODULES	= CPAN threads threads::shared MCE::Loop
 		  
 all:    perl-modules Data-Utils forced
 

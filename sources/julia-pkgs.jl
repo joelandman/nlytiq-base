@@ -47,6 +47,7 @@ pkgs = [
 	"Primes",
 	"XLSX",
 	"Query",
+	"Pluto",
 	"PackageCompiler"
        ]
 

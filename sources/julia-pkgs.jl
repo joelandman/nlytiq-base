@@ -48,6 +48,8 @@ pkgs = [
 	"XLSX",
 	"Query",
 	"Pluto",
+	"Turing",
+	"TensorBoardLogger",
 	"PackageCompiler"
        ]
 

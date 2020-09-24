@@ -54,14 +54,23 @@ endif
 
 ifeq ($(OS),Linux)
 	#echo  USE_SYSTEM_PCRE=1         >> ${JULIA_DIR}/Make.user
-	#echo  OPENBLAS_TARGET_ARCH=NEHALEM >> ${JULIA_DIR}/Make.user
+	#echo  OPENBLAS_TARGET_ARCH=pentium4  >> ${JULIA_DIR}/Make.user
+	#echo  ARCH=pentium4  >> ${JULIA_DIR}/Make.user
+	#echo JULIA_CPU_TARGET=pentium4  >> ${JULIA_DIR}/Make.use
 	#echo  USE_SYSTEM_CURL=1         >> ${JULIA_DIR}/Make.user
 	#echo "CXXFLAGS=-D_GLIBCXX_USE_CXX11_ABI=0" >> ${JULIA_DIR}/Make.user
 endif
 
 	touch configure-julia
 
+make-julia-flisp: configure-julia
+	#cd ${JULIA_DIR}/src/flisp ; patch < ../../../sources/flisp.patch 
+	cd ${JULIA_DIR}/src/flisp ;  make clean ; make
+	touch make-julia-flisp
+
 make-julia-deps: configure-julia
+	# make-julia-flisp 
+	#cd ${JULIA_DIR}/src ; patch < ../../sources/julia.patch
 	cd ${JULIA_DIR} ; ${__ENV__SET} ${MAKECMD} -j${NCPU} -C deps
 	touch make-julia-deps
 

@@ -50,6 +50,8 @@ pkgs = [
 	"Pluto",
 	"Turing",
 	"TensorBoardLogger",
+	"PyPlot",
+	"Javis",
 	"PackageCompiler"
        ]
 

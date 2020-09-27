@@ -14,15 +14,15 @@ CMAKE_BIN       = $(shell which cmake)
 endif
 
 # gcc-9 and later currently fail on build (in Ubuntu 20.04), so use gcc-8 for the moment
-GCC		= gcc-8
-GXX		= g++-8
+GCC		= gcc
+GXX		= g++
 
 CMAKE_CMD	= CC=${GCC} CXX=${GXX} ${CMAKE_BIN}  -G "Unix Makefiles" 				\
 			-DCMAKE_INSTALL_PREFIX:STRING=${NLYTIQ_INST_PATH} 	\
 			-DLLVM_PARALLEL_COMPILE_JOBS:STRING=${NCPU}  		\
 			-DLLVM_PARALLEL_LINK_JOBS:STRING=${NCPU}		\
 			-DCMAKE_BUILD_TYPE=Release				\
-			-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lldb;compiler-rt;polly;openmp;libcxx;libcxxabi;libunwind"
+			-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lldb;compiler-rt;polly;openmp;libcxx;libcxxabi;libunwind" 
 
 #                        -DLLVM_ENABLE_CXX1Y:BOOL=On -DLLVM_ENABLE_LTO:BOOL=Off \
 #                        -DLLVM_PARALLEL_COMPILE_JOBS:STRING=${NCPU}  \

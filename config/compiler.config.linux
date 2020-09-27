@@ -5,7 +5,7 @@ CLANG   = 0
 
 # GCC by default, should be in the default path.  Change this if you need
 GCC_PATH        =
-GCC_VER         =-8
+GCC_VER         =
 # example
 #  GCC-6.3 installed in /opt/gcc/6.3/bin/gcc-6
 #  GCC_PATH        = /opt/gcc/6.3/bin/

@@ -66,7 +66,7 @@ install-python-modules: install-python
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install numpy
 	#${NLYTIQ_INST_PATH}/bin/pip3 install dateutil 
 	LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install pyzmq tornado
-	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install matplotlib
+#	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install matplotlib
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install pandas
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install sympy
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install fortran-language-server

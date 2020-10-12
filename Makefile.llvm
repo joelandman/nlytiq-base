@@ -1,7 +1,7 @@
 include config/base.config
 
 #### llvm
-LLVMVER		= 10.0.1
+LLVMVER		= 11.0.0
 LLVMSRC		= llvm-project-${LLVMVER}
 LLVMDIR		= ${LLVMSRC}
 LLVMTAR		= ${LLVMDIR}.tar.xz
@@ -22,7 +22,7 @@ CMAKE_CMD	= CC=${GCC} CXX=${GXX} ${CMAKE_BIN}  -G "Unix Makefiles" 				\
 			-DLLVM_PARALLEL_COMPILE_JOBS:STRING=${NCPU}  		\
 			-DLLVM_PARALLEL_LINK_JOBS:STRING=${NCPU}		\
 			-DCMAKE_BUILD_TYPE=Release				\
-			-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lldb;compiler-rt;polly;openmp;libcxx;libcxxabi;libunwind" 
+			-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lldb;compiler-rt;polly;openmp;libcxx;libcxxabi;libunwind;flang;libclc;libcxxabi;lld" 
 
 #                        -DLLVM_ENABLE_CXX1Y:BOOL=On -DLLVM_ENABLE_LTO:BOOL=Off \
 #                        -DLLVM_PARALLEL_COMPILE_JOBS:STRING=${NCPU}  \

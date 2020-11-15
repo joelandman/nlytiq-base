@@ -10,11 +10,11 @@ include config/options.config
 
 ### list of all supported packages
 
-compiler = cmake llvm 
+compiler = llvm 
 prereqs  = perl5 perl5mods rust
-locallibs= 
+locallibs= openblas
 base     = gnuplot python 
-environs = octave julia R 
+environs = julia octave R 
 misc	 = jupyter_kernels spark 
 
 # package construction

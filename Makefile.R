@@ -1,7 +1,7 @@
 include config/base.config
 
 #### R  
-RVER		= 4.0.2
+RVER		= 4.0.3
 R		= R-${RVER}
 R_INST_PATH	= ${NLYTIQ_INST_PATH}
 
@@ -79,7 +79,6 @@ install-R-modules: install-R
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("bspec")' 
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("bit64")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("rjson")'
-	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("IRkernel")'
 	touch install-R-modules
 
 clean-R:

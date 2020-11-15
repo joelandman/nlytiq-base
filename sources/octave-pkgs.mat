@@ -1,0 +1,11 @@
+#!/usr/bin/env octave
+
+pkg install -forge dataframe
+pkg install -forge io
+pkg install -forge linear-algebra
+pkg install -forge struct
+pkg install -forge parallel
+pkg install -forge statistics
+pkg install -forge symbolic
+pkg install -forge matgeom
+

@@ -26,7 +26,7 @@ install-jupyter-mods: install-jupyter
 	export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ;\
 	export JUPYTER=${NLYTIQ_INST_PATH}/bin/jupyter ;\
 	JULIA_PKGDIR=${NLYTIQ_INST_PATH}/julia ${NLYTIQ_INST_PATH}/bin/julia -e 'using Pkg ; Pkg.add("IJulia")'	
-
+	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("IRkernel")'
 	touch install-jupyter-mods
 
 clean-jupyter:

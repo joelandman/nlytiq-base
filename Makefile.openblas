@@ -1,0 +1,38 @@
+include config/base.config
+include config/forcegcc.config
+
+#### Octave
+OBLASVER		= 0.3.10
+OBLAS			= OpenBLAS-${OBLASVER}
+OBLAS_INST_PATH		= ${NLYTIQ_INST_PATH}
+
+
+# ${_EPF_} contains the front matter for configure after the include below
+include config/configure.prefix.flag.config
+
+_LDP_ = LD_LIBRARY_PATH=${NLYTIQ_LIB_PATH}
+
+#--------------------------------------------------------------------------#
+
+all:    	install-openblas 
+
+clean:		clean-openblas
+
+configure-openblas:
+	tar -zxvf sources/${OBLAS}.tar.gz
+	touch configure-openblas
+
+build-openblas: configure-openblas
+	cd ${OBLAS} ; \
+		make TARGET=SANDYBRIDGE BINARY=64 USE_OPENMP=1 \
+		USE_THREAD=1 NUM_THREADS=${NCPU} USE_TLS=1 \
+		MAKE_NB_JOBS=${NCPU} GEMM_MULTITHREAD_THRESHOLD=50
+	touch build-openblas
+
+install-openblas: build-openblas
+	cd ${OBLAS} ; \
+		make PREFIX=${NLYTIQ_INST_PATH} install
+	touch install-openblas
+
+clean-openblas:
+	rm -rf  build-openblas configure-openblas install-openblas ${OBLAS}

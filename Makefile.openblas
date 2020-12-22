@@ -24,9 +24,9 @@ configure-openblas:
 
 build-openblas: configure-openblas
 	cd ${OBLAS} ; \
-		make TARGET=SANDYBRIDGE BINARY=64 USE_OPENMP=1 \
-		USE_THREAD=1 NUM_THREADS=${NCPU} USE_TLS=1 \
-		MAKE_NB_JOBS=${NCPU} GEMM_MULTITHREAD_THRESHOLD=50
+		make TARGET=ZEN BINARY=64 USE_OPENMP=1 \
+		USE_TLS=1 MAKE_NB_JOBS=${NCPU} \
+		GEMM_MULTITHREAD_THRESHOLD=50
 	touch build-openblas
 
 install-openblas: build-openblas

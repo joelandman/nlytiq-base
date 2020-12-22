@@ -21,9 +21,9 @@ GCC_VER         =
 ifeq ($(GCC),1)
 CC             = ${GCC_PATH}gcc${GCC_VER}
 CXX            = ${GCC_PATH}g++${GCC_VER}
-CFLAGS         = -fPIC -O3 -malign-double -g -mtune=native
-CXXFLAGS       = -fPIC -O3 -malign-double -g -mtune=native
-FCFLAGS	       = -fPIC -O3 -malign-double -g -mtune=native
+CFLAGS         = -fPIC -O3 -malign-double  -mtune=native
+CXXFLAGS       = -fPIC -O3 -malign-double  -mtune=native
+FCFLAGS	       = -fPIC -O3 -malign-double  -mtune=native
 FC             = ${GCC_PATH}gfortran{$GCC_VER}
 F77            = ${FC}
 endif

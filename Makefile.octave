@@ -9,7 +9,6 @@ OCTAVE_INST_PATH	= ${NLYTIQ_INST_PATH}
 OCTAVEOPTS		= --enable-openmp 		\
 			  --enable-threads=posix	\
 			  --disable-atomic-refcount	\
-			  --enable-jit			\
 			  --with-blas="-lopenblas"	\
 			  --disable-float-truncate 
 

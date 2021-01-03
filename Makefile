@@ -10,16 +10,16 @@ include config/options.config
 
 ### list of all supported packages
 
-compiler = llvm 
+compiler = llvm
 prereqs  = perl5 perl5mods rust
 locallibs= openblas
-base     = gnuplot python 
-environs = julia octave R 
-misc	 = jupyter_kernels spark 
+base     = gnuplot python
+environs = julia octave R
+misc	 = maxima jupyter_kernels spark 
 
 # package construction
 all_packages = ${compiler} ${prereqs} ${locallibs} ${base} ${environs} ${misc}
-packages = 
+packages =
 
 #Linux
 ifeq (${OS},Linux)
@@ -79,15 +79,15 @@ endif
 ### boundaries (all, clean) are respected, and are working ... such that
 ###
 ###    make -f Makefile.$package
-### 
+###
 ### will generate a newly installed package, and
-### 
+###
 ###    make -f Makefile.$package clean
 ###
 ### will clean up the build
 
 
-### The below are the mechanisms used to create build targets, completed 
+### The below are the mechanisms used to create build targets, completed
 ### build targets, and clean up.
 ###
 build    = $(addsuffix .build,$(packages))
@@ -108,13 +108,12 @@ endif
 
 
 %.complete: %.build
-	mkdir -p ${NLYTIQ_INST_PATH}	
+	mkdir -p ${NLYTIQ_INST_PATH}
 	$(MAKECMD) -f Makefile.$*
 	touch $*.complete
 
-clean:	
+clean:
 	for p in $(all_packages) ; do \
 		$(MAKECMD) -f Makefile.$$p clean ; \
 		rm -f $$p.build $$p.packages $$p.complete ; \
 	done
-

@@ -10,8 +10,8 @@ include config/options.config
 
 ### list of all supported packages
 
-compiler = llvm
-prereqs  = perl5 perl5mods rust
+compiler = llvm 
+prereqs  = perl5 perl5mods rust go
 locallibs= openblas
 base     = gnuplot python
 environs = julia octave R

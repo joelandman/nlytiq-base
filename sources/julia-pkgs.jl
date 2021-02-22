@@ -52,6 +52,7 @@ pkgs = [
 #	"TensorBoardLogger",
 	"PyPlot",
 	"Javis",
+	"OhMyREPL',
 	"PackageCompiler"
        ]
 

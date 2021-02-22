@@ -26,7 +26,12 @@ build-openblas: configure-openblas
 	cd ${OBLAS} ; \
 		make TARGET=ZEN BINARY=64 USE_OPENMP=1 \
 		USE_TLS=1 MAKE_NB_JOBS=${NCPU} \
-		GEMM_MULTITHREAD_THRESHOLD=50
+		GEMM_MULTITHREAD_THRESHOLD=50  \
+		NO_FORTRAN=0 \
+		NOFORTRAN=0  \
+		NO_LAPACK=0  \
+		NO_STATIC=0  \
+		NO_DYNAMIC=0
 	touch build-openblas
 
 install-openblas: build-openblas

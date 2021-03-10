@@ -19,7 +19,7 @@ pkgs = [
 	"OrdinaryDiffEq",
 	"Flux",
 	"LinuxPerf",
-#	"SpecialFunctions",
+	"SpecialFunctions",
 	"ScikitLearn",
 	"UnicodePlots",
 	"FileIO",
@@ -43,16 +43,14 @@ pkgs = [
 	"TimerOutputs",
 	"Optim",
 	"UnicodePlots",
-#	"TensorFlow",
 	"Primes",
 	"XLSX",
 	"Query",
 	"Pluto",
-#	"Turing",
-#	"TensorBoardLogger",
+	"Turing",
 	"PyPlot",
 	"Javis",
-	"OhMyREPL',
+	"OhMyREPL",
 	"PackageCompiler"
        ]
 

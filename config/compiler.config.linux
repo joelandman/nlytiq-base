@@ -46,7 +46,7 @@ endif
 
 # fortran flags: needed for Julia, R, Octave.  Change if using another
 # compiler.
-FCFLAGS         = -O3 -g -malign-double -mtune=native
+FCFLAGS         = -O3 -malign-double -mtune=native
 FC              = ${GCC_PATH}gfortran${GCC_VER}
 FFLAGS          = ${FCFLAGS}
 ### use locally compiled atlas or not

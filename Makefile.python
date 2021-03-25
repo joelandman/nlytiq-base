@@ -71,7 +71,7 @@ install-python-modules: install-python
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install sympy
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install fortran-language-server
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install scipy
-
+	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install requests
 	# note: these are the non-GPU versions of the below
 	# To Do: Add in GPU versions
 	#${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install tensorflow-gpu

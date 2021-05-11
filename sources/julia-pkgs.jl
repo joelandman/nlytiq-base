@@ -45,8 +45,8 @@ pkgs = [
 	"Loess",
 	"DSP",
 	"SmoothingSplines",
-	"ThreadsX",
-	"HTTP"
+	"HTTP",
+	"ThreadsX"
        ]
 
 for p ∈  pkgs

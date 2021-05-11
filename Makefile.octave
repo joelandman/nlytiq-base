@@ -39,7 +39,7 @@ clean:		clean-octave
 configure-octave: 
 	tar -Jxvf sources/${OCTAVE}.tar.xz
 	cd ${OCTAVE} ;\
-		${_LDP_} ${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} ${OCTAVEOPTS} CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"
+		${_EPF_}  ./configure --prefix=${NLYTIQ_INST_PATH} ${OCTAVEOPTS} CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"
 	touch configure-octave
 
 make-octave: configure-octave

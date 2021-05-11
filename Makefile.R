@@ -70,18 +70,13 @@ install-R-modules: install-R
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("IRkernel")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'IRkernel::installspec()'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("ggplot")'
-	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("tseries")'
+	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("onstatseries")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("gplots")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("gtools")'
-	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("parallelize.dynamic")'
-	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("partools")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("tframe")'
-	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("forecast")'
-	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("ltsa")'
-	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("bspec")' 
-	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("bit64")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("rjson")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("tidyverse")'
+	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("shiny")'
 	touch install-R-modules
 
 clean-R:

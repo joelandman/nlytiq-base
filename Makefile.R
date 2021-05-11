@@ -1,7 +1,7 @@
 include config/base.config
 
 #### R  
-RVER		= 4.0.4
+RVER		= 4.0.5
 R		= R-${RVER}
 R_INST_PATH	= ${NLYTIQ_INST_PATH}
 
@@ -67,6 +67,8 @@ install-R-modules: install-R
 	echo "R_LIBS=${NLYTIQ_INST_PATH}/Rpackages/" >> ${HOME}/.Renviron
 	#
 	# now install the modules we want
+	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("IRkernel")'
+	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'IRkernel::installspec()'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("ggplot")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("tseries")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("gplots")'

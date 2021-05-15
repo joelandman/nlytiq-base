@@ -2,7 +2,7 @@ include config/base.config
 
 #### llvm
 LLVMVER		= 12.0.0
-LLVMSRC		= llvm-project-${LLVMVER}
+LLVMSRC		= llvm-project-${LLVMVER}.src
 LLVMDIR		= ${LLVMSRC}
 LLVMTAR		= ${LLVMDIR}.tar.xz
 LLVM_INST_PATH	= ${NLYTIQ_INST_PATH}

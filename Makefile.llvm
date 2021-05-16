@@ -13,11 +13,9 @@ else
 CMAKE_BIN       = $(shell which cmake)
 endif
 
-# gcc-9 and later currently fail on build (in Ubuntu 20.04), so use gcc-8 for the moment
-GCC		= gcc
-GXX		= g++
+include config/configure.prefix.flag.config  
 
-CMAKE_CMD	= CC=${GCC} CXX=${GXX} ${CMAKE_BIN}  -G "Unix Makefiles" 				\
+CMAKE_CMD	=    ${CMAKE_BIN} -G "Ninja" 				\
 			-DCMAKE_INSTALL_PREFIX:STRING=${NLYTIQ_INST_PATH} 	\
 			-DLLVM_PARALLEL_COMPILE_JOBS:STRING=${NCPU}  		\
 			-DLLVM_PARALLEL_LINK_JOBS:STRING=${NCPU}		\
@@ -47,8 +45,8 @@ configure-llvm:
 	touch configure-llvm
 
 make-llvm: configure-llvm
-	cd ${BUILDDIR} ; ${CMAKE_CMD} ../llvm
-	cd ${BUILDDIR}  ; make -j${NCPU}
+	cd ${BUILDDIR} ; CFLAGS="${CFLAGS}" CXXFLAGS="${CXXFLAGS}" ${CMAKE_CMD} -D CMAKE_C_COMPILER=${CC} -D CMAKE_CXX_COMPILER=${CXX}  ../llvm
+	cd ${BUILDDIR}  ; ninja -j${NCPU}
 	touch make-llvm
 
 install-llvm: make-llvm

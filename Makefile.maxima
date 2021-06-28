@@ -1,7 +1,7 @@
 include config/base.config
 
 ####
-maximaVER	= 5.44.0
+maximaVER	= 5.45.1
 maxima		= maxima-${maximaVER}
 maximaTAR	= ${maxima}.tar.zstd
 DIR		= $(shell pwd)/${maxima}

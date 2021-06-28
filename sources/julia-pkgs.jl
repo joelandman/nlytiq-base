@@ -46,7 +46,10 @@ pkgs = [
 	"DSP",
 	"SmoothingSplines",
 	"HTTP",
-	"ThreadsX"
+	"ThreadsX",
+	"BenchmarkHistograms",
+	"ProfileView",
+	"Revise"
        ]
 
 for p ∈  pkgs

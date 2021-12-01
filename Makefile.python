@@ -75,9 +75,9 @@ install-python-modules: install-python
 	# note: these are the non-GPU versions of the below
 	# To Do: Add in GPU versions
 	#${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install tensorflow-gpu
-	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install bokeh
-	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install Keras
-	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install torch	
+#	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install bokeh
+#	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install Keras
+#	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install torch	
 	${_EPF_} LD_LIBRARY_PATH=${NLYTIQ_INST_PATH}/lib ${NLYTIQ_INST_PATH}/bin/pip3 install xlrd
 	touch install-python-modules
 

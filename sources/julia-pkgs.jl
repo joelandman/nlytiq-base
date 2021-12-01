@@ -33,7 +33,7 @@ pkgs = [
 	"Pluto",
 	"Turing",
 	"PyPlot",
-	"Javis",
+#	"Javis",
 	"OhMyREPL",
 	"PackageCompiler",
 	"LoopVectorization",

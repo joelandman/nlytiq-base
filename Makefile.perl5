@@ -14,7 +14,7 @@ DARWIN_PATCH_3  = 0001-macos-gettime-emulation.patch
 THR		= Time-HiRes-1.9742
 
 DIR		= $(shell pwd)/${PERL}
-CFLAGS          = -fPIC -O3 -malign-double -g
+CFLAGS          = -fPIC -O3 -malign-double -g -std=c17
 
 ifeq ($(OS), Linux)
 CONFFLAGS      =  -des -Dprefix=${NLYTIQ_INST_PATH} -Duselargefiles  -Duseshrplib -Duse64bitall -Dusethreads -Dccflags="${CFLAGS}" -Dcccdlflags=-fPIC

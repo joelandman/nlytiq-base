@@ -59,4 +59,5 @@ end
 
 Pkg.add(PackageSpec(url="https://github.com/genieframework/Genie.jl"))
 Pkg.add(PackageSpec(url="https://github.com/queryverse/Queryverse.jl"))
+Pkg.add(PackageSpec(url="https://github.com/eliascarv/WebAPI.jl"))
 Pkg.precompile()

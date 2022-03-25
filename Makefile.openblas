@@ -2,7 +2,7 @@ include config/base.config
 include config/forcegcc.config
 
 #### Octave
-OBLASVER		= 0.3.17
+OBLASVER		= 0.3.20
 OBLAS			= OpenBLAS-${OBLASVER}
 OBLAS_INST_PATH		= ${NLYTIQ_INST_PATH}
 

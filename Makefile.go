@@ -1,7 +1,7 @@
 include config/base.config
 
 #### go
-GOVER			= 1.17.2
+GOVER			= 1.18.2
 
 ifeq (${OS},Linux)
 GOTAR			= go${GOVER}.linux-amd64.tar.gz

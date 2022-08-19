@@ -5,7 +5,7 @@ use CPAN;
 use MCE::Loop;
 
 my @mods=qw(
-  Digest::SHA IO::Pty IPC::Cmd
+  Digest::SHA IO::Pty IPC::Cmd IO::Socket::SSL
 	IPC::Run File::Spec File::PathConvert Sys::Hostname ZMQ::LibZMQ3
 	Getopt::Lucid JSON::PP DBI DBD::SQLite Digest::SHA1
 	File::ChangeNotify Data::Serializer Time::ParseDate Moo

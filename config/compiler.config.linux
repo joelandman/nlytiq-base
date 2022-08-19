@@ -21,9 +21,9 @@ GCC_VER         =
 ifeq ($(GCC),1)
 CC             = ${GCC_PATH}gcc${GCC_VER}
 CXX            = ${GCC_PATH}g++${GCC_VER}
-CFLAGS         = -fPIC -O3 -malign-double  -mtune=native
-CXXFLAGS       = -fPIC -O3 -malign-double  -mtune=native
-FCFLAGS	       = -fPIC -O3 -malign-double  -mtune=native
+CFLAGS         = -fPIC -O3 -mtune=native
+CXXFLAGS       = -fPIC -O3 -mtune=native
+FCFLAGS	       = -fPIC -O3 -mtune=native
 FC             = ${GCC_PATH}gfortran{$GCC_VER}
 F77            = ${FC}
 endif
@@ -40,15 +40,11 @@ CXX             = ${_CLPPP_}
 
 CFLAGS          = -O2
 CXXFLAGS        = -O2
+FC              = ${GCC_PATH}gfortran${GCC_VER}
+FFLAGS          = ${FCFLAGS}
 
 endif
 
-
-# fortran flags: needed for Julia, R, Octave.  Change if using another
-# compiler.
-FCFLAGS         = -O3 -malign-double -mtune=native
-FC              = ${GCC_PATH}gfortran${GCC_VER}
-FFLAGS          = ${FCFLAGS}
 ### use locally compiled atlas or not
 BUILDATLAS      = 0
 

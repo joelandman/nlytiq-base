@@ -14,30 +14,26 @@ pkgs = [
 	"LinuxPerf",
 	"UnicodePlots",
 	"FileIO",
-	"Images",
-	"ImageView",
-	"GeometryTypes",
 	"Colors",
 	"JSON",
 	"IJulia",
 	"JuliaInterpreter",
 	"Zygote",
 	"ForwardDiff",
-	"TimerOutputs",
 	"UnicodePlots",
-	"Primes",
 	"XLSX",
 	"Query",
 	"Pluto",
 	"Turing",
 	"PyPlot",
 #	"Javis",
-	"OhMyREPL",
 	"PackageCompiler",
 	"LoopVectorization",
 	"ArgParse",
+	"ArgMacros",
 	"Distributions",
 	"CSV",
+	"JSON",
 	"Statistics",
 	"StatsBase",
 	"Loess",
@@ -47,7 +43,9 @@ pkgs = [
 	"ThreadsX",
 	"BenchmarkHistograms",
 	"ProfileView",
-	"Revise"
+	"Revise",
+	"StaticCompiler",
+	"StaticTools"
        ]
 
 for p ∈  pkgs
@@ -57,5 +55,5 @@ end
 
 Pkg.add(PackageSpec(url="https://github.com/genieframework/Genie.jl"))
 Pkg.add(PackageSpec(url="https://github.com/queryverse/Queryverse.jl"))
-Pkg.add(PackageSpec(url="https://github.com/eliascarv/WebAPI.jl"))
+#Pkg.add(PackageSpec(url="https://github.com/eliascarv/WebAPI.jl"))
 Pkg.precompile()

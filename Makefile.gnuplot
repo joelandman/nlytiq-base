@@ -1,7 +1,7 @@
 include config/base.config
 
 ####   
-GNUPLOTVER	= 5.4.4
+GNUPLOTVER	= 5.4.5
 GNUPLOT		= gnuplot-${GNUPLOTVER}
 GNUPLOTTAR	= ${GNUPLOT}.tar.gz
 PFLAGS          = 

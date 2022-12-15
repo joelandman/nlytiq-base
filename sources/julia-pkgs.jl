@@ -18,15 +18,10 @@ pkgs = [
 	"JSON",
 	"IJulia",
 	"JuliaInterpreter",
-	"Zygote",
 	"ForwardDiff",
 	"UnicodePlots",
-	"XLSX",
 	"Query",
 	"Pluto",
-	"Turing",
-	"PyPlot",
-#	"Javis",
 	"PackageCompiler",
 	"LoopVectorization",
 	"ArgParse",
@@ -45,7 +40,8 @@ pkgs = [
 	"ProfileView",
 	"Revise",
 	"StaticCompiler",
-	"StaticTools"
+	"StaticTools",
+  "Queryverse"
        ]
 
 for p ∈  pkgs
@@ -54,6 +50,7 @@ for p ∈  pkgs
 end
 
 Pkg.add(PackageSpec(url="https://github.com/genieframework/Genie.jl"))
-Pkg.add(PackageSpec(url="https://github.com/queryverse/Queryverse.jl"))
 #Pkg.add(PackageSpec(url="https://github.com/eliascarv/WebAPI.jl"))
+Pkg.add(PackageSpec(url="https://github.com/kmsquire/ArgParse2.jl"))
+
 Pkg.precompile()

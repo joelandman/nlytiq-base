@@ -11,14 +11,12 @@ pkgs = [
 	"StatsPlots",
 	"Plots",
 	"CUDA",
-	"LinuxPerf",
 	"UnicodePlots",
 	"FileIO",
 	"Colors",
 	"JSON",
 	"IJulia",
 	"JuliaInterpreter",
-	"ForwardDiff",
 	"UnicodePlots",
 	"Query",
 	"Pluto",
@@ -40,8 +38,7 @@ pkgs = [
 	"ProfileView",
 	"Revise",
 	"StaticCompiler",
-	"StaticTools",
-  "Queryverse"
+	"StaticTools"
        ]
 
 for p ∈  pkgs

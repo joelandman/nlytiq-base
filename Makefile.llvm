@@ -1,7 +1,7 @@
 include config/base.config
 
 #### llvm
-LLVMVER		= 15.0.3
+LLVMVER		= 15.0.7
 LLVMSRC		= llvm-project-${LLVMVER}.src
 LLVMDIR		= ${LLVMSRC}
 LLVMTAR		= ${LLVMDIR}.tar.xz

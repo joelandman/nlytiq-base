@@ -10,6 +10,7 @@ clean:		clean-rust
 
 install-rustbin: ${RUSTUPINIT}
 	CARGO_INSTALL_ROOT=${NLYTIQ_INST_PATH} RUSTUP_HOME=${NLYTIQ_INST_PATH} ${RUSTUPINIT} -v -y
+	CARGO_INSTALL_ROOT=${NLYTIQ_INST_PATH} RUSTUP_HOME=${NLYTIQ_INST_PATH} ${HOME}/.cargo/bin/rustup update
 	touch install-rustbin
 
 

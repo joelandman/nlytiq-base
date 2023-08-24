@@ -1,7 +1,7 @@
 include config/base.config
 
 ####   
-PYTHONVER		= 3.11.4
+PYTHONVER		= 3.11.5
 PYTHON			= Python-${PYTHONVER}
 PYTHON_INST_PATH	= ${NLYTIQ_INST_PATH}
 

@@ -34,7 +34,6 @@ pkgs = [
 	"SmoothingSplines",
 	"HTTP",
 	"ThreadsX",
-	"BenchmarkHistograms",
 	"ProfileView",
 	"Revise",
 	"StaticCompiler",

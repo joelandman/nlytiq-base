@@ -1,17 +1,17 @@
 include config/base.config
 
 ####   
-GNUPLOTVER	= 5.4.10
+GNUPLOTVER	= 6.0.0
 GNUPLOT		= gnuplot-${GNUPLOTVER}
 GNUPLOTTAR	= ${GNUPLOT}.tar.gz
 PFLAGS          = 
 CONFFLAGS	= --prefix=${NLYTIQ_INST_PATH} --disable-silent-rules \
 		  --enable-stats \
 		  --enable-backwards-compatibility \
-		  --with-x --with-readline=gnu \
+		  --with-readline=gnu \
 		  --with-gd=/usr/lib/x86_64-linux-gnu/	\
 		  --with-pdf=/usr/lib/x86_64-linux-gnu/ \
-		  --with-qt --with-row-help
+		  --with-row-help --without-x --without-qt
 DIR		= $(shell pwd)/${GNUPLOT}
 
 

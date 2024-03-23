@@ -79,12 +79,17 @@ make-julia: make-julia-deps
 	touch make-julia
 
 install-julia: make-julia
+ifeq (${OS},Darwin)
+	mkdir -p ${JULIA_INST_PATH}/{etc,bin,lib}
+	cd ${JULIA_DIR}/usr ; tar -cf - . | (cd ${JULIA_INST_PATH} && tar -xvf - )
+else
 	cd ${JULIA_DIR} ; ${__ENV__SET} ${MAKECMD} install
 	cd ${JULIA_DIR}/${JULIA_DWV} ; tar -cf - . | (cd ${JULIA_INST_PATH} && tar -xvf - )
+endif
 	touch install-julia
 
 install-julia-modules: install-julia
-	mkdir -p ${JULIA_INST_PATH}/julia
+	mkdir -p ${JULIA_INST_PATH}/{etc,bin,lib,libexec}
 	mkdir -p ~/.julia/config
 	echo JULIA_PKGDIR=${JULIA_INST_PATH}/julia >  ${JULIA_INST_PATH}/etc/bashrc.julia
 	echo JULIA_BINDIR=${JULIA_INST_PATH}/bin   >> ${JULIA_INST_PATH}/etc/bashrc.julia

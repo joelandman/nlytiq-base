@@ -1,7 +1,7 @@
 ### nlytiq compiler config for darwin/macosx
 
-GCC     = 0
-CLANG   = 1
+GCC     = 1
+CLANG   = 0
 
 # use for building python
 PYCOMP	= 0
@@ -9,7 +9,8 @@ PYCOMP	= 0
 
 # GCC by default, should be in the default path.  Change this if you need
 #GCC_PATH        = /usr/local/bin/
-#GCC_VER         =-8
+GCC_VER          =-13
+GCC_PATH	 = /opt/homebrew/bin/
 # example
 #  GCC-6.3 installed in /opt/gcc/6.3/bin/gcc-6
 #  GCC_PATH        = /opt/gcc/6.3/bin/
@@ -24,8 +25,8 @@ PYCOMP	= 0
 ifeq ($(GCC),1)
 CC             = ${GCC_PATH}gcc${GCC_VER}
 CXX            = ${GCC_PATH}g++${GCC_VER}
-CFLAGS         = -fPIC -O3 -malign-double -g
-CXXFLAGS       = -fPIC -O3 -malign-double -g
+#CFLAGS         = -fPIC -O3 -malign-double -g
+#CXXFLAGS       = -fPIC -O3 -malign-double -g
 FC             = ${GCC_PATH}gfortran{$GCC_VER}
 F77            = ${FC}
 endif

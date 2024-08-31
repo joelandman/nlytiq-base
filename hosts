@@ -1,0 +1,133 @@
+#
+# hosts         This file describes a number of hostname-to-address
+#               mappings for the TCP/IP subsystem.  It is mostly
+#               used at boot time, when no name servers are running.
+#               On small systems, this file can be used instead of a
+#               "named" name server.
+# Syntax:
+#    
+# IP-Address  Full-Qualified-Hostname  Short-Hostname
+#
+127.0.0.1	localhost	localhost.localdomain	localhost.scalability.org
+
+192.168.5.10	wlan1.scalability.org	wlan1
+192.168.5.11	wlan2.scalability.org wlan2
+192.168.5.12	wlan3.scalability.org wlan3
+192.168.5.9     orbi.scalability.org orbi	
+192.168.5.3	maradns.scalability.org maradns
+192.168.5.33    maradns2.scalability.org maradns2
+192.168.5.34	maradns-v2-1.scalability.org maradns-v2-1
+192.168.5.35    maradns-v2-2.scalability.org maradns-v2-2
+192.168.5.232	hermes.scalability.org hermes
+192.168.5.221   hermes-ipmi.scalability.org hermes-ipmi
+192.168.5.190   hermes-ipmi.scalability.org hermes-ipmi
+192.168.5.233	external-dns.scalability.org external-dns edns
+192.168.5.234	vhermes.scalability.org vhermes
+192.168.5.253	openvpn.scalability.org openvpn
+#192.168.5.234	mirror.scalability.org mirror
+192.168.5.235	slurm.scalability.org slurm
+192.168.5.236	home.mistborn home mistborn
+192.168.5.237 	clickhouse-server.scalability.org clickhouse-server ch
+167.99.1.253	gl-do
+192.168.5.71	cn1.scalability.org cn1
+192.168.5.72    cn2.scalability.org cn2
+192.168.5.73    cn3.scalability.org cn3
+192.168.5.74    cn4.scalability.org cn4
+10.100.5.235 vslurm.scalability.org vslurm
+10.100.5.71  vcn1
+10.100.5.72  vcn2
+10.100.5.73  vcn3
+10.100.5.74  vcn4
+
+
+192.168.5.117	zoidberg.scalability.org zoidberg crunch-r.scalability.org crunch-r logs.scalability.org cpan.scalability.org cpan mysql.scalability.org mysql pgsql.scalability.org pgsql munin phpmyadmin.scalability.org munin.scalability.org munin phpmyadmin zoidberg.dc84ab5ad7f441a59a9475443192e8a8.plex.direct 
+192.168.5.118	zoidberg-ipmi crunch-r-ipmi
+#192.168.5.243	zoidberg-ipmi crunch-r-ipmi 
+
+
+
+# print server
+192.168.5.4	printserver	
+192.168.5.5	hpprinter	
+
+# mail server
+#192.168.5.8	mail
+
+192.168.5.21	smash.scalability.org smash
+#192.168.5.216	cubert.scalability.org cubert
+#192.168.5.220	mail2.scalability.org smtp2.scalability.org mail2 smtp2 mail2.sciencewerks.com smtp2.sciencewerks.com
+#192.168.5.222	shell
+192.168.5.226	nlytiq-support
+#192.168.5.227	centos7
+192.168.5.228	wireguard streisand
+192.168.5.229	pihole
+192.168.5.219	pihole2
+192.168.5.230	auth
+192.168.5.231	wg
+192.168.5.100	ssh ssh.scalability.org
+192.168.5.254	mordor.scalability.org mordor fortress.scalability.org fortress
+192.168.5.154	fortress2.scalability.org fortress2
+192.168.5.251	fortress-ipmi
+192.168.5.250	calculon myadmin
+192.168.5.252	calculon-ipmi
+192.168.5.239	bcm
+192.168.5.240	bender.scalability.org bender
+192.168.5.241   bender-ipmi
+192.168.5.242	leela.scalability.org leela
+192.168.5.243	leela-ipmi
+192.168.5.244	mellanoxsw mlnxsw mellanox sw6036
+192.168.5.245	nibbler.scalability.org nibbler mirror.scalability.org mirror www.scalability.org 
+192.168.5.246	ubunturepo
+192.168.5.247	aristasw
+192.168.5.248	ocl1
+192.168.5.249   mlnx10gsw
+192.168.5.223	juliapkg.scalability.org juliapkg
+192.168.5.224	nlytiq
+192.168.5.225	hugo-blog
+192.168.5.201	localdns2-1 dns1
+192.168.5.202   localdns2-2 dns2
+192.168.4.210	ghost blog commento 
+192.168.5.1	mordor
+192.168.5.2	alamo
+192.168.5.6	masada
+
+### nyble lab machines
+10.10.128.17    hades
+10.10.3.17      hades-ipmi
+
+### home lab VMs
+192.168.5.48	rocky8
+
+192.168.5.50	kif
+192.168.5.53	io
+192.168.5.52	lrrr
+192.168.5.63    lrrr-wifi
+
+192.168.5.54	morbo
+192.168.5.62	morbo-wifi
+
+192.168.5.56	zap
+192.168.5.64	zap-wifi
+192.168.5.57	joes-iMac
+
+192.168.5.51	scruffy
+
+#################################################################
+# lab-canton
+10.10.0.250	nyble lab-utility lab-utility.scalability.org lab-s3 lab-s3.scalability.org 
+
+
+
+#################################################################
+### Scalable Informatics VM systems for temp use until shut down
+
+#192.168.5.20	smtp.scalableinformatics.com
+#192.168.5.13	rt4  support
+#192.168.5.18	supportvpn.scalableinformatics.com
+#192.168.5.14	gitlabapp.scalableinformatics.com gitlab.scalableinformatics.com
+#192.168.5.15	ldap.scalableinformatics.com ldap
+
+#################################################################
+# sci-hub
+80.82.77.83	sci-hub.io
+80.82.77.84	sci-hub.io	

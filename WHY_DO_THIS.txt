@@ -1,0 +1,56 @@
+Why create/use this?  
+
+A perfectly valid question, in light of several (many) package managers
+such as homebrew on mac/linux, spack on linux, etc.  
+
+First reason has to do with long experience dealing with linux distributions,
+and their long disdain for either up-to-date, or even non end-of-life 
+base packages.  Red Hat in particular (as well as any distro based upon it)
+has notoriously shipped completely EOL Perl, Python, and other tools as their
+system default installs.  While this may be fine for their tooling, as 
+a computational scientist or engineer, a researcher, anyone in a 
+rapidly evolving tooling ecosystem, this means you are forever caught between
+the system version of tooling (which IT will almost never want to update
+for you to use later versions), and the version you need.
+
+To a degree, this is what tools such as modules (lmodule/gmodule) are 
+designed to address as well.  And in some cases they do a great job of it.
+In other cases, that I've experienced directly at various work locations in 
+the past, this leads to a combinatorial explosion of configurations.  Which
+makes reproducibility, debugging, recompilation of patched versions
+pretty much a generator of waste heat in the universe, and not something
+that would actually benefit the user.  Plus the rather large baggage one
+must carry around for modules.  They'll work great on supercomputers.  Not
+so well on personal workstations.
+
+Docker containers are another option.  These are great for some specific things,
+though I've encountered many end user sites that refuse to use containers
+for security reasons ... not because containers are insecure by design 
+(this is arguable on linux), but because one cannot always vouch for the 
+elements going into the containers.  All you need is one compromised library
+(libxz anyone?) to take an entire unrelated stack down.
+
+Finally, one of my major critiques of many of the packages available are
+that they are built by non-practioners with options suitable for sysadmins
+to build packages, but not for users.  Look at debian's python3 debacle.  
+Just try to install a needed package with `pip3 install torch` or similar.
+You find out that the package maintainers care more about the package
+builder/philosophy behind the builds, than the users going `WTaF is going
+on here?`.  This is a common feature of builds/packages/philosophy with 
+a defined "right way to do things", which doesn't mesh with your needs.
+
+So this project exists to give you a local install in a local path
+(curiously hosted in $HOME/local) of packages you may wish to use.  The
+only real philosophy of this is that you control what you build, 
+the way you build it.  You don't need someone's permission to use these
+(all open source) tools.  You just need to build them.  If you wish
+to put them into a container, so be it.  Or modules.  Or Spack.  
+
+It really doesn't matter in the end.  If you don't find this useful, 
+by all means use something else.  I find this useful.  I use it everywhere
+from small VMs, laptops, deskside/workstations, through supercomputers.
+
+Its quite nice to have the packages work the same everywhere, so that
+your code/environment is portable between systems.
+
+Joe Landman 1-Sept-2024

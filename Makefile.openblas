@@ -2,7 +2,7 @@ include config/base.config
 include config/forcegcc.config
 
 #### Octave
-OBLASVER		= 0.3.27
+OBLASVER		= 0.3.28
 OBLAS			= OpenBLAS-${OBLASVER}
 OBLAS_INST_PATH		= ${NLYTIQ_INST_PATH}
 
@@ -24,7 +24,7 @@ configure-openblas:
 
 build-openblas: configure-openblas
 	cd ${OBLAS} ; \
-		make TARGET=ZEN BINARY=64 USE_OPENMP=1 \
+		make TARGET=SKYLAKEX BINARY=64 USE_OPENMP=1 \
 		USE_TLS=1 MAKE_NB_JOBS=${NCPU} \
 		GEMM_MULTITHREAD_THRESHOLD=50  \
 		NO_FORTRAN=0 \

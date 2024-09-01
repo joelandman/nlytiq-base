@@ -37,7 +37,7 @@ configure-julia:
 	fi
 
 	rm -f ${JULIA_DIR}/Make.user
-	cp -f julia.Make.user ${JULIA_DIR}/Make.user
+	cp -f config/julia.Make.user ${JULIA_DIR}/Make.user
 
 ifeq (${OS},Darwin)
 	# use 'brew install libunwind mpfr mbedtls libssh2 curl wget suitesparse'

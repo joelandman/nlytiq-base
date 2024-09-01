@@ -16,7 +16,7 @@
    * Xwindows (R)
    * PCRE (Python, R)
 
-Note: gcc 8 and 9 work well for this.  LLVM tends to be able to compile most of these packages
+Note: gcc 8 through 14 work well for this.  LLVM tends to be able to compile most of these packages
 though there are occassional compatibility issues.  If you would like to adjust which compiler
 is used, options for the compilation, paths to the compiler, make a (backup) copy of 
 
@@ -30,34 +30,23 @@ and FreeBSD in the past, but this support has been removed.
 
 ##Building
 
+TL;DR version: 
+    cd scripts
+    sudo ./prep_$OS.sh
+
+where $OS is debian1{1,2}, ubuntu2{2,4}.04, rocky8, or mac.
+Then
+    cd ..
+    make
+
 Note: this will take a long time, as several of the codes
 are quite time consuming to build.  The process is (mostly)
 automated, and undergoing rapid development.  The builds are
-done in parallel whenever possible.  On my 6 core system with ample
-memory and fast disk, builds (when rust is enabled) have taken
-more than 2 hours.
+done in parallel whenever possible. 
 
-Note: if you are building on Mac, I'd recommend homebrew.  Then you'll
-want to install gcc@8, and the following dependent packages:
-	
-	libssh2
-	zlib
-	tcl-tk
-	ossp-uuid
-	suite-sparse
-	mbedtls
-	curl
-	libunwind-headers
-	mpfr
-	xz
-	libedit
-	with-readline
-	cmake
-	gnu-sed
+Note: if you are building on Mac, homebrew is strongly recommended,
+and is the basis of the prep_mac.sh script. 
 
-The prep_mac.bash script will do this for you.  If you are running on linux, use the appropriate prep_distro.bash script by
-	sudo ./prep_$DISTRO.bash
-	
 To build everything after installing any dependencies
 
   make

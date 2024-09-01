@@ -11,6 +11,7 @@ pkgs = [
 	"StatsPlots",
 	"Plots",
 	"CUDA",
+  "AMDGPU",
 	"UnicodePlots",
 	"FileIO",
 	"Colors",

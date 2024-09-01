@@ -1,0 +1,9 @@
+numpy
+pyzmq
+sympy
+fortran-language-server
+scipy
+requests
+polars
+nuitka
+tqdm

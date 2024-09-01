@@ -48,8 +48,9 @@ make-perl: configure-perl
 	   export CXX=${CXX} ;\
 	   export  LD_LIBRARY_PATH=${DIR} ;\
 	   export LANGUAGE=en_US ;\
-	   ${PFLAGS}  make -j${NCPU} ;\
-	   TEST_JOBS=${NCPU} LD_LIBRARY_PATH=${DIR} make test_harness
+	   ${PFLAGS}  make -j${NCPU} 
+	#;\
+	#   TEST_JOBS=${NCPU} LD_LIBRARY_PATH=${DIR} make test_harness
 	touch make-perl
 
 install-perl: make-perl

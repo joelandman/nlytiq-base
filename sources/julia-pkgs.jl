@@ -10,8 +10,8 @@ pkgs = [
 	"DataFramesMeta",
 	"StatsPlots",
 	"Plots",
-	"CUDA",
-  "AMDGPU",
+#	"CUDA",
+#	"AMDGPU",
 	"UnicodePlots",
 	"FileIO",
 	"Colors",
@@ -20,14 +20,12 @@ pkgs = [
 	"JuliaInterpreter",
 	"UnicodePlots",
 	"Query",
-	"Pluto",
 	"PackageCompiler",
 	"LoopVectorization",
 	"ArgParse",
 	"ArgMacros",
 	"Distributions",
 	"CSV",
-	"JSON",
 	"Statistics",
 	"StatsBase",
 	"Loess",
@@ -35,10 +33,7 @@ pkgs = [
 	"SmoothingSplines",
 	"HTTP",
 	"ThreadsX",
-	"ProfileView",
-	"Revise",
-	"StaticCompiler",
-	"StaticTools"
+	"Revise"
        ]
 
 for p ∈  pkgs

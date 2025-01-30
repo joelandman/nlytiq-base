@@ -5,5 +5,7 @@ fortran-language-server
 scipy
 requests
 polars
+pandas
 nuitka
 tqdm
+uv

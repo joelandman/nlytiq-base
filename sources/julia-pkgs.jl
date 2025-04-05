@@ -4,22 +4,17 @@ using Pkg
 using Printf
 
 pkgs = [
-	"Test",
 	"BenchmarkTools",
 	"DataFrames", 
 	"DataFramesMeta",
 	"StatsPlots",
 	"Plots",
-#	"CUDA",
-#	"AMDGPU",
 	"UnicodePlots",
 	"FileIO",
 	"Colors",
 	"JSON",
 	"IJulia",
-	"JuliaInterpreter",
 	"UnicodePlots",
-	"Query",
 	"PackageCompiler",
 	"LoopVectorization",
 	"ArgParse",
@@ -28,9 +23,6 @@ pkgs = [
 	"CSV",
 	"Statistics",
 	"StatsBase",
-	"Loess",
-	"DSP",
-	"SmoothingSplines",
 	"HTTP",
 	"ThreadsX",
 	"Revise"

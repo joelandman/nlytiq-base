@@ -38,8 +38,7 @@ install-maxima: make-maxima
 	touch install-maxima
 
 install-quicklisp: install-maxima
-	# again, assume sbcl
-	sbcl --load sources/quicklisp.lisp < sources/quicklisp.install
+	cd sources ; ./maxima-install-quicklisp.max
 	touch install-quicklisp
 
 

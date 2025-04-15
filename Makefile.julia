@@ -2,7 +2,7 @@ include config/base.config
 include config/forcegcc.config
 #include config/forcellvm.config
 
-JULIA_VER = 1.11.4
+JULIA_VER = 1.11.5
 JULIA_NAME = ${JULIA_VER}-full
 JULIA_INST_PATH	= ${NLYTIQ_INST_PATH}
 JULIA_DWV = julia-${JULIA_VER}

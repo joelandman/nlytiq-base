@@ -1,0 +1,2 @@
+#!/usr/bin/env -S maxima
+:lisp (load "quicklisp.lisp")

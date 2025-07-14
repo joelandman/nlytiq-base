@@ -1,7 +1,7 @@
 include config/base.config
 
 ####   
-PERLVER		= 5.40.1
+PERLVER		= 5.42.0
 PERL		= perl-${PERLVER}
 PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 PFLAGS          = 

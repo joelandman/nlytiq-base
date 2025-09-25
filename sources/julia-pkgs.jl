@@ -25,7 +25,8 @@ pkgs = [
 	"StatsBase",
 	"HTTP",
 	"ThreadsX",
-	"Revise"
+	"Revise",
+  "GenieFramework"
        ]
 
 for p ∈  pkgs
@@ -33,8 +34,6 @@ for p ∈  pkgs
 	Pkg.add(p)
 end
 
-Pkg.add(PackageSpec(url="https://github.com/genieframework/Genie.jl"))
-#Pkg.add(PackageSpec(url="https://github.com/eliascarv/WebAPI.jl"))
 Pkg.add(PackageSpec(url="https://github.com/kmsquire/ArgParse2.jl"))
 
 Pkg.precompile()

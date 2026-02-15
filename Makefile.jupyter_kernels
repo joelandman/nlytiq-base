@@ -17,18 +17,40 @@ install-jupyter:
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install jupyterlab
 	touch install-jupyter
 
-install-jupyter-mods: install-jupyter
+install-jupyter-mods: install-jupyter-gnuplot install-jupyter-perl install-jupyter-julia install-jupyter-R install-jupyter-octave install-jupyter-scripts install-jupyter-maxima
+	touch install-jupyter
+
+install-jupyter-perl: install-jupyter
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/cpan Devel::IPerl
 	echo "you need to run iperl to finish setting up the perl5 kernel in jupyter"
+	touch install-jupyter-perl
+
+install-jupyter-gnuplot: install-jupyter
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install gnuplot_kernel
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/python3 -m gnuplot_kernel install --user
-	export PYTHON=${NLYTIQ_INST_PATH}/bin/python3 ;\
-	export JUPYTER=${NLYTIQ_INST_PATH}/bin/jupyter ;\
-	JULIA_PKGDIR=${NLYTIQ_INST_PATH}/julia ${NLYTIQ_INST_PATH}/bin/julia -e 'using Pkg ; Pkg.add("IJulia")'	
+	touch install-jupyter-gnuplot
+	
+install-jupyter-julia: install-jupyter
+	JULIA_PKGDIR=${NLYTIQ_INST_PATH}/julia julia -e 'using Pkg ; Pkg.add("IJulia")'	
+	touch install-jupyter-julia
+
+install-jupyter-R: install-jupyter
 	if [[ -e ${NLYTIQ_INST_PATH}/bin/R ]]; then ${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("IRkernel")' ; fi
+	touch install-jupyter-R
+
+install-jupyter-octave: install-jupyter
 	if [[ -e ${NLYTIQ_INST_PATH}/bin/octave ]]; then ${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install octave_kernel ; fi
+	touch install-jupyter-octave
+
+install-jupyter-scripts: install-jupyter
 	cp -f scripts/* ${NLYTIQ_INST_PATH}/bin/
-	touch install-jupyter-mods
+	touch install-jupyter-scripts
+
+install-jupyter-maxima: install-jupyter
+	tar -zxvf sources/maxima-kernel.tar.gz
+	${NLYTIQ_INST_PATH}/bin/pip3 install pexpect ipckernel
+	cd maxima-kernel ; 	${NLYTIQ_INST_PATH}/bin/pip3 -e . ; 	${NLYTIQ_INST_PATH}/bin/python3 install.py 
+	touch install-jupyter-maxima
 
 clean-jupyter:
-	rm -rf ${PYTHON} install-jupyter install-jupyter-mods 
+	rm -rf ${PYTHON} install-jupyter* maxima-kernel

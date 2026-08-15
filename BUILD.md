@@ -76,7 +76,40 @@ A tarball already present in sources/ is verified and left alone, so the above
 is cheap to re-run.  A checksum that does not match is always a hard error:
 the build stops rather than using the file.
 
-To bump a package version, edit the version variable at the top of the
+
+Bumping a package version
+
+See UPDATING.md for the full treatment.  In short:
+
+	scripts/update-package.py --package gnuplot --list-versions
+	scripts/update-package.py --package gnuplot
+
+The first lists what upstream offers, with release dates and ages in days and
+a marker on the version this tree currently pins.  The second downloads the
+newest one, with a progress bar, and updates all three things that have to
+agree: the version variable in Makefile.<pkg>, the package's line in
+sources/manifest.txt (filename, checksum and URL), and the tarball in sources/.
+The checksum is computed from the bytes that actually arrived, and nothing is
+written until the download has finished, so an interrupted run leaves the tree
+as it was.
+
+Pass --version VERSION to pick a specific one rather than the latest, or
+--dry-run to see what would change without downloading or writing anything.
+--list-packages shows the packages it knows about and their pinned versions.
+
+Where each package's versions come from, and the templates used to build its
+download URL, are described in packages.yaml at the top of the tree.  The tool
+needs nothing but python3.  Set GITHUB_TOKEN if you hit GitHub's rate limit on
+anonymous requests.
+
+The version bump is deliberately separate from the build: review it with
+'git diff', then rebuild that package with
+
+	make -f Makefile.<pkg> clean && make -f Makefile.<pkg>
+
+Packages installed some other way -- rust (rustup), spark, jupyter_kernels and
+perl5mods -- have no tarball and are not managed by this tool.  To bump one of
+the packages by hand instead, edit the version variable at the top of the
 relevant Makefile.<pkg> and replace that package's line in sources/manifest.txt
 with the new filename, checksum, and URL.  Take the checksum from upstream
 where they publish one; otherwise download the tarball and run sha256sum on it.

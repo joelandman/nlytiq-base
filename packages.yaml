@@ -1,0 +1,151 @@
+# Upstream package descriptions for scripts/update-package.py
+#
+# Each entry says two things: how to FIND the available versions of a package,
+# and how to USE a particular version -- the tarball name, the download URL,
+# and the Makefile variable that pins it.
+#
+# Bumping a package touches three places, and update-package.py does all three:
+#
+#   1. the version variable in Makefile.<pkg>
+#   2. the package's line in sources/manifest.txt (name, sha256, url)
+#   3. the tarball itself, downloaded into sources/
+#
+# In 'url' and 'filename', these tokens are replaced:
+#
+#   __VERSION__   the full version, e.g. 3.14.3
+#   __MAJOR__     the first component, e.g. 3
+#   __MINOR__     the second component, e.g. 14
+#   __PATCH__     the third component, e.g. 3
+#
+# The 'versions' block selects a probe. Four kinds are understood:
+#
+#   github        GitHub releases (or tags) via the API.  Gives release dates.
+#                 Set GITHUB_TOKEN in the environment to raise the rate limit.
+#   git           'git ls-remote --tags' against any git host.  Works without
+#                 an API or a token, but reports no dates.
+#   html_index    An Apache/nginx style directory listing.  Dates come from the
+#                 listing when it has a date column.
+#   sourceforge   A SourceForge file-release RSS feed.  Gives upload dates.
+#
+# 'pattern' (html_index, sourceforge) and 'tag_pattern' (github, git) are
+# regular expressions with a named group 'version'; entries that do not match
+# are ignored, which is what keeps release candidates, unrelated files and
+# other projects' tags out of the list.
+#
+# 'stable_pattern', where present, marks versions that do NOT match it as
+# prereleases, for upstreams whose numbering encodes that (perl uses odd minor
+# numbers for development releases). Prereleases are hidden unless you pass
+# --include-prerelease.
+#
+# Not listed here, deliberately:
+#
+#   rust              installed through sources/rustup-init.sh, not a tarball
+#   spark             a local git snapshot, no upstream release artifact
+#   jupyter_kernels   installed through pip, no tarball
+#   perl5mods         installed through cpan, no tarball
+
+defaults:
+  sources_dir: sources
+  manifest: sources/manifest.txt
+
+packages:
+
+  openblas:
+    makefile: Makefile.openblas
+    version_var: OBLASVER
+    filename: "OpenBLAS-__VERSION__.tar.gz"
+    url: "https://github.com/OpenMathLib/OpenBLAS/releases/download/v__VERSION__/OpenBLAS-__VERSION__.tar.gz"
+    versions:
+      kind: github
+      repo: OpenMathLib/OpenBLAS
+      tag_pattern: "^v(?P<version>[0-9]+\\.[0-9]+\\.[0-9]+)$"
+
+  julia:
+    makefile: Makefile.julia
+    version_var: JULIA_VER
+    filename: "julia-__VERSION__-full.tar.gz"
+    url: "https://github.com/JuliaLang/julia/releases/download/v__VERSION__/julia-__VERSION__-full.tar.gz"
+    versions:
+      kind: github
+      repo: JuliaLang/julia
+      tag_pattern: "^v(?P<version>[0-9]+\\.[0-9]+\\.[0-9]+)$"
+
+  llvm:
+    # The release tag is llvmorg-X.Y.Z while the version is X.Y.Z, so the tag
+    # prefix lives in the url template and tag_pattern strips it back off.
+    makefile: Makefile.llvm
+    version_var: LLVMVER
+    filename: "llvm-project-__VERSION__.src.tar.xz"
+    url: "https://github.com/llvm/llvm-project/releases/download/llvmorg-__VERSION__/llvm-project-__VERSION__.src.tar.xz"
+    versions:
+      kind: github
+      repo: llvm/llvm-project
+      tag_pattern: "^llvmorg-(?P<version>[0-9]+\\.[0-9]+\\.[0-9]+)$"
+
+  python:
+    makefile: Makefile.python
+    version_var: PYTHONVER
+    filename: "Python-__VERSION__.tar.xz"
+    url: "https://www.python.org/ftp/python/__VERSION__/Python-__VERSION__.tar.xz"
+    versions:
+      kind: html_index
+      url: "https://www.python.org/ftp/python/"
+      # Trailing slash: these are directories, and it also excludes the
+      # release-candidate directories such as 3.15.0rc1/.
+      pattern: "(?P<version>3\\.[0-9]+\\.[0-9]+)/"
+
+  R:
+    # CRAN files live under a major-version directory, src/base/R-4.
+    makefile: Makefile.R
+    version_var: RVER
+    filename: "R-__VERSION__.tar.xz"
+    url: "https://cran.r-project.org/src/base/R-__MAJOR__/R-__VERSION__.tar.xz"
+    versions:
+      kind: html_index
+      url: "https://cran.r-project.org/src/base/R-4/"
+      pattern: "R-(?P<version>4\\.[0-9]+\\.[0-9]+)\\.tar\\.xz"
+
+  octave:
+    makefile: Makefile.octave
+    version_var: OCTAVEVER
+    filename: "octave-__VERSION__.tar.xz"
+    url: "https://ftp.gnu.org/gnu/octave/octave-__VERSION__.tar.xz"
+    versions:
+      kind: html_index
+      url: "https://ftp.gnu.org/gnu/octave/"
+      pattern: "octave-(?P<version>[0-9]+\\.[0-9]+\\.[0-9]+)\\.tar\\.xz"
+
+  perl5:
+    # perl numbers development releases with an odd minor: 5.42.0 is stable,
+    # 5.45.1 is not. stable_pattern keeps the dev ones out of the way.
+    makefile: Makefile.perl5
+    version_var: PERLVER
+    filename: "perl-__VERSION__.tar.gz"
+    url: "https://www.cpan.org/src/5.0/perl-__VERSION__.tar.gz"
+    versions:
+      kind: html_index
+      url: "https://www.cpan.org/src/5.0/"
+      pattern: "perl-(?P<version>5\\.[0-9]+\\.[0-9]+)\\.tar\\.gz"
+      stable_pattern: "^5\\.[0-9]*[02468]\\.[0-9]+$"
+
+  gnuplot:
+    makefile: Makefile.gnuplot
+    version_var: GNUPLOTVER
+    filename: "gnuplot-__VERSION__.tar.gz"
+    url: "https://downloads.sourceforge.net/project/gnuplot/gnuplot/__VERSION__/gnuplot-__VERSION__.tar.gz"
+    versions:
+      kind: sourceforge
+      project: gnuplot
+      path: "/gnuplot"
+      pattern: "/gnuplot-(?P<version>[0-9]+\\.[0-9]+\\.[0-9]+)\\.tar\\.gz$"
+
+  maxima:
+    makefile: Makefile.maxima
+    version_var: maximaVER
+    filename: "maxima-__VERSION__.tar.gz"
+    url: "https://downloads.sourceforge.net/project/maxima/Maxima-source/__VERSION__-source/maxima-__VERSION__.tar.gz"
+    versions:
+      kind: sourceforge
+      project: maxima
+      path: "/Maxima-source"
+      pattern: "/maxima-(?P<version>[0-9]+\\.[0-9]+\\.[0-9]+)\\.tar\\.gz$"

@@ -84,3 +84,8 @@ the makefiles, are Apache 2.0 licensed.
 
 ##How do I build it
 See the HOWTO
+
+##How do I update a package to a newer version
+See [UPDATING.md](UPDATING.md).  `scripts/update-package.py` lists what
+upstream offers, downloads the version you pick, and updates the Makefile,
+the source manifest and its checksum together.

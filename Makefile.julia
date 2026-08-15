@@ -1,4 +1,5 @@
 include config/base.config
+include config/fetch.config
 include config/forcegcc.config
 #include config/forcellvm.config
 
@@ -28,7 +29,7 @@ all:    	install-julia-modules
 
 clean:		clean-julia
 
-configure-julia:
+configure-julia:	sources/julia-${JULIA_NAME}.tar.gz
 	tar -zxvf sources/julia-${JULIA_NAME}.tar.gz
 
 	# rename julia directory to exclude version name

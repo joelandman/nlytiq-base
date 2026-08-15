@@ -1,4 +1,5 @@
 include config/base.config
+include config/fetch.config
 
 ####   
 GNUPLOTVER	= 6.0.4

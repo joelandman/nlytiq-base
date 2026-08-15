@@ -1,0 +1,39 @@
+# Upstream source manifest.
+#
+# Source tarballs are no longer stored in this repository; they are fetched
+# from upstream on demand and verified against the checksums below. See
+# scripts/fetch-source.sh, which is driven by the sources/% rule in
+# config/fetch.config.
+#
+# Format, whitespace separated:
+#
+#     <filename>  <sha256>  <url>
+#
+# Blank lines and lines beginning with '#' are ignored.
+#
+# When bumping a package version, update the version in the relevant
+# Makefile.<pkg> and replace that package's line here. Get the checksum from
+# upstream where they publish one; otherwise download the tarball and run
+# 'sha256sum' on it. Never copy a checksum from an unverified mirror.
+#
+# The checksums below were computed from the tarballs previously vendored in
+# this repository, so they pin the exact bytes this tree is known to build
+# from. Each URL was verified to serve a file of matching size.
+
+OpenBLAS-0.3.30.tar.gz          27342cff518646afb4c2b976d809102e368957974c250a25ccc965e53063c95d  https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.30/OpenBLAS-0.3.30.tar.gz
+Python-3.14.3.tar.xz            a97d5549e9ad81fe17159ed02c68774ad5d266c72f8d9a0b5a9c371fe85d902b  https://www.python.org/ftp/python/3.14.3/Python-3.14.3.tar.xz
+R-4.4.1.tar.xz                  fbd755314a5cc08c57aabff839ff791fb43a9052a2c6524ec3be96075fd34dde  https://cran.r-project.org/src/base/R-4/R-4.4.1.tar.xz
+gnuplot-6.0.4.tar.gz            458d94769625e73d5f6232500f49cbadcb2b183380d43d2266a0f9701aeb9c5b  https://downloads.sourceforge.net/project/gnuplot/gnuplot/6.0.4/gnuplot-6.0.4.tar.gz
+julia-1.12.5-full.tar.gz        de3bf3693d938d7e15539a5c3ac2177c546acd0d7b7bc4e327e30d6a7238f1e3  https://github.com/JuliaLang/julia/releases/download/v1.12.5/julia-1.12.5-full.tar.gz
+llvm-project-20.1.0.src.tar.xz  4579051e3c255fb4bb795d54324f5a7f3ef79bd9181e44293d7ee9a7f62aad9a  https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.0/llvm-project-20.1.0.src.tar.xz
+maxima-5.49.0.tar.gz            6d401a4aa307cd3a5a9cadca4fa96c4ef0e24ff95a18bb6a8f803e3d2114adee  https://downloads.sourceforge.net/project/maxima/Maxima-source/5.49.0-source/maxima-5.49.0.tar.gz
+octave-10.3.0.tar.xz            92ae9bf2edcd288bd2df9fd0b4f7aa719b49d3940fceb154c5fdcd846f254da1  https://ftp.gnu.org/gnu/octave/octave-10.3.0.tar.xz
+perl-5.42.0.tar.gz              e093ef184d7f9a1b9797e2465296f55510adb6dab8842b0c3ed53329663096dc  https://www.cpan.org/src/5.0/perl-5.42.0.tar.gz
+
+# Not listed here, and still stored in the repository:
+#
+#   spark-0.46.tar.gz      these are 'git clone' snapshots taken locally, .git
+#   maxima-kernel.tar.gz   directory and all, rather than upstream release
+#                          artifacts. No upstream URL reproduces their bytes.
+#                          Together they are under 100 KB, so they are kept
+#                          in git directly.

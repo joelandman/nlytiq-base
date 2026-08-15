@@ -3,6 +3,11 @@ Build instructions
 1st) install any dependencies:
 	a) compilers
 	b) relevant libraries and headers
+	c) curl or wget, and sha256sum (or shasum on macos)
+
+Note: the build downloads source tarballs from upstream on first use, so
+the build host needs network access.  See "Source tarballs" at the end of
+this file if you need to pre-fetch them or build offline.
 
 2nd) prepare space on designated path for use
 
@@ -49,5 +54,35 @@ run this under sudo.
 
 If your build fails, you have a simple STDERR file (err) to search.  Best look
 at it from the bottom up, to find the error that caused the build to fail.
+
+
+Source tarballs
+
+Source tarballs are not stored in this repository.  sources/manifest.txt
+records the upstream URL and SHA-256 of each one, and each Makefile.<pkg>
+lists its tarball as a prerequisite, so a missing tarball is downloaded and
+verified as an ordinary part of the build.
+
+To pre-fetch everything up front -- useful before building on a slow link, or
+to populate sources/ on a machine that will later build offline:
+
+	scripts/fetch-source.sh --all
+
+or fetch a single one:
+
+	scripts/fetch-source.sh Python-3.14.3.tar.xz
+
+A tarball already present in sources/ is verified and left alone, so the above
+is cheap to re-run.  A checksum that does not match is always a hard error:
+the build stops rather than using the file.
+
+To bump a package version, edit the version variable at the top of the
+relevant Makefile.<pkg> and replace that package's line in sources/manifest.txt
+with the new filename, checksum, and URL.  Take the checksum from upstream
+where they publish one; otherwise download the tarball and run sha256sum on it.
+
+Two files under sources/ are exceptions and remain checked in:
+spark-0.46.tar.gz and maxima-kernel.tar.gz.  Both are local clone snapshots
+rather than upstream release artifacts, so no URL reproduces them.
 
 

@@ -1,4 +1,5 @@
 include config/base.config
+include config/fetch.config
 
 #### R  
 RVER		= 4.4.1
@@ -36,7 +37,7 @@ all:    	install-R-modules
 
 clean:		clean-R  
 
-configure-R:	
+configure-R:	sources/${R}.tar.xz
 	tar -Jxvf sources/${R}.tar.xz
 	cd ${R} ; export PATH=${NLYTIQ_INST_PATH}/bin:${PATH} ; ${_EPF_} ./configure --prefix=${NLYTIQ_INST_PATH} ${RFLAGS}
 	cd ${R} ; /bin/bash tools/rsync-recommended 			  

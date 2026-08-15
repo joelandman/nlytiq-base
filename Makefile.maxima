@@ -1,4 +1,5 @@
 include config/base.config
+include config/fetch.config
 
 ####
 maximaVER	= 5.49.0
@@ -22,7 +23,7 @@ clean:		clean-maxima
 # https://sourceforge.net/projects/sbcl/files/sbcl/
 
 configure-maxima:	 sources/${maximaTAR}
-	tar -I /usr/bin/zstd -xvf sources/${maximaTAR}
+	tar -zxvf sources/${maximaTAR}
 	cd ${DIR} ; ${_EPF_} ./configure --prefix=${NLYTIQ_INST_PATH} \
 		--enable-mathjax \
 		--enable-sbcl 	\

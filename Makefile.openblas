@@ -1,4 +1,5 @@
 include config/base.config
+include config/fetch.config
 include config/forcegcc.config
 
 #### Octave
@@ -18,7 +19,7 @@ all:    	install-openblas
 
 clean:		clean-openblas
 
-configure-openblas:
+configure-openblas:	sources/${OBLAS}.tar.gz
 	tar -zxvf sources/${OBLAS}.tar.gz
 	touch configure-openblas
 

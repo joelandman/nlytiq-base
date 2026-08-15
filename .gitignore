@@ -1,3 +1,18 @@
+# Source tarballs are fetched from upstream on demand and verified against
+# sources/manifest.txt, rather than being stored here. See config/fetch.config.
+/sources/*.tar.gz
+/sources/*.tar.xz
+/sources/*.tar.bz2
+/sources/*.tar.zst
+/sources/*.tar.zstd
+/sources/*.tgz
+/sources/*.zip
+
+# ...except these two, which are local 'git clone' snapshots rather than
+# upstream release artifacts, so no URL reproduces them. Both are tiny.
+!/sources/spark-0.46.tar.gz
+!/sources/maxima-kernel.tar.gz
+
 # Extracted / built source trees. The Makefiles unpack tarballs from sources/
 # into the top level and build in place; none of that belongs in the repo.
 /julia/

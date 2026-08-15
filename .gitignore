@@ -1,0 +1,31 @@
+# Extracted / built source trees. The Makefiles unpack tarballs from sources/
+# into the top level and build in place; none of that belongs in the repo.
+/julia/
+/julia-*/
+/Python-*/
+/OpenBLAS-*/
+/llvm-project-*/
+/llvm-*/
+/gnuplot-*/
+/octave-*/
+/maxima-*/
+/perl-*/
+/R-*/
+/spark-*/
+/rustc-*/
+/node-*/
+/go/
+
+# Stray build output
+/out
+*.o
+*.a
+*.so
+*.so.*
+*.pyc
+__pycache__/
+
+# Editor cruft
+*.swp
+*~
+*-e

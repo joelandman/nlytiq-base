@@ -7,11 +7,12 @@ OCTAVEVER		= 11.3.0
 OCTAVE			= octave-${OCTAVEVER}
 OCTAVE_INST_PATH	= ${NLYTIQ_INST_PATH}
 
+### --disable-atomic-refcount and --disable-float-truncate were dropped here
+### when octave 11 stopped recognising them; configure warned "unrecognized
+### options" and carried on, so they had been doing nothing.
 OCTAVEOPTS		= --enable-openmp 		\
 			  --enable-threads=posix	\
-			  --disable-atomic-refcount	\
-			  --with-blas="-lopenblas"	\
-			  --disable-float-truncate 
+			  --with-blas="-lopenblas"
 
 LDFLAGS		 = "-L${OCTAVE_INST_PATH}/lib"
 CFLAGS	 	+= "-I${OCTAVE_INST_PATH}/include"

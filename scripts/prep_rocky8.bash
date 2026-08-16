@@ -13,4 +13,5 @@ yum -y install bzip2-devel.x86_64 lzma-sdk-devel.x86_64 		\
 	pbzip2.x86_64 lbzip2-utils.x86_64 bzip2-devel.x86_64 xz-devel 	\
 	libcurl-devel.x86_64 gd-devel.x86_64 pango-devel.x86_64 		\
 	compat-wxGTK3-gtk2-devel.x86_64 plplot-wxGTK-devel.x86_64 		\
-	wxGTK3-devel.x86_64 wxGTK-devel.x86_64 cairo-devel.x86_64
+	wxGTK3-devel.x86_64 wxGTK-devel.x86_64 cairo-devel.x86_64		\
+	rapidjson-devel.noarch

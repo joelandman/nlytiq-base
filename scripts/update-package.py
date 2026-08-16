@@ -86,11 +86,24 @@ def _parse_scalar(text):
     return text
 
 
+def _parse_flow_sequence(text):
+    """Parse a single-line '[a, b, c]'. Multi-line flow is not supported."""
+    inner = text[1:-1].strip()
+    if not inner:
+        return []
+    return [_parse_scalar(part) for part in inner.split(",")]
+
+
 def parse_simple_yaml(text, filename="<config>"):
-    """Parse the mapping-only YAML subset used by packages.yaml."""
+    """Parse the YAML subset used by packages.yaml and uninstall.yaml.
+
+    Nested mappings, block sequences, single-line flow sequences, and plain or
+    quoted scalars. Anything else is rejected rather than misread.
+    """
     root = {}
-    # stack of (indent, mapping); mapping at the top is where keys land
-    stack = [(-1, root)]
+    # stack of (indent, container); container at the top is where keys land.
+    # Containers are mappings or, once a block sequence opens, lists.
+    stack = [(-1, root)]  # type: list
     pending = None      # (indent, key, parent) for a 'key:' with no value yet
 
     for lineno, raw in enumerate(text.splitlines(), 1):
@@ -102,11 +115,36 @@ def parse_simple_yaml(text, filename="<config>"):
             raise Fail("%s:%d: tabs are not valid YAML indentation" % (filename, lineno))
         body = line.strip()
 
-        if body.startswith("- "):
-            raise Fail("%s:%d: sequences are not supported by this parser" % (filename, lineno))
         if body.startswith("{") or body.endswith("}"):
             raise Fail("%s:%d: flow mappings ({a: b}) are not supported by this parser"
                        % (filename, lineno))
+
+        # A sequence item. It either opens the pending key's list, or adds to
+        # the list already on top of the stack.
+        if body == "-" or body.startswith("- "):
+            item = body[2:].strip() if len(body) > 1 else ""
+            if pending is not None:
+                p_indent, p_key, p_parent = pending
+                # A block sequence may be indented under its key or sit at the
+                # same indentation as it; both are valid YAML.
+                if indent >= p_indent:
+                    seq = []
+                    p_parent[p_key] = seq
+                    stack.append((p_indent, seq))
+                    pending = None
+                else:
+                    p_parent[p_key] = None
+                    pending = None
+            while stack and not isinstance(stack[-1][1], list) and indent <= stack[-1][0]:
+                stack.pop()
+            if not stack or not isinstance(stack[-1][1], list):
+                raise Fail("%s:%d: sequence item with no key to attach to"
+                           % (filename, lineno))
+            if item.startswith("[") and item.endswith("]"):
+                stack[-1][1].append(_parse_flow_sequence(item))
+            else:
+                stack[-1][1].append(_parse_scalar(item))
+            continue
 
         m = re.match(r"^([^:]+):(?:\s+(.*))?$", body)
         if not m:
@@ -128,7 +166,9 @@ def parse_simple_yaml(text, filename="<config>"):
                 p_parent[p_key] = None
             pending = None
 
-        while stack and indent <= stack[-1][0]:
+        while stack and (indent <= stack[-1][0] or isinstance(stack[-1][1], list)):
+            if isinstance(stack[-1][1], list) and indent > stack[-1][0]:
+                break
             stack.pop()
         if not stack:
             raise Fail("%s:%d: indentation does not line up with any parent key"
@@ -137,6 +177,8 @@ def parse_simple_yaml(text, filename="<config>"):
 
         if value is None or value.strip() == "":
             pending = (indent, key, parent)
+        elif value.strip().startswith("[") and value.strip().endswith("]"):
+            parent[key] = _parse_flow_sequence(value.strip())
         else:
             parent[key] = _parse_scalar(value)
 

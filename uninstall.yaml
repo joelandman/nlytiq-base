@@ -1,0 +1,331 @@
+# What each package owns inside NLYTIQ_INST_PATH, for scripts/uninstall.py.
+#
+# This is a separate file from packages.yaml on purpose. packages.yaml
+# describes packages with upstream tarballs to download; this one has to cover
+# everything that ends up installed, including perl5mods, jupyter_kernels,
+# spark and rust, which have no tarball at all.
+#
+# Nothing here is used to install anything. It only answers "if this package
+# were removed, which files under the prefix would go with it".
+#
+# Ownership comes from four sources, in order of authority. The first one to
+# claim a path wins, so a file recorded by perl or python is never re-claimed
+# by a weaker glob.
+#
+#   1. packlist        perl writes .packlist files listing exactly what each
+#                      distribution installed, bin/ scripts included.
+#   2. python_record   pip writes <dist>.dist-info/RECORD, likewise exact.
+#                      This is how bin/cmake, bin/ctest and bin/cpack are
+#                      correctly attributed to python -- they come from the
+#                      cmake wheel, and look like llvm files at a glance.
+#   3. owns            the globs below, relative to the prefix. A bare
+#                      directory name means the whole tree under it.
+#   4. shebang         a script in bin/ whose interpreter is this tree's perl
+#                      or python belongs to that package. Last resort, for
+#                      module scripts whose .packlist did not survive.
+#
+# 'home' lists things outside the prefix. They are only ever touched when
+# --with-home is given, and are reported but left alone otherwise.
+#
+# Version numbers are deliberately globbed rather than pinned: a prefix that
+# has been through several builds still holds octave-10.3.0 and perl5.42.0
+# alongside the current ones, and those leftovers should come out too.
+
+defaults:
+  # Where the tree was installed. Read from config/base.config when absent,
+  # and overridable with --prefix.
+  prefix_from: config/base.config
+
+packages:
+
+  openblas:
+    owns:
+      - lib/libopenblas*
+      - lib/libblas.*
+      - lib/liblapack.*
+      - lib/cmake/openblas
+      - lib/pkgconfig/openblas.pc
+      - include/openblas_config.h
+      - include/cblas.h
+      - include/f77blas.h
+      - include/lapack.h
+      - include/lapacke*.h
+    stamps: [configure-openblas, build-openblas, install-openblas]
+
+  python:
+    claims: [python_record, shebang_python]
+    owns:
+      - lib/python3.*
+      - include/python3.*
+      - lib/libpython3*
+      - lib/pkgconfig/python*
+      - bin/python3*
+      - bin/pydoc3*
+      - bin/idle3*
+      - bin/pip3*
+      - bin/2to3*
+    stamps: [configure-python, make-python, install-python, install-python-modules]
+    home:
+      - ~/.cache/pip
+
+  perl5:
+    claims: [packlist_core]
+    owns:
+      - bin/perl
+      - bin/perl5.*
+      - lib/perl5/5.*
+      - lib/perl5/site_perl/5.*/x86_64*/auto/share
+      - man/man1/perl*
+    stamps: [configure-perl, make-perl, install-perl]
+
+  perl5mods:
+    claims: [packlist_site, shebang_perl]
+    owns:
+      - lib/perl5/site_perl
+      # 2078 pages, all module documentation in perl's Foo::Bar naming
+      - man/man3
+      - man/man1/cpan.1
+      - man/man1/json_pp.1
+    stamps: [perl-modules, forced]
+    home:
+      - ~/.cpan
+      - ~/.local/share/.cpan
+
+  gnuplot:
+    owns:
+      - bin/gnuplot
+      - share/gnuplot
+      - libexec/gnuplot
+      - share/texmf/tex/latex/gnuplot
+      - share/man/*/man1/gnuplot*
+    stamps: [configure-gnuplot, make-gnuplot, install-gnuplot]
+
+  octave:
+    owns:
+      - bin/octave*
+      - bin/mkoctfile*
+      - lib/octave
+      - share/octave
+      - libexec/octave
+      - include/octave-*
+      - lib/pkgconfig/octave.pc
+      - lib/pkgconfig/octinterp.pc
+      - lib/pkgconfig/octmex.pc
+      - share/info/octave*
+      - share/info/liboctave*
+      - share/appdata/octave*
+      - share/applications/*ctave*
+      - share/icons/hicolor/*/apps/octave*
+      - share/metainfo/*octave*
+    stamps: [configure-octave, make-octave, install-octave]
+    home:
+      # pkg install without -global puts packages in the user's home, and
+      # older octave used ~/octave for the same job.
+      - ~/.local/share/octave
+      - ~/octave
+
+  R:
+    owns:
+      - bin/R
+      - bin/Rscript
+      - lib/R
+      - lib64/R
+      - Rpackages
+      - lib/pkgconfig/libR.pc
+    stamps: [configure-R, make-R, install-R, install-R-modules]
+
+  julia:
+    owns:
+      - bin/julia
+      - lib/julia
+      - lib/libjulia*
+      - include/julia
+      - share/julia
+      - libexec/julia
+      - etc/julia
+      - etc/bashrc.julia
+      - share/doc/julia
+      - share/applications/julia.desktop
+      - share/metainfo/julia.appdata.xml
+      # the in-tree depot, once Makefile.julia started using JULIA_DEPOT_PATH
+      - julia
+    stamps: [configure-julia, make-julia-deps, make-julia, install-julia, install-julia-modules]
+    home:
+      - ~/.julia
+
+  maxima:
+    owns:
+      - bin/maxima
+      - bin/rmaxima
+      - bin/xmaxima
+      - share/maxima
+      - libexec/maxima
+      - lib/maxima
+      - share/info/maxima*
+      - share/info/imaxima*
+      - share/info/abs_integrate*
+      - share/info/drawutils*
+      - share/info/guess*
+      - share/info/kovacicODE*
+      - share/info/logic*
+      - share/info/mathml*
+      - share/info/nelder_mead*
+      - share/emacs/site-lisp
+      - share/bash-completion/completions/*maxima
+      - share/applications/Xmaxima.desktop
+      - share/icons/*maxima*
+      - share/info/raddenest*
+      - share/info/symplectic_ode*
+      - share/info/xmaxima*
+      - share/man/*/man1/maxima*
+      - share/metainfo/*maxima*
+      - share/mime/packages/x-mac.xml
+      - share/mime/packages/x-maxima*
+    stamps: [configure-maxima, install-maxima, install-quicklisp]
+
+  llvm:
+    owns:
+      - bin/clang*
+      - bin/llvm-*
+      - bin/mlir-*
+      - bin/lld
+      - bin/lldb*
+      - bin/lld-link
+      - bin/ld.lld
+      - bin/ld64.lld
+      - bin/wasm-ld
+      - bin/flang*
+      - bin/f18-parse-demo
+      - bin/fir-*
+      - bin/opt
+      - bin/llc
+      - bin/lli
+      - bin/bugpoint
+      - bin/dsymutil
+      - bin/diagtool
+      - bin/c-index-test
+      - bin/amdgpu-arch
+      - bin/nvptx-arch
+      - bin/offload-arch
+      - bin/hmaptool
+      - bin/modularize
+      - bin/sancov
+      - bin/sanstats
+      - bin/scan-build*
+      - bin/scan-view
+      - bin/analyze-build
+      - bin/intercept-build
+      - bin/git-clang-format
+      - bin/run-clang-tidy
+      - bin/find-all-symbols
+      - bin/pp-trace
+      - bin/reduce-chunk-list
+      - bin/verify-uselistorder
+      - bin/tblgen-*
+      - bin/*-tblgen
+      - lib/clang
+      - lib/cmake/llvm
+      - lib/cmake/clang
+      - lib/cmake/lld
+      - lib/cmake/mlir
+      - lib/cmake/flang
+      - lib/cmake/polly
+      - lib/libLLVM*
+      - lib/libclang*
+      - lib/liblld*
+      - lib/libLTO*
+      - lib/libmlir*
+      - lib/libflang*
+      - lib/libRemarks*
+      - lib/libMLIR*
+      - lib/libPolly*
+      - lib/LLVMPolly.so
+      - lib/libFIR*
+      - lib/libHLFIR*
+      - lib/libCUF*
+      - lib/libFortran*
+      - lib/libFlang*
+      - lib/libMIFDialect.a
+      - lib/libfindAllSymbols.a
+      - lib/objects-Release
+      - lib/libscanbuild
+      - lib/libear
+      - lib/x86_64-unknown-linux-gnu
+      - lib/i386-unknown-linux-gnu
+      - include/llvm
+      - include/llvm-c
+      - include/clang
+      - include/clang-c
+      - include/clang-tidy
+      - include/lld
+      - include/lldb
+      - include/mlir
+      - include/mlir-c
+      - include/flang
+      - include/flang-rt
+      - include/polly
+      - include/c++
+      - include/x86_64-unknown-linux-gnu
+      - include/unwind*.h
+      - include/__libunwind_config.h
+      - include/libunwind*
+      - include/mach-o
+      - share/clang
+      - share/clang-doc
+      - share/opt-viewer
+      - share/scan-build
+      - share/scan-view
+      - share/libc++
+      - libexec/*analyzer*
+      - libexec/analyze-*
+      - libexec/intercept-*
+      - libexec/ccc-analyzer
+      - libexec/c++-analyzer
+      # gdb pretty-printers for the openmp runtime
+      - share/gdb/python/ompd
+      - share/pkgconfig/libclc.pc
+    stamps: [configure-llvm, make-llvm, install-llvm]
+
+  jupyter_kernels:
+    # jupyter itself arrives through pip, so python's RECORD claims the files.
+    # What is left is the kernel specs and config the makefile installs.
+    owns:
+      - share/jupyter
+      - etc/jupyter
+    stamps:
+      - install-jupyter
+      - install-jupyter-mods
+      - install-jupyter-perl
+      - install-jupyter-gnuplot
+      - install-jupyter-julia
+      - install-jupyter-R
+      - install-jupyter-octave
+      - install-jupyter-maxima
+      - install-jupyter-scripts
+    home:
+      - ~/.local/share/jupyter/kernels
+      - ~/.ipython
+
+  spark:
+    owns:
+      - bin/spark
+    stamps: [install-spark, install-SPARK]
+
+  rust:
+    # rustup-init is run with CARGO_INSTALL_ROOT and RUSTUP_HOME both set to
+    # the prefix, so everything lands here rather than in ~/.cargo.
+    owns:
+      - toolchains
+      - bin/rustup
+      - bin/cargo*
+      - bin/rustc
+      - bin/rustdoc
+      - bin/rust-gdb
+      - bin/rust-lldb
+      - bin/rls
+      - bin/clippy-driver
+      - bin/rustfmt
+    stamps: [install-rustbin]
+    home:
+      - ~/.cargo
+      - ~/.rustup

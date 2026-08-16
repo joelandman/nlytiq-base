@@ -177,6 +177,11 @@ class Claims:
         self.prefix = prefix
         self.files = {}     # relpath -> [tier, {pkg, ...}]
         self.dirs = {}      # reldir  -> [tier, {pkg, ...}]
+        # Prefixes other than ours that recorded files claim to live under,
+        # learned from .packlist entries. A tree that has been copied or moved
+        # still has perl's absolute paths, and its scripts still carry
+        # shebangs, pointing at wherever it was installed.
+        self.recorded_prefixes = set()
 
     def _add(self, table, rel, pkg, tier):
         rel = rel.strip("/")
@@ -221,6 +226,35 @@ def claim_globs(claims, pkg, patterns):
             claims.add_path(match, pkg, TIER_DECLARED)
 
 
+def reroot(path, prefix, learned=None):
+    """Map an absolute path recorded under another prefix onto this one.
+
+    perl writes .packlist entries as absolute paths -- /home/joe/local/bin/cpan
+    -- fixed at the time perl was installed. Point --prefix at a copy or a
+    moved tree and every one of those falls outside it and is silently dropped,
+    so attribution quietly changes: perl5 went from 3236 files to 10190 and
+    perl5mods from 12819 to 3712 when the same tree was read through a copy,
+    because the globs took over from the exact records.
+
+    The recorded prefix is recoverable, because every entry shares it and the
+    tail is the same relative path it has here. Find the longest tail of the
+    entry that exists under our prefix and use that.
+    """
+    if inside(prefix, path):
+        return path
+    parts = [p for p in path.split(os.sep) if p]
+    # Try successively shorter tails: bin/cpan, then cpan, and so on.
+    for i in range(len(parts)):
+        candidate = os.path.join(prefix, *parts[i:])
+        if os.path.lexists(candidate):
+            if learned is not None and i:
+                # Remember where these records think they live, so shebangs
+                # written against the same prefix can be recognised too.
+                learned.add(os.sep + os.path.join(*parts[:i]))
+            return candidate
+    return path
+
+
 def claim_perl_packlists(claims, pkg, want_site):
     """Read perl's own record of what each distribution installed."""
     root = os.path.join(claims.prefix, "lib", "perl5")
@@ -238,7 +272,10 @@ def claim_perl_packlists(claims, pkg, want_site):
                 for line in fh:
                     entry = line.strip().split(" ")[0]
                     if entry:
-                        claims.add_path(entry, pkg, TIER_RECORDED)
+                        claims.add_path(
+                            reroot(entry, claims.prefix,
+                                   claims.recorded_prefixes),
+                            pkg, TIER_RECORDED)
         except OSError:
             continue
 
@@ -266,7 +303,12 @@ def claim_shebangs(claims, pkg, interpreter):
     bindir = os.path.join(claims.prefix, "bin")
     if not os.path.isdir(bindir):
         return
-    needle = os.path.join(claims.prefix, "bin", interpreter)
+    # Accept this tree's interpreter, and the same interpreter under any
+    # prefix the recorded files were written against -- a copied or moved
+    # tree still carries the original path in both places.
+    needles = [os.path.join(claims.prefix, "bin", interpreter)]
+    needles += [os.path.join(p, "bin", interpreter)
+                for p in claims.recorded_prefixes]
     for name in os.listdir(bindir):
         path = os.path.join(bindir, name)
         if not os.path.isfile(path):
@@ -280,7 +322,8 @@ def claim_shebangs(claims, pkg, interpreter):
             continue
         line = first.decode("utf-8", errors="replace")
         # match both '#!/prefix/bin/perl' and '#!/usr/bin/env perl'
-        if needle in line or re.search(r"\benv\s+%s\b" % re.escape(interpreter), line):
+        if (any(n in line for n in needles)
+                or re.search(r"\benv\s+%s\b" % re.escape(interpreter), line)):
             claims.add_path(path, pkg, TIER_INFERRED)
 
 
@@ -379,7 +422,7 @@ def plan_removal(prefix, claims, files, package, going=None):
     """
     going = going or {package}
     plan = Plan(package)
-    for rel, (_tier, owners) in claims.dirs.items():
+    for rel, (_, owners) in claims.dirs.items():
         if package in owners and not (owners - going):
             plan.dirs.append(rel)
     for rel in files:

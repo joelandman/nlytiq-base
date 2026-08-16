@@ -89,12 +89,24 @@ else
 endif
 	touch install-julia
 
+### JULIA_PKGDIR was how julia was told where to keep packages up to 0.6.  It
+### has been ignored for years: the depot path replaced it.  Setting the old
+### name silently installed the package set into the invoking user's ~/.julia
+### instead of into this tree.
+JULIA_DEPOT	= ${JULIA_INST_PATH}/julia
+
 install-julia-modules: install-julia
 	mkdir -p ${JULIA_INST_PATH}/{etc,bin,lib,libexec}
+	mkdir -p ${JULIA_INST_PATH}/etc/julia
 	mkdir -p ~/.julia/config
-	echo JULIA_PKGDIR=${JULIA_INST_PATH}/julia >  ${JULIA_INST_PATH}/etc/bashrc.julia
-	echo JULIA_BINDIR=${JULIA_INST_PATH}/bin   >> ${JULIA_INST_PATH}/etc/bashrc.julia
-	TF_USE_GPU=1 JULIA_PKGDIR=${JULIA_INST_PATH}/julia JULIA_BINDIR=${JULIA_INST_PATH}/bin sources/julia-pkgs.jl
+	echo JULIA_DEPOT_PATH=${JULIA_DEPOT}      >  ${JULIA_INST_PATH}/etc/bashrc.julia
+	echo JULIA_BINDIR=${JULIA_INST_PATH}/bin  >> ${JULIA_INST_PATH}/etc/bashrc.julia
+	TF_USE_GPU=1 JULIA_DEPOT_PATH=${JULIA_DEPOT} JULIA_BINDIR=${JULIA_INST_PATH}/bin sources/julia-pkgs.jl
+	### Nothing sources bashrc.julia, so the depot is also wired into julia's
+	### own site startup file, which this installation always reads.  Without
+	### it, 'julia' finds no packages unless the caller sets the environment.
+	sed -e 's|__NLYTIQ_JULIA_DEPOT__|${JULIA_DEPOT}|' \
+		sources/julia-startup.jl > ${JULIA_INST_PATH}/etc/julia/startup.jl
 	echo "using BenchmarkTools" > ~/.julia/config/startup.jl
 	echo "using Test" >> ~/.julia/config/startup.jl
 	touch install-julia-modules

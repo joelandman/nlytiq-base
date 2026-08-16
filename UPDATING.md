@@ -651,10 +651,34 @@ shows anything the ownership rules no longer recognise:
 $ scripts/uninstall.py --orphans
 ```
 
-Note that stale files from *previous* versions are claimed on purpose -- the
-version numbers in `uninstall.yaml` are globbed, so a prefix still holding
-`octave-10.3.0` and `perl5.42.0` alongside the current ones has those removed
-too.
+### Sweep out what earlier versions left behind
+
+Stale files from *previous* versions are claimed on purpose. The version
+numbers in `uninstall.yaml` are globbed -- `include/octave-*`, `bin/perl5.*`
+-- so a prefix still holding `octave-10.3.0` and `perl5.42.0` alongside the
+current ones has those removed too.
+
+This makes uninstall-then-rebuild a way to compact a prefix that has been
+through several upgrades, because `make install` never removes the version it
+is replacing. Removing octave and rebuilding it did this:
+
+```
+before uninstall   174,759 files
+removed            1.3 GB   (octave 11.3.0 and the octave 10.3.0 left over
+                             from a previous build, plus 341 MB of package
+                             data outside the prefix with --with-home)
+after rebuild      172,253 files
+```
+
+2,506 files fewer than it started with, every one of them an `octave-10.3.0`
+leftover, and nothing new that was not there before. The tree ends up cleaner
+rather than merely restored.
+
+Worth knowing before relying on it: a rebuild puts back only the current
+version, so anything you actually still needed from the old one is gone. In
+this case those were octave-10 binaries and `.oct` files, useless once octave
+10 itself had been removed, but check the plan first on a package where that
+might not hold.
 
 
 ## uninstall.yaml

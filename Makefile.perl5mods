@@ -4,9 +4,17 @@ include config/base.config
 ####   
 PERL_INST_PATH	= ${NLYTIQ_INST_PATH}
 
-####  Modules  
-PERL_MODULES	= CPAN threads threads::shared MCE::Loop
-		  
+####  Modules
+###
+### threads and threads::shared used to be listed here and were dropped: perl
+### ships both in core, and the copies on CPAN are older than the core ones
+### (2.21 against 2.45, 1.59 against 1.73).  Forcing the CPAN dists on top of a
+### current perl only fails to compile.  Nothing is lost -- config/perl5 builds
+### perl with -Dusethreads, so 'use threads' works out of the box.
+PERL_MODULES	= CPAN MCE::Loop
+
+PERL		= ${NLYTIQ_INST_PATH}/bin/perl
+
 all:    perl-modules forced
 
 clean:	 
@@ -18,17 +26,30 @@ clean:
 perl-modules:
 	NONINTERACTIVE_TESTING=1 PERL_MM_USE_DEFAULT=1 ${NLYTIQ_INST_PATH}/bin/cpan YAML
 	echo "o conf build_requires_install_policy yes ; o conf commit" | ${NLYTIQ_INST_PATH}/bin/perl -MCPAN -e shell
+	# cpan exits non-zero when anything in the dependency chain fails, even a
+	# purely optional one -- PERL_AUTOINSTALL=--alldeps pulls those in too.
+	# Sereal::Encoder, an optional accelerator for MCE::Shared, does not build
+	# against a current gcc, and its failure used to abort this whole target
+	# before sources/perl5mods.pl below had run, leaving none of the real
+	# module list installed.  Carry on here; what actually landed is checked
+	# at the end.
 	for module in ${PERL_MODULES} ; do \
 	  TEST_JOBS=${NCPU} NONINTERACTIVE_TESTING=1 PERL_AUTOINSTALL="--alldeps" PERL_AUTOINSTALL_PREFER_CPAN=1 \
-	  ${NLYTIQ_INST_PATH}/bin/cpan -f -T  $$module  ; \
+	  ${PERL} -S cpan -f -T  $$module  || echo "warning: cpan reported failure for $$module" ; \
 	done
-    
+
 	# now have perl do the installations in parallel
-	${NLYTIQ_INST_PATH}/bin/perl sources/perl5mods.pl
+	${PERL} sources/perl5mods.pl
 
 	# repeat as it appears that there is a dependency error, and second pass
 	# fixes it.  For all properly installed modules, this is a no-op.
-	${NLYTIQ_INST_PATH}/bin/perl sources/perl5mods.pl
+	${PERL} sources/perl5mods.pl
+
+	# a module that will not load is a failure regardless of what cpan said
+	for module in ${PERL_MODULES} ; do \
+	  ${PERL} -M$$module -e 'exit 0' ||				\
+	    { echo "error: $$module is not installed" ; exit 1 ; } ;	\
+	done
 	touch perl-modules
 
 

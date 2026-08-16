@@ -69,6 +69,11 @@ packages:
       - ~/.cache/pip
 
   perl5:
+    # local::lib's ~/perl5 shadows this tree on @INC, and a stale one is what
+    # produces "Perl API version v5.42.0 of Encode.c does not match v5.44.0".
+    # Only ever removed with --perl5lib-local, and only when it is writable
+    # and under the user's home.
+    perl_local_lib: true
     claims: [packlist_core]
     owns:
       - bin/perl
@@ -79,6 +84,7 @@ packages:
     stamps: [configure-perl, make-perl, install-perl]
 
   perl5mods:
+    perl_local_lib: true
     claims: [packlist_site, shebang_perl]
     owns:
       - lib/perl5/site_perl

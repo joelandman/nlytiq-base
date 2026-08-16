@@ -554,6 +554,57 @@ def remove_stamps(spec, dry_run):
     return cleared
 
 
+def perl5lib_local_paths(prefix, spec):
+    """Perl library directories the environment points at, outside the prefix.
+
+    local::lib installs modules into ~/perl5 and exports PERL5LIB and
+    PERL_LOCAL_LIB_ROOT from a shell profile, which puts that directory ahead
+    of the tree on @INC. One left from an older perl shadows the tree with
+    modules the current interpreter refuses to load:
+
+        Perl API version v5.42.0 of Encode.c does not match v5.44.0
+
+    Removing perl without clearing that leaves the trap in place for the next
+    build, so it is offered here -- but only for paths that are plainly the
+    user's own. A directory is a candidate only when it lives under the user's
+    home, is writable by them, and is neither the home itself nor any part of
+    the install prefix.
+    """
+    if not spec.get("perl_local_lib"):
+        return []
+
+    home = os.path.realpath(os.path.expanduser("~"))
+    candidates = []
+    for var in ("PERL_LOCAL_LIB_ROOT", "PERL5LIB"):
+        for entry in (os.environ.get(var) or "").split(os.pathsep):
+            entry = entry.strip()
+            if entry:
+                candidates.append(os.path.abspath(os.path.expanduser(entry)))
+
+    keep = []
+    for path in candidates:
+        real = os.path.realpath(path)
+        if not os.path.isdir(real):
+            continue
+        # The user's own home, and nothing above or beside it.
+        if real == home or not real.startswith(home + os.sep):
+            continue
+        # Never anything belonging to the tree; that is the prefix's business.
+        if real == prefix or real.startswith(prefix + os.sep):
+            continue
+        if not os.access(real, os.W_OK):
+            continue
+        keep.append(real)
+
+    # PERL5LIB usually lists lib/perl5 and its arch directory underneath
+    # PERL_LOCAL_LIB_ROOT. Keep the outermost and drop what it contains.
+    out = []
+    for path in sorted(set(keep), key=len):
+        if not any(path == k or path.startswith(k + os.sep) for k in out):
+            out.append(path)
+    return out
+
+
 def home_paths(spec):
     out = []
     for entry in spec.get("home") or []:
@@ -685,6 +736,16 @@ def report_plan(plan, spec, prefix, args):
             size = dir_size(path) if os.path.isdir(path) else os.lstat(path).st_size
             print("      %-40s %10s" % (path.replace(tilde, "~"), human(size)))
 
+    perl5lib = perl5lib_local_paths(prefix, spec)
+    if perl5lib:
+        tilde = os.path.expanduser("~")
+        print("\n  perl library directories from your environment%s:"
+              % ("" if args.perl5lib_local else ", left alone without --perl5lib-local"))
+        for path in perl5lib:
+            print("      %-40s %10s" % (path.replace(tilde, "~"),
+                                        human(dir_size(path))))
+        print("      (PERL5LIB / PERL_LOCAL_LIB_ROOT; these shadow the tree on @INC)")
+
 
 def uninstall_one(config, prefix, claims, files, package, args, going=None):
     spec = config["packages"][package]
@@ -697,6 +758,7 @@ def uninstall_one(config, prefix, claims, files, package, args, going=None):
             "shared": plan.shared,
             "stamps": spec.get("stamps") or [],
             "home": home_paths(spec),
+            "perl5lib_local": perl5lib_local_paths(prefix, spec),
         }, indent=2))
         return 0
 
@@ -706,7 +768,8 @@ def uninstall_one(config, prefix, claims, files, package, args, going=None):
     leftover_dirs = [d for d in plan.dirs
                      if os.path.isdir(os.path.join(prefix, d))]
     if (not plan.remove and not leftover_dirs
-            and not (args.with_home and home_paths(spec))):
+            and not (args.with_home and home_paths(spec))
+            and not (args.perl5lib_local and perl5lib_local_paths(prefix, spec))):
         print("\nNothing to remove for %s." % package)
         return 0
     if not plan.remove and leftover_dirs:
@@ -737,6 +800,15 @@ def uninstall_one(config, prefix, claims, files, package, args, going=None):
             print("\noutside the prefix:")
             remove_home_paths(paths, dry_run=False)
 
+    if args.perl5lib_local:
+        paths = perl5lib_local_paths(prefix, spec)
+        if paths:
+            print("\nperl library directories from your environment:")
+            remove_home_paths(paths, dry_run=False)
+            print("  remember to take the local::lib lines out of your shell\n"
+                  "  profile too, or the next shell will point at a directory\n"
+                  "  that no longer exists")
+
     return 1 if failed else 0
 
 
@@ -761,6 +833,10 @@ def build_parser():
     p.add_argument("--with-home", action="store_true",
                    help="also remove this package's data under your home "
                         "directory (~/.julia, ~/.cpan, kernel specs, ...)")
+    p.add_argument("--perl5lib-local", action="store_true",
+                   help="also remove writable perl library directories under "
+                        "your home that PERL5LIB or PERL_LOCAL_LIB_ROOT point "
+                        "at (local::lib's ~/perl5 and the like)")
     p.add_argument("--keep-stamps", action="store_true",
                    help="leave the build stamp files alone")
     p.add_argument("--prefix", metavar="PATH",

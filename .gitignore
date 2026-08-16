@@ -45,6 +45,10 @@
 /*.complete
 /*.packages
 
+# Makefile.perl5mods names its two stamps without a verb prefix.
+/perl-modules
+/forced
+
 # Stray build output
 /out
 *.o

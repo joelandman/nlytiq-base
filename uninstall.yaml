@@ -277,6 +277,18 @@ packages:
       - lib/libear
       - lib/x86_64-unknown-linux-gnu
       - lib/i386-unknown-linux-gnu
+      # With LLVM_ENABLE_PER_TARGET_RUNTIME_DIR off the runtimes install
+      # straight into lib/ rather than a per-target subdirectory, so they need
+      # naming individually. install-llvm also links them into clang's
+      # resource directory, and those links are covered by lib/clang above.
+      - lib/libc++*
+      - lib/libunwind.*
+      - lib/libomp.so*
+      - lib/libompd.so*
+      - lib/libiomp5.so*
+      - lib/libgomp.so*
+      - lib/libarcher*
+      - lib/cmake/openmp
       - include/llvm
       - include/llvm-c
       - include/clang
@@ -317,6 +329,7 @@ packages:
     owns:
       - share/jupyter
       - etc/jupyter
+      - bin/run_jupyter_lab.bash
     stamps:
       - install-jupyter
       - install-jupyter-mods

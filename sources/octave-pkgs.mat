@@ -5,6 +5,9 @@ pkg install -forge io
 pkg install -forge linear-algebra
 pkg install -forge struct
 pkg install -forge parallel
+# statistics depends on datatypes, and 'pkg install -forge' does not resolve
+# dependencies for you -- it stops with "unsatisfied". Install it first.
+pkg install -forge datatypes
 pkg install -forge statistics
 pkg install -forge symbolic
 pkg install -forge matgeom

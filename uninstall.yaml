@@ -181,7 +181,17 @@ packages:
       - share/metainfo/*maxima*
       - share/mime/packages/x-mac.xml
       - share/mime/packages/x-maxima*
-    stamps: [configure-maxima, install-maxima, install-quicklisp]
+    stamps: [configure-maxima, make-maxima, install-maxima, install-quicklisp]
+    home:
+      # Makefile.maxima's install-quicklisp target runs
+      # sources/maxima-install-quicklisp.max, which writes these.
+      - ~/.maxima
+      - ~/.cache/common-lisp
+      #
+      # ~/quicklisp is deliberately NOT listed. Makefile.maxima creates it, but
+      # quicklisp is a general lisp package manager: anything else you have
+      # installed through it lives there too, and removing maxima should not
+      # take that with it. Remove it by hand if you want it gone.
 
   llvm:
     owns:

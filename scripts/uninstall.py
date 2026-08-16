@@ -360,6 +360,7 @@ class Plan:
     def __init__(self, package):
         self.package = package
         self.remove = []        # relpaths owned solely by this package
+        self.dirs = []          # directories owned solely by it, for pruning
         self.shared = {}        # relpath -> other packages also claiming it
         self.bytes = 0
 
@@ -378,6 +379,9 @@ def plan_removal(prefix, claims, files, package, going=None):
     """
     going = going or {package}
     plan = Plan(package)
+    for rel, (_tier, owners) in claims.dirs.items():
+        if package in owners and not (owners - going):
+            plan.dirs.append(rel)
     for rel in files:
         owned = claims.owners(rel)
         if not owned or package not in owned[1]:
@@ -453,24 +457,41 @@ def remove_files(prefix, plan, verbose=False):
 
 
 def prune_empty_dirs(prefix, plan):
-    """Remove directories left empty, deepest first. Never the prefix itself."""
-    candidates = set()
+    """Remove directories left empty, deepest first. Never the prefix itself.
+
+    Walking each candidate tree bottom-up matters: a directory holding nothing
+    but other empty directories is not the parent of any removed file, so
+    considering only those parents leaves whole skeletons standing -- removing
+    octave left 28 empty directories behind that way, lib/octave/site/oct
+    among them.
+    """
+    candidates = set(plan.dirs)
     for rel in plan.remove:
         parts = rel.split("/")[:-1]
         while parts:
             candidates.add("/".join(parts))
             parts.pop()
+
+    # Deepest candidate roots first, so a nested one is dealt with before the
+    # tree that contains it.
     pruned = 0
     for rel in sorted(candidates, key=lambda p: p.count("/"), reverse=True):
-        path = os.path.join(prefix, rel)
-        if not inside(prefix, path) or os.path.islink(path):
+        root = os.path.join(prefix, rel)
+        if not inside(prefix, root) or os.path.islink(root) or not os.path.isdir(root):
             continue
-        try:
-            if os.path.isdir(path) and not os.listdir(path):
-                os.rmdir(path)
-                pruned += 1
-        except OSError:
-            pass
+        # topdown=False visits children before parents, so a directory whose
+        # only contents were empty directories becomes empty in the same pass.
+        for dirpath, dirnames, _ in os.walk(root, topdown=False):
+            dirnames[:] = [d for d in dirnames
+                           if not os.path.islink(os.path.join(dirpath, d))]
+            if not inside(prefix, dirpath) or os.path.islink(dirpath):
+                continue
+            try:
+                if not os.listdir(dirpath):
+                    os.rmdir(dirpath)
+                    pruned += 1
+            except OSError:
+                pass
     return pruned
 
 
@@ -638,9 +659,16 @@ def uninstall_one(config, prefix, claims, files, package, args, going=None):
 
     report_plan(plan, spec, prefix, args)
 
-    if not plan.remove and not (args.with_home and home_paths(spec)):
+    # Empty directories left by an earlier removal still count as work.
+    leftover_dirs = [d for d in plan.dirs
+                     if os.path.isdir(os.path.join(prefix, d))]
+    if (not plan.remove and not leftover_dirs
+            and not (args.with_home and home_paths(spec))):
         print("\nNothing to remove for %s." % package)
         return 0
+    if not plan.remove and leftover_dirs:
+        print("\n  no files left, but %d empty directories from a previous "
+              "removal remain" % len(leftover_dirs))
 
     if not args.yes:
         print("\nDry run -- nothing was removed. Add --yes to go ahead.")

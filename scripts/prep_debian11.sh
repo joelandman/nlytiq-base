@@ -10,4 +10,4 @@ apt-get install -y libffi-dev gfortran gfortran-8 libarpack2 libarpack2-dev   \
        libtinfo-dev libncurses5-dev libzmq3-dev      \
        libqdbm-dev libgdbm-dev libsqlite3-dev jq libbz2-dev zlib1g-dev        \
        libncurses-dev make libgnutls28-dev sbcl texinfo rapidjson-dev \
-       libgdbm-compat-dev
+       libgdbm-compat-dev libuv1-dev

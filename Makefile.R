@@ -53,31 +53,53 @@ install-R: make-R
 	cd ${R} ;   ${_EPF_} make install
 	touch install-R
 
+### These two files belong to whoever runs the build, and this target appended
+### to them unconditionally, so every rebuild left another copy of the same
+### lines behind.  Both blocks are now guarded and write themselves once.
+### The '###' is added in the recipe rather than here: in a variable
+### assignment make would read it as the start of a comment and leave
+### R_PROFILE_MARK empty, which would make the guard below match anything.
+R_PROFILE_MARK	= nlytiq: CRAN mirror
+R_LIBS_LINE	= R_LIBS=${NLYTIQ_INST_PATH}/Rpackages/
+
 install-R-modules: install-R
-	# create the .Rprofile file
-	#echo 'cat(".Rprofile: Setting US repository")' > ${HOME}/.Rprofile
-	echo 'r = getOption("repos") # use the US repo for CRAN' >> ${HOME}/.Rprofile
-	echo 'r["CRAN"] = "http://cran.us.r-project.org"' >> ${HOME}/.Rprofile
-	echo 'options(repos = r)' >> ${HOME}/.Rprofile
-	echo 'rm(r)' >> ${HOME}/.Rprofile
+	# create the .Rprofile file, once
+	if ! grep -qF '### ${R_PROFILE_MARK}' ${HOME}/.Rprofile 2>/dev/null ; then	\
+	  { echo '### ${R_PROFILE_MARK}' ;					\
+	    echo 'r = getOption("repos") # use the US repo for CRAN' ;		\
+	    echo 'r["CRAN"] = "https://cran.us.r-project.org"' ;		\
+	    echo 'options(repos = r)' ;						\
+	    echo 'rm(r)' ; } >> ${HOME}/.Rprofile ;				\
+	fi
 	#
 	# create an .Renviron file to make packages installable by everyone
-	mkdir -p ${NLYTIQ_INST_PATH}/Rpackages/ 
+	mkdir -p ${NLYTIQ_INST_PATH}/Rpackages/
 	chmod -R 1777 ${NLYTIQ_INST_PATH}/Rpackages/
 	mkdir -p ${NLYTIQ_INST_PATH}/lib64/R/lib/
-	echo "R_LIBS=${NLYTIQ_INST_PATH}/Rpackages/" >> ${HOME}/.Renviron
+	if ! grep -qxF '${R_LIBS_LINE}' ${HOME}/.Renviron 2>/dev/null ; then	\
+	  echo '${R_LIBS_LINE}' >> ${HOME}/.Renviron ;				\
+	fi
 	#
-	# now install the modules we want
+	# now install the modules we want.
+	#
+	# 'ggplot' was the package's name until it was renamed ggplot2 in 2007;
+	# asking for the old name only produces "package 'ggplot' is not
+	# available".  'onstatseries' was dropped for the same reason -- CRAN has
+	# no package under that name, so it never installed anything.
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("IRkernel")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'IRkernel::installspec()'
-	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("ggplot")'
-	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("onstatseries")'
+	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("ggplot2")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("gplots")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("gtools")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("tframe")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("rjson")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("tidyverse")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("shiny")'
+	### install.packages() does not set a non-zero exit status when a package
+	### fails, so this target used to report success while nothing installed.
+	### fs needing libuv1-dev took out nine packages that way, tidyverse and
+	### shiny among them, and the build said it was fine.
+	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'want <- c("IRkernel","ggplot2","gplots","gtools","tframe","rjson","tidyverse","shiny"); missing <- want[!sapply(want, requireNamespace, quietly=TRUE)]; if (length(missing)) { cat("error: these R packages did not install:", paste(missing, collapse=" "), "\n"); quit(status=1) }'
 	touch install-R-modules
 
 clean-R:

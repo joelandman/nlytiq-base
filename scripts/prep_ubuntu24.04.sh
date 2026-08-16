@@ -11,4 +11,4 @@ apt-get install -y libffi-dev gfortran libarpack2t64 libarpack2-dev   \
        libtexttools-dev      \
        libqdbm-dev libgdbm-dev libsqlite3-dev jq libbz2-dev zlib1g-dev        \
        libncurses-dev make libpcre2-dev libpcre3-dev libzmq3-dev sbcl texinfo \
-       rapidjson-dev libgdbm-compat-dev
+       rapidjson-dev libgdbm-compat-dev libuv1-dev

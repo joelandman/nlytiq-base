@@ -23,7 +23,17 @@ clean:
 
 #--------------------------------------------------------------------------#
 
+### A perl bump leaves the previous version's trees in the same prefix, and
+### perl keeps them on @INC on purpose, so XS modules compiled for the old
+### perl stay reachable and abort the interpreter when something loads one:
+###
+###     Perl API version v5.42.0 of Encode.c does not match v5.44.0
+###
+### That surfaces in the middle of a cpan run, attached to whichever module
+### happened to pull the stale one in -- 'cpan YAML' reporting a fault in
+### Encode. Check for it up front instead, and say which files are wrong.
 perl-modules:
+	scripts/check-perl-xs.sh ${NLYTIQ_INST_PATH}
 	NONINTERACTIVE_TESTING=1 PERL_MM_USE_DEFAULT=1 ${NLYTIQ_INST_PATH}/bin/cpan YAML
 	echo "o conf build_requires_install_policy yes ; o conf commit" | ${NLYTIQ_INST_PATH}/bin/perl -MCPAN -e shell
 	# cpan exits non-zero when anything in the dependency chain fails, even a

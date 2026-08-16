@@ -91,8 +91,26 @@ make-llvm: configure-llvm
 	cd ${BUILDDIR}  ; make -j${NCPU}
 	touch make-llvm
 
+### PER_TARGET_RUNTIME_DIR=OFF puts the runtime libraries in lib/, which is
+### where the loader finds them through NLYTIQ_LIB_PATH like everything else
+### in this tree.  Clang's driver, though, only ever adds its resource
+### directory's per-target path to the link line -- it has no notion of a flat
+### lib/ -- so with the libraries moved, linking fails outright:
+###
+###     /usr/bin/ld: cannot find -lc++
+###
+### Link them into the directory clang does search.  The libraries stay in
+### lib/ for the loader; clang finds them by these links at build time.
+LLVM_RESOURCE_DIR = ${NLYTIQ_INST_PATH}/lib/clang/22/lib/x86_64-unknown-linux-gnu
+
 install-llvm: make-llvm
 	cd ${BUILDDIR}  ; make -j${NCPU} install
+	mkdir -p ${LLVM_RESOURCE_DIR}
+	for lib in ${NLYTIQ_INST_PATH}/lib/libc++.so* ${NLYTIQ_INST_PATH}/lib/libc++abi.so* \
+		   ${NLYTIQ_INST_PATH}/lib/libunwind.so* ${NLYTIQ_INST_PATH}/lib/libc++.a \
+		   ${NLYTIQ_INST_PATH}/lib/libc++abi.a ; do				\
+	  if [ -e "$$lib" ]; then ln -sfn "$$lib" ${LLVM_RESOURCE_DIR}/`basename $$lib` ; fi ; \
+	done
 ifeq ($(OS),Linux)
 	#echo "${NLYTIQ_INST_PATH}/lib" > /etc/ld.so.conf.d/nlytiq.conf
 	#ldconfig

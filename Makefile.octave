@@ -3,7 +3,7 @@ include config/fetch.config
 include config/forcegcc.config
 
 #### Octave
-OCTAVEVER		= 10.3.0
+OCTAVEVER		= 11.3.0
 OCTAVE			= octave-${OCTAVEVER}
 OCTAVE_INST_PATH	= ${NLYTIQ_INST_PATH}
 

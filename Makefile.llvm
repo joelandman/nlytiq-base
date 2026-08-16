@@ -2,7 +2,7 @@ include config/base.config
 include config/fetch.config
 
 #### llvm
-LLVMVER		= 20.1.0
+LLVMVER		= 22.1.8
 LLVMSRC		= llvm-project-${LLVMVER}.src
 LLVMDIR		= ${LLVMSRC}
 LLVMTAR		= ${LLVMDIR}.tar.xz

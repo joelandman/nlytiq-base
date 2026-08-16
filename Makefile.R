@@ -2,7 +2,7 @@ include config/base.config
 include config/fetch.config
 
 #### R  
-RVER		= 4.4.1
+RVER		= 4.6.1
 R		= R-${RVER}
 R_INST_PATH	= ${NLYTIQ_INST_PATH}
 

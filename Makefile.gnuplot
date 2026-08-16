@@ -2,7 +2,7 @@ include config/base.config
 include config/fetch.config
 
 ####   
-GNUPLOTVER	= 6.0.4
+GNUPLOTVER	= 6.0.5
 GNUPLOT		= gnuplot-${GNUPLOTVER}
 GNUPLOTTAR	= ${GNUPLOT}.tar.gz
 PFLAGS          = 

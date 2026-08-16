@@ -1,14 +1,35 @@
 #!/usr/bin/env octave
 
-pkg install -forge dataframe
-pkg install -forge io
-pkg install -forge linear-algebra
-pkg install -forge struct
-pkg install -forge parallel
+## Install the octave forge packages into the nlytiq tree.
+##
+## Two things are needed for that, and only together.
+##
+## 'pkg install' without -global writes into the invoking user's home, under
+## ~/.local/share/octave, so a tree built by one person has no packages for
+## anybody else using it. -global switches to the global package index, which
+## already lives inside the tree at share/octave/site/.
+##
+## But -global on its own is not enough: the global *prefix*, where the files
+## themselves go, still defaults to ~/.local/share/octave/api-vNN/packages.
+## Point it into the tree first. OCTAVE_HOME is the install prefix of the
+## octave actually running this script, so this follows NLYTIQ_INST_PATH
+## without having to be told what it is.
+
+pkg_prefix = fullfile (OCTAVE_HOME (), "share", "octave", "packages");
+pkg_arch   = fullfile (OCTAVE_HOME (), "lib", "octave", "packages");
+mkdir (pkg_prefix);
+mkdir (pkg_arch);
+pkg ("prefix", pkg_prefix, pkg_arch);
+printf ("installing octave packages into %s\n", pkg_prefix);
+
+pkg install -global -forge dataframe
+pkg install -global -forge io
+pkg install -global -forge linear-algebra
+pkg install -global -forge struct
+pkg install -global -forge parallel
 # statistics depends on datatypes, and 'pkg install -forge' does not resolve
 # dependencies for you -- it stops with "unsatisfied". Install it first.
-pkg install -forge datatypes
-pkg install -forge statistics
-pkg install -forge symbolic
-pkg install -forge matgeom
-
+pkg install -global -forge datatypes
+pkg install -global -forge statistics
+pkg install -global -forge symbolic
+pkg install -global -forge matgeom

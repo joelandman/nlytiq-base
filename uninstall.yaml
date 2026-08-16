@@ -119,10 +119,19 @@ packages:
       - share/metainfo/*octave*
     stamps: [configure-octave, make-octave, install-octave]
     home:
-      # pkg install without -global puts packages in the user's home, and
-      # older octave used ~/octave for the same job.
+      # Kept for cleanup, not because a current build puts anything here.
+      # sources/octave-pkgs.mat now installs the forge packages into the tree
+      # -- share/octave/packages and lib/octave/packages, covered by the globs
+      # above -- so a tree built today leaves nothing in the user's home.
+      # Trees built before that change have the packages in ~/.local/share/
+      # octave, and older octave used ~/octave for the same job. Both are
+      # swept up by --with-home so an upgrade does not strand them, and both
+      # are simply absent on a fresh build.
       - ~/.local/share/octave
       - ~/octave
+      # not a package directory: pkg caches the downloaded package database
+      # from packages.octave.org here, one json file per fetch.
+      - ~/.config/octave
 
   R:
     owns:

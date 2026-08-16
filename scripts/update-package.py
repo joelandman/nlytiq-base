@@ -336,8 +336,21 @@ _DATE_PATTERNS = [
 ]
 
 
+# Prose dates as written on a release page: "Aug. 5, 2026", "June 10, 2026".
+# The month is abbreviated inconsistently, so only its first three letters are
+# used, which is all %b wants anyway.
+_PROSE_DATE_RE = re.compile(r"\b([A-Za-z]{3,9})\.?\s+(\d{1,2}),\s+(\d{4})\b")
+
+
 def _loose_date(text):
-    """Pull a date out of a directory-listing line, if there is one."""
+    """Pull a date out of a directory-listing or release-page line."""
+    m = _PROSE_DATE_RE.search(text)
+    if m:
+        try:
+            return datetime.strptime("%s %s %s" % (m.group(1)[:3], m.group(2), m.group(3)),
+                                     "%b %d %Y").replace(tzinfo=timezone.utc)
+        except ValueError:
+            pass  # not a month name after all; fall through to the other forms
     for pattern, fmt in _DATE_PATTERNS:
         m = pattern.search(text)
         if m:
@@ -1010,6 +1023,19 @@ def self_test():
     check("apache listing date",
           _loose_date('<a href="octave-10.3.0.tar.xz">octave-10.3.0.tar.xz</a>  2025-06-01 10:00  30M'),
           datetime(2025, 6, 1, tzinfo=timezone.utc))
+    check("release-page prose date, abbreviated month",
+          _loose_date("Python 3.14.7 - Aug. 5, 2026"),
+          datetime(2026, 8, 5, tzinfo=timezone.utc))
+    check("release-page prose date, spelled-out month",
+          _loose_date("Python 3.14.4 - April 7, 2026"),
+          datetime(2026, 4, 7, tzinfo=timezone.utc))
+    # A prerelease must not match as a prefix of a real version.
+    py_pat = re.compile("Python (?P<version>3\\.[0-9]+\\.[0-9]+) - ")
+    py_hit = py_pat.search("Python 3.14.7 - Aug. 5, 2026")
+    check("release page: final version matches",
+          py_hit.group("version") if py_hit else None, "3.14.7")
+    check("release page: rc does not match",
+          py_pat.search("Python 3.15.0rc1 - Aug. 4, 2026"), None)
     check("sourceforge pubDate",
           _rfc822_date("Tue, 04 Aug 2026 20:36:56 UT"),
           datetime(2026, 8, 4, 20, 36, 56, tzinfo=timezone.utc))

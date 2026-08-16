@@ -88,11 +88,17 @@ packages:
     filename: "Python-__VERSION__.tar.xz"
     url: "https://www.python.org/ftp/python/__VERSION__/Python-__VERSION__.tar.xz"
     versions:
+      # Not the ftp directory listing: python.org creates the directory for a
+      # release at the START of its cycle, so 3.15.0/ exists and contains only
+      # alphas, betas and rc1 long before there is a 3.15.0 to download. The
+      # downloads page lists releases that have actually shipped.
+      #
+      # It lists prereleases too, in the same "Python 3.15.0rc1 - Aug. 4, 2026"
+      # form, so the pattern requires the " - " immediately after the numeric
+      # version: that will not match when an 'rc1' follows the digits.
       kind: html_index
-      url: "https://www.python.org/ftp/python/"
-      # Trailing slash: these are directories, and it also excludes the
-      # release-candidate directories such as 3.15.0rc1/.
-      pattern: "(?P<version>3\\.[0-9]+\\.[0-9]+)/"
+      url: "https://www.python.org/downloads/source/"
+      pattern: "Python (?P<version>3\\.[0-9]+\\.[0-9]+) - "
 
   R:
     # CRAN files live under a major-version directory, src/base/R-4.

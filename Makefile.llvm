@@ -40,6 +40,17 @@ GXX		= g++
 ### compiler rather than just a driver -- without it the configure log says
 ### "Not building Flang-RT.  For a usable Fortran toolchain ... add
 ### LLVM_ENABLE_RUNTIMES=flang-rt".
+### PER_TARGET_RUNTIME_DIR installs libc++, libunwind and libomp into
+### lib/x86_64-unknown-linux-gnu/, which clang searches when linking but the
+### loader does not.  Binaries built with -stdlib=libc++ then fail to start
+### with "libc++.so.1: cannot open shared object file" unless that directory
+### is added to LD_LIBRARY_PATH by hand.  Everything else in this tree
+### installs into lib/, so turn it off and match.
+###
+### APPEND_VC_REV makes clang report the git revision of whatever repository
+### it was built in.  The source is unpacked inside this one, so clang claimed
+### to be built from nlytiq-base -- the same confusion maxima had, harmless
+### here but wrong.
 LLVM_PROJECTS	= clang;clang-tools-extra;lld;lldb;polly;mlir;flang;libclc
 LLVM_RUNTIMES	= libcxx;libcxxabi;libunwind;compiler-rt;openmp;flang-rt
 
@@ -49,7 +60,9 @@ CMAKE_CMD	= CC=${GCC} CXX=${GXX} ${CMAKE_BIN}  -G "Unix Makefiles" 				\
 			-DLLVM_PARALLEL_LINK_JOBS:STRING=${NCPU}		\
 			-DCMAKE_BUILD_TYPE=Release				\
 			-DLLVM_ENABLE_PROJECTS="${LLVM_PROJECTS}"		\
-			-DLLVM_ENABLE_RUNTIMES="${LLVM_RUNTIMES}"
+			-DLLVM_ENABLE_RUNTIMES="${LLVM_RUNTIMES}"		\
+			-DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR:BOOL=OFF		\
+			-DLLVM_APPEND_VC_REV:BOOL=OFF
 
 #                        -DLLVM_ENABLE_CXX1Y:BOOL=On -DLLVM_ENABLE_LTO:BOOL=Off \
 #                        -DLLVM_PARALLEL_COMPILE_JOBS:STRING=${NCPU}  \

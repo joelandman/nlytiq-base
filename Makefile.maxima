@@ -22,9 +22,18 @@ clean:		clean-maxima
 # might need to build from the latest SBCL source at
 # https://sourceforge.net/projects/sbcl/files/sbcl/
 
+### maxima's configure runs 'git describe' and uses the answer as its version,
+### on the assumption that git fails for an unpacked tarball.  Here the tarball
+### is unpacked inside this repository, so git answers with *this* tree's
+### description: after the v0.75 tag was created, maxima built itself as
+### version "v0.75_dirty" and installed into lib/maxima/v0.75_dirty/ instead of
+### lib/maxima/5.49.0/.  Pointing GIT_DIR at nothing restores the behaviour
+### configure.ac is expecting, which is to keep the tarball's own version.
+_NOGIT_	= GIT_DIR=/nonexistent
+
 configure-maxima:	 sources/${maximaTAR}
 	tar -zxvf sources/${maximaTAR}
-	cd ${DIR} ; ${_EPF_} ./configure --prefix=${NLYTIQ_INST_PATH} \
+	cd ${DIR} ; ${_NOGIT_} ${_EPF_} ./configure --prefix=${NLYTIQ_INST_PATH} \
 		--enable-mathjax \
 		--enable-sbcl 	\
 		--enable-sbcl-exec

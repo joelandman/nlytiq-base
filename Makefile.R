@@ -66,8 +66,12 @@ install-R-modules: install-R
 	# create the .Rprofile file, once
 	if ! grep -qF '### ${R_PROFILE_MARK}' ${HOME}/.Rprofile 2>/dev/null ; then	\
 	  { echo '### ${R_PROFILE_MARK}' ;					\
-	    echo 'r = getOption("repos") # use the US repo for CRAN' ;		\
-	    echo 'r["CRAN"] = "https://cran.us.r-project.org"' ;		\
+	    echo 'r = getOption("repos")' ;					\
+	    echo '# cloud.r-project.org is the CRAN CDN.  Not cran.us.r-project' ;\
+	    echo '# .org: over http that redirects to lib.stat.cmu.edu and works,' ;\
+	    echo '# but over https it redirects to cran.microsoft.com, which was' ;\
+	    echo '# retired and now just times out.' ;				\
+	    echo 'r["CRAN"] = "https://cloud.r-project.org"' ;			\
 	    echo 'options(repos = r)' ;						\
 	    echo 'rm(r)' ; } >> ${HOME}/.Rprofile ;				\
 	fi

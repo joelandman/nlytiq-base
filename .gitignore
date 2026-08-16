@@ -31,6 +31,20 @@
 /node-*/
 /go/
 
+# Build stamp files. Each Makefile.<pkg> touches an empty file to record that a
+# step is done -- configure-octave, make-perl, install-python and so on -- and
+# the top-level Makefile does the same with <pkg>.build, <pkg>.complete and
+# <pkg>.packages. They accumulate at the top level as the tree is built, and
+# 'make clean' removes them. Anchored to the root, where they are created, so
+# these patterns cannot swallow anything under config/ or sources/.
+/configure-*
+/make-*
+/build-*
+/install-*
+/*.build
+/*.complete
+/*.packages
+
 # Stray build output
 /out
 *.o

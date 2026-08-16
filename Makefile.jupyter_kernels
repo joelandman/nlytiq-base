@@ -18,39 +18,80 @@ install-jupyter:
 	touch install-jupyter
 
 install-jupyter-mods: install-jupyter-gnuplot install-jupyter-perl install-jupyter-julia install-jupyter-R install-jupyter-octave install-jupyter-scripts install-jupyter-maxima
-	touch install-jupyter
+	touch install-jupyter-mods
 
+### 'iperl' calls create_kernel_spec() at the top of every run, before it does
+### anything else, so 'iperl --version' registers the kernel and exits without
+### starting a notebook -- no manual step needed.  It writes into whatever
+### 'jupyter --data-dir' reports, so JUPYTER_DATA_DIR puts it in the tree
+### alongside the others.
 install-jupyter-perl: install-jupyter
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/cpan Devel::IPerl
-	echo "you need to run iperl to finish setting up the perl5 kernel in jupyter"
+	### cpan returns 0 even when a dependency fails and the distribution is
+	### therefore skipped.  Devel::IPerl was reported installed for exactly
+	### that reason -- "Tests succeeded but one dependency not OK
+	### (JSON::MaybeXS)" -- while nothing had been installed at all.  What
+	### loads is the only trustworthy signal.
+	${NLYTIQ_INST_PATH}/bin/perl -MDevel::IPerl -e 'exit 0' ||			\
+	  { echo "error: Devel::IPerl did not install" ; exit 1 ; }
+	JUPYTER_DATA_DIR=${NLYTIQ_INST_PATH}/share/jupyter				\
+	  PATH=${NLYTIQ_INST_PATH}/bin:$${PATH} ${NLYTIQ_INST_PATH}/bin/perl		\
+	    ${NLYTIQ_INST_PATH}/bin/iperl --version
+	test -f ${NLYTIQ_INST_PATH}/share/jupyter/kernels/iperl/kernel.json ||		\
+	  { echo "error: the iperl kernelspec was not created in the tree" ; exit 1 ; }
 	touch install-jupyter-perl
 
+### --prefix, not --user: a kernelspec installed with --user lands in the
+### building user's ~/.local/share/jupyter and is invisible to anyone else
+### using the tree.  --prefix puts it in share/jupyter/kernels here, which is
+### what uninstall.yaml already attributes to jupyter_kernels.
 install-jupyter-gnuplot: install-jupyter
 	${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install gnuplot_kernel
-	${_EPF_} ${NLYTIQ_INST_PATH}/bin/python3 -m gnuplot_kernel install --user
+	${_EPF_} ${NLYTIQ_INST_PATH}/bin/python3 -m gnuplot_kernel install --prefix=${NLYTIQ_INST_PATH}
 	touch install-jupyter-gnuplot
 	
+### JULIA_PKGDIR has been ignored since julia 0.6; the depot path replaced it.
+### Setting the old name put IJulia in the building user's ~/.julia instead of
+### in the tree, the same way Makefile.julia did before it was corrected.
+### JUPYTER_DATA_DIR is what jupyter calls the user data directory, and it is
+### where IJulia and IRkernel put a kernelspec by default -- the builder's
+### ~/.local/share/jupyter, invisible to anyone else using the tree. Pointing
+### it into the tree covers both without needing a different flag for each.
 install-jupyter-julia: install-jupyter
-	JULIA_PKGDIR=${NLYTIQ_INST_PATH}/julia julia -e 'using Pkg ; Pkg.add("IJulia")'	
+	JULIA_DEPOT_PATH=${NLYTIQ_INST_PATH}/julia					\
+	JUPYTER_DATA_DIR=${NLYTIQ_INST_PATH}/share/jupyter				\
+	  ${NLYTIQ_INST_PATH}/bin/julia -e						\
+	    'using Pkg ; Pkg.add("IJulia") ; using IJulia ; IJulia.installkernel("Julia")'
 	touch install-jupyter-julia
 
 install-jupyter-R: install-jupyter
-	if [[ -e ${NLYTIQ_INST_PATH}/bin/R ]]; then ${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("IRkernel")' ; fi
+	if [[ -e ${NLYTIQ_INST_PATH}/bin/R ]]; then					\
+	  ${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("IRkernel")' ;\
+	  ${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e				\
+	    'IRkernel::installspec(user = FALSE, prefix = "${NLYTIQ_INST_PATH}")' ;	\
+	fi
 	touch install-jupyter-R
 
 install-jupyter-octave: install-jupyter
-	if [[ -e ${NLYTIQ_INST_PATH}/bin/octave ]]; then ${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install octave_kernel ; fi
+	if [[ -e ${NLYTIQ_INST_PATH}/bin/octave ]]; then					\
+	  ${_EPF_} ${NLYTIQ_INST_PATH}/bin/pip3 install octave_kernel ;			\
+	  ${_EPF_} ${NLYTIQ_INST_PATH}/bin/python3 -m octave_kernel install		\
+		--prefix=${NLYTIQ_INST_PATH} ;						\
+	fi
 	touch install-jupyter-octave
 
+### Only the launcher.  'cp -f scripts/*' copied everything in scripts/ into
+### bin/, which now means fetch-source.sh, every prep_*.sh, __pycache__ and
+### the update-package.py and uninstall.py tools would land on users' PATH.
 install-jupyter-scripts: install-jupyter
-	cp -f scripts/* ${NLYTIQ_INST_PATH}/bin/
+	cp -f scripts/run_jupyter_lab.bash ${NLYTIQ_INST_PATH}/bin/
 	touch install-jupyter-scripts
 
 install-jupyter-maxima: install-jupyter
 	tar -zxvf sources/maxima-kernel.tar.gz
-	${NLYTIQ_INST_PATH}/bin/pip3 install pexpect ipckernel
-	cd maxima-kernel ; 	${NLYTIQ_INST_PATH}/bin/pip3 -e . ; 	${NLYTIQ_INST_PATH}/bin/python3 install.py 
+	${NLYTIQ_INST_PATH}/bin/pip3 install pexpect ipykernel
+	cd maxima-kernel ; ${NLYTIQ_INST_PATH}/bin/pip3 install -e . ; ${NLYTIQ_INST_PATH}/bin/python3 install.py 
 	touch install-jupyter-maxima
 
 clean-jupyter:
-	rm -rf ${PYTHON} install-jupyter* maxima-kernel
+	rm -rf install-jupyter* maxima-kernel

@@ -91,7 +91,11 @@ install-R-modules: install-R
 	# available".  'onstatseries' was dropped for the same reason -- CRAN has
 	# no package under that name, so it never installed anything.
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("IRkernel")'
-	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'IRkernel::installspec()'
+	### user = FALSE with an explicit prefix puts the kernelspec in
+	### share/jupyter/kernels inside the tree.  The default installs it into
+	### the building user's ~/.local/share/jupyter, where nobody else sees it.
+	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e \
+	  'IRkernel::installspec(user = FALSE, prefix = "${NLYTIQ_INST_PATH}")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e 'install.packages("ggplot2")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("gplots")'
 	${NLYTIQ_INST_PATH}/bin/R --no-save --quiet -e  'install.packages("gtools")'

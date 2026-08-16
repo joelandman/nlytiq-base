@@ -1,12 +1,13 @@
-# Updating packages
+# Updating and removing packages
 
-`scripts/update-package.py` bumps a package to a new upstream version: it finds
-the versions upstream offers, downloads the one you want, and points the build
-at it.
+Two tools, both needing nothing but `python3` -- no pip install, no
+virtualenv. That is deliberate: this tree builds its own Python, so the tools
+that manage it cannot depend on anything installed into it.
 
-It needs nothing but `python3` -- no pip install, no virtualenv. That is
-deliberate: this tree builds its own Python, so the tool that fetches its
-sources cannot depend on anything installed into it.
+    scripts/update-package.py     bump a package to a new upstream version
+    scripts/uninstall.py          remove an installed package from the prefix
+
+**Updating**
 
 - [Why a tool at all](#why-a-tool-at-all)
 - [Quick start](#quick-start)
@@ -16,6 +17,16 @@ sources cannot depend on anything installed into it.
 - [Adding a package](#adding-a-package)
 - [When something goes wrong](#when-something-goes-wrong)
 - [What it does not do](#what-it-does-not-do)
+
+**Removing**
+
+- [Uninstalling a package](#uninstalling-a-package)
+- [How it knows what to remove](#how-it-knows-what-to-remove)
+- [Safety](#safety)
+- [Uninstall commands](#uninstall-commands)
+- [Uninstall workflows](#uninstall-workflows)
+- [uninstall.yaml](#uninstallyaml)
+- [What the uninstaller does not do](#what-the-uninstaller-does-not-do)
 
 
 ## Why a tool at all
@@ -461,3 +472,238 @@ know how to spell.
 - **It does not judge.** Whether a version is a good idea -- API breakage, a
   major bump that needs new configure flags -- is your call. Build it before
   you commit it.
+
+
+---
+
+
+# Uninstalling a package
+
+`scripts/uninstall.py` removes an installed package from `NLYTIQ_INST_PATH`.
+
+```console
+$ scripts/uninstall.py --package gnuplot          # dry run: what would go
+package   gnuplot
+prefix    /home/joe/local
+files     39  (6.2 MB)
+
+  bin/                           1 files      5.0 MB
+  share/                        38 files      1.1 MB
+
+  build stamps to clear: configure-gnuplot make-gnuplot install-gnuplot
+
+Dry run -- nothing was removed. Add --yes to go ahead.
+
+$ scripts/uninstall.py --package gnuplot --yes     # actually remove it
+...
+removed 39 files, 6.2 MB, and 7 empty directories
+cleared build stamps: configure-gnuplot make-gnuplot install-gnuplot
+```
+
+Removing a package also clears its build stamps, so `make -f Makefile.gnuplot`
+will rebuild it rather than believing it is still installed. Uninstall and
+rebuild is a clean round trip: doing exactly that with gnuplot took the prefix
+from 174,759 files, down by 39, and back to a file listing identical to where
+it started.
+
+
+## How it knows what to remove
+
+Every package installs with `make install` into one shared prefix, and nothing
+records what went where -- 173,845 files with no manifest. So ownership has to
+be re-derived, and guessing from filenames is not good enough:
+
+- `bin/cmake`, `bin/ctest` and `bin/cpack` come from a **pip wheel**, and look
+  like part of llvm.
+- `bin/mojo` is **Mojolicious**, a perl module, not anything of python's.
+- `lib/libopenblas_*.so` is openblas, but `lib/julia/libopenblas64_.so` is the
+  copy julia bundles for itself.
+
+So ownership comes from four sources, strongest first. A stronger claim is
+never overridden by a weaker one:
+
+| source | what it is | accuracy |
+|---|---|---|
+| `packlist` | perl's own `.packlist` files -- 177 of them, each an exact list of what a distribution installed, `bin/` scripts included | exact |
+| `python_record` | pip's `<dist>.dist-info/RECORD`, 144 of them, likewise exact | exact |
+| `owns` | the globs declared in `uninstall.yaml` | declared |
+| `shebang` | a `bin/` script whose interpreter is this tree's perl or python | inferred |
+
+Man pages are then attributed by a derived rule: `man/manN/foo.N` belongs to
+whoever owns `bin/foo`. That saves every package from listing its own, and
+attributes 2,078 perl module pages in one go.
+
+Between them these account for all but **5** of the installed files. The
+remainder are genuinely ambiguous -- four stray binaries and `share/info/dir`,
+which several packages append to and none owns.
+
+`--list` shows the split:
+
+```console
+$ scripts/uninstall.py --list
+prefix: /home/joe/local
+
+  PACKAGE              FILES  SOURCES
+  R                     8529  owns
+  julia                34682  owns
+  llvm                 10331  owns
+  perl5mods            12819  packlist_site,shebang_perl
+  python               97309  python_record,shebang_python
+  ...
+  unclaimed                5  (use --orphans to list)
+```
+
+
+## Safety
+
+This deletes from a path computed out of a config variable, so it is built to
+be hard to misuse:
+
+- **Dry run is the default.** Without `--yes` it prints the plan and exits
+  without touching anything.
+- **The prefix is validated.** A prefix that resolves to `/`, `/usr`, `/home`,
+  your home directory, anything less than two levels deep, or any path
+  containing this git repository is refused outright.
+- **Paths are checked to be inside the prefix**, and a symlink is unlinked
+  rather than followed. A link to `/etc/passwd` inside the prefix removes the
+  link; `/etc/passwd` is not touched.
+- **Shared files are kept.** A file claimed by two packages survives while
+  either owner is staying. It is removed only once every owner is on its way
+  out, so `--all` does not strand them.
+- **Directories go only when empty**, deepest first.
+- **Nothing outside the prefix** is touched without `--with-home`.
+
+The plan it prints is exactly what it does. Verified on a real removal by
+snapshotting all 174,759 files before and after: the set removed matched the
+set planned exactly, with nothing else added, changed or deleted.
+
+
+## Uninstall commands
+
+```console
+$ scripts/uninstall.py --list                        # packages and file counts
+$ scripts/uninstall.py --package octave              # dry run
+$ scripts/uninstall.py --package octave --yes        # remove
+$ scripts/uninstall.py --all --yes                   # every known package
+$ scripts/uninstall.py --package julia --with-home   # include ~/.julia
+$ scripts/uninstall.py --orphans                     # files nobody claims
+```
+
+| flag | effect |
+|---|---|
+| `--yes` | actually remove things; without it every run is a dry run |
+| `--all` | every package in `uninstall.yaml`, one at a time |
+| `--with-home` | also remove the package's data outside the prefix |
+| `--keep-stamps` | leave the build stamps, so `make` still thinks it is installed |
+| `--prefix PATH` | operate on a different prefix |
+| `--orphans` | list files under the prefix no package claims |
+| `--json` | print the removal plan as JSON and stop |
+| `--verbose` | print every file as it goes |
+
+`--with-home` matters more than it sounds. Several packages leave most of
+their bulk outside the prefix, and it is always reported even when it is not
+being removed:
+
+```
+  outside the prefix, left alone without --with-home:
+      ~/.julia                                      4.6 GB
+```
+
+Also covered: `~/.cpan`, `~/octave` and `~/.local/share/octave` (octave's
+`pkg install` puts packages in your home unless given `-global`), and the
+jupyter kernel specs, which otherwise linger pointing at an interpreter that
+no longer exists.
+
+
+## Uninstall workflows
+
+### Remove one package cleanly
+
+```console
+$ scripts/uninstall.py --package octave          # read the plan
+$ scripts/uninstall.py --package octave --yes
+$ scripts/uninstall.py --orphans                 # did anything get stranded?
+```
+
+### Rebuild a package from scratch
+
+Uninstalling clears the stamps, which is exactly what a from-scratch rebuild
+needs:
+
+```console
+$ scripts/uninstall.py --package gnuplot --yes
+$ make -f Makefile.gnuplot
+```
+
+### Reclaim the disk a package is really using
+
+```console
+$ scripts/uninstall.py --package julia            # prefix and home, with sizes
+$ scripts/uninstall.py --package julia --yes --with-home
+```
+
+### Check the patterns after a version bump
+
+New upstream versions move files. After bumping and rebuilding, `--orphans`
+shows anything the ownership rules no longer recognise:
+
+```console
+$ scripts/uninstall.py --orphans
+```
+
+Note that stale files from *previous* versions are claimed on purpose -- the
+version numbers in `uninstall.yaml` are globbed, so a prefix still holding
+`octave-10.3.0` and `perl5.42.0` alongside the current ones has those removed
+too.
+
+
+## uninstall.yaml
+
+Separate from `packages.yaml` on purpose: that file covers packages with
+upstream tarballs, while uninstalling has to cover everything that lands in the
+prefix -- `perl5mods`, `jupyter_kernels`, `spark` and `rust` included.
+
+```yaml
+  octave:
+    owns:
+      - bin/octave*            # globs, relative to the prefix
+      - lib/octave             # a bare directory means the whole tree
+      - share/octave
+      - include/octave-*       # versions globbed, to catch old leftovers
+    stamps: [configure-octave, make-octave, install-octave]
+    home:
+      - ~/.local/share/octave  # only removed with --with-home
+      - ~/octave
+
+  perl5mods:
+    claims: [packlist_site, shebang_perl]   # exact sources, no globs needed
+    owns:
+      - lib/perl5/site_perl
+      - man/man3
+```
+
+`claims` names the exact-record sources: `packlist_core`, `packlist_site`,
+`python_record`, `shebang_perl`, `shebang_python`. `owns` is the glob fallback.
+`stamps` are the build markers to clear. `home` is only ever touched with
+`--with-home`.
+
+To add a package: write its `owns` patterns, then run `--orphans` and see what
+is left unclaimed. That loop is how the patterns here were built -- it took the
+unclaimed count from 3,177 to 5.
+
+
+## What the uninstaller does not do
+
+- **It does not uninstall what it did not install.** Files under the prefix
+  that no package claims are reported by `--orphans` and left alone, always.
+- **`--all` is not `rm -rf` on the prefix.** It removes the known packages one
+  at a time and leaves anything unrecognised in place. That is the safe
+  behaviour when the prefix holds things this tree did not put there.
+- **It does not touch your home directory** unless you pass `--with-home`, and
+  even then only the paths listed under `home:` for that package.
+- **It does not rebuild.** Removing and rebuilding are separate steps, the same
+  way bumping and building are.
+- **It cannot undo a partial `make install`.** If a build died halfway, the
+  files it managed to install are still attributed by the ownership rules --
+  but anything installed under a name the patterns do not cover shows up as an
+  orphan rather than being removed.

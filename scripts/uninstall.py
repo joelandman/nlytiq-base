@@ -677,6 +677,56 @@ def cmd_list(config, prefix, claims, files):
     return 0
 
 
+def orphan_files(claims, files):
+    return [rel for rel in files if not claims.owners(rel)]
+
+
+def remove_orphans(prefix, claims, files, args):
+    """Sweep whatever is left in the prefix after every package has gone.
+
+    Only reached from --all, where the intent is an empty prefix. A file no
+    package claims is left alone by a single-package uninstall, always; here
+    there is nothing left for it to belong to.
+    """
+    orphans = orphan_files(claims, files)
+    if not orphans:
+        return 0
+
+    total = 0
+    for rel in orphans:
+        try:
+            total += os.lstat(os.path.join(prefix, rel)).st_size
+        except OSError:
+            pass
+
+    print("\n%d files under the prefix belong to no package (%s)"
+          % (len(orphans), human(total)))
+    groups = {}
+    for rel in orphans:
+        groups.setdefault(rel.split("/")[0], []).append(rel)
+    for top in sorted(groups):
+        print("  %-16s %d" % (top + "/", len(groups[top])))
+
+    if args.keep_orphans:
+        print("  left alone (--keep-orphans)")
+        return 0
+    if not args.yes:
+        print("  would be removed too; --keep-orphans leaves them")
+        return 0
+
+    plan = Plan("(unclaimed)")
+    for rel in orphans:
+        try:
+            plan.add(rel, os.lstat(os.path.join(prefix, rel)).st_size)
+        except OSError:
+            plan.add(rel, 0)
+    removed, failed = remove_files(prefix, plan, verbose=args.verbose)
+    pruned = prune_empty_dirs(prefix, plan)
+    print("  removed %d files, %s, and %d empty directories"
+          % (removed, human(total), pruned))
+    return 1 if failed else 0
+
+
 def cmd_orphans(prefix, claims, files, limit):
     orphans = [rel for rel in files if not claims.owners(rel)]
     total = 0
@@ -837,6 +887,9 @@ def build_parser():
                    help="also remove writable perl library directories under "
                         "your home that PERL5LIB or PERL_LOCAL_LIB_ROOT point "
                         "at (local::lib's ~/perl5 and the like)")
+    p.add_argument("--keep-orphans", action="store_true",
+                   help="with --all, leave files that no package claims "
+                        "instead of sweeping them up at the end")
     p.add_argument("--keep-stamps", action="store_true",
                    help="leave the build stamp files alone")
     p.add_argument("--prefix", metavar="PATH",
@@ -905,6 +958,10 @@ def main(argv):
         if args.yes:
             # Later packages must see the tree as it now stands.
             files = walk_prefix(prefix)
+
+    if args.all and not args.json:
+        # Everything known has gone; anything still here belonged to nothing.
+        status |= remove_orphans(prefix, claims, walk_prefix(prefix), args)
     return status
 
 

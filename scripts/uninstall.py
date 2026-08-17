@@ -722,6 +722,22 @@ def remove_orphans(prefix, claims, files, args):
             plan.add(rel, 0)
     removed, failed = remove_files(prefix, plan, verbose=args.verbose)
     pruned = prune_empty_dirs(prefix, plan)
+
+    # --all is meant to leave an empty prefix, so take a final pass over
+    # whatever directories are left. Anything still holding a file survives;
+    # the prefix itself is never removed.
+    for dirpath, dirnames, _ in os.walk(prefix, topdown=False):
+        dirnames[:] = [d for d in dirnames
+                       if not os.path.islink(os.path.join(dirpath, d))]
+        if dirpath == prefix or not inside(prefix, dirpath):
+            continue
+        try:
+            if not os.listdir(dirpath):
+                os.rmdir(dirpath)
+                pruned += 1
+        except OSError:
+            pass
+
     print("  removed %d files, %s, and %d empty directories"
           % (removed, human(total), pruned))
     return 1 if failed else 0
